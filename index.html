@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>KROC Centers — Prototype</title>
+<meta name="viewport" content="width=1320"/>
+<link rel="stylesheet" href="kroc.css"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="blocks.jsx"></script>
+<script type="text/babel" src="meta.jsx"></script>
+<script type="text/babel" src="pages-a.jsx"></script>
+<script type="text/babel" src="pages-b.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+function JumpNav(){
+  const groups = [
+    ["Meta", [
+      ["cover","Cover"],["essence","Essence Audit"],["blocks","Block Library"],["open","Open Questions"]
+    ]],
+    ["Pages", [
+      ["p-home","6.1 Homepage"],
+      ["p-programs","6.2 All Programs"],
+      ["p-program-cat","6.3 Program Category"],
+      ["p-class","6.4 Class Detail"],
+      ["p-info","6.5 Informational"],
+      ["p-stories","6.6 All Stories"],
+      ["p-story","6.7 Story Detail"],
+      ["p-tags","6.8 All Tags"],
+      ["p-tag","6.9 Tag Detail"],
+      ["p-events","6.10 Events Root"],
+      ["p-event","6.11 Event Detail"],
+      ["p-contact","6.12 Contact Us"],
+      ["p-volunteers","6.13 Volunteers"],
+    ]],
+  ];
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="jumpnav">
+      <button className="jumpnav-toggle" onClick={()=>setOpen(o=>!o)}>
+        <span>≡</span> Jump to…
+      </button>
+      {open && (
+        <div className="jumpnav-panel">
+          {groups.map(([g, items]) => (
+            <div key={g} className="jumpnav-group">
+              <div className="jumpnav-h">{g}</div>
+              {items.map(([id,label]) => (
+                <a key={id} href={`#${id}`} onClick={()=>setOpen(false)}>{label}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function App(){
+  return (
+    <div className="canvas">
+      <JumpNav/>
+
+      <a id="cover"></a>
+      <Cover/>
+
+      <a id="essence"></a>
+      <Essence/>
+
+      <a id="blocks"></a>
+      <BlocksLibrary/>
+
+      <Page_Home/>
+      <Page_AllPrograms/>
+      <Page_ProgramCategory/>
+      <Page_ClassDetail/>
+      <Page_Info/>
+      <Page_AllStories/>
+      <Page_StoryDetail/>
+      <Page_AllTags/>
+      <Page_TagDetail/>
+      <Page_Events/>
+      <Page_EventDetail/>
+      <Page_Contact/>
+      <Page_Volunteers/>
+
+      <a id="open"></a>
+      {/*<OpenQuestions/>*/}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
