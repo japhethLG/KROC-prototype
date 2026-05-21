@@ -133,7 +133,7 @@ function Page_Events(){
     <PageFrameB id="p-events" tag="6.10 · Page" name="Events Root" annotations={[
       {k:"[events] — OPEN", v:"Schema inferred (Comments 2 + 5) — flag for architect"},
       {k:"layout", v:"hero + Upcoming 3×2 grid + pagination + Connect"},
-      {k:"filters", v:"Audience · Tag · Date range"},
+      {k:"filters", v:"Tag · Date range"},
     ]}>
       <Header active="Events"/>
       <div className="kroc-main">
@@ -160,7 +160,6 @@ function Page_Events(){
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:6}}>
             <h2 className="t-heading-md" style={{margin:0}}>Upcoming Events</h2>
             <div style={{display:"flex",gap:8,alignItems:"center"}}>
-              <div className="kroc-input" style={{padding:"8px 14px"}}><span>Audience: All</span><Icon name="chev" size={14}/></div>
               <div className="kroc-input" style={{padding:"8px 14px"}}><span>Sort: Soonest</span><Icon name="chev" size={14}/></div>
             </div>
           </div>
@@ -220,7 +219,6 @@ function Page_EventDetail(){
               <Icon name="cal" size={14}/> Add to Calendar
             </a>
             <div style={{display:"flex",gap:8,marginBottom:24}}>
-              <a className="btn btn-info btn-sm">RSVP</a>
               <a className="btn btn-primary btn-sm">Register Here</a>
             </div>
 
@@ -407,7 +405,7 @@ function Page_Contact(){
 function Page_Volunteers(){
   return (
     <PageFrameB id="p-volunteers" tag="6.13 · Page" name="Volunteers" annotations={[
-      {k:"[volunteers] — OPEN (Comment 7)", v:"Hybrid template — header + Featured Opportunities + Highlight + Why Volunteer + Stats + Stories"},
+      {k:"[volunteers] — OPEN (Comment 7)", v:"Hybrid template — header + Featured Opportunities + Highlight + Why Volunteer + Stories"},
       {k:"golden_api", v:"Featured Opportunity cards show skeleton state until Golden resolves"},
       {k:"OPEN", v:"Failure copy when Golden is down — please define"},
       {k:"[image_gallery]", v:"Drag-in block — volunteers in action, recruitment moment"},
@@ -497,26 +495,6 @@ function Page_Volunteers(){
               ["family night",          1, 1],
             ]}
           />
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="kroc-main" style={{marginTop:32}}>
-        <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <h3 className="t-heading-sm" style={{margin:"0 0 14px"}}>Volunteering at a Glance</h3>
-          <div style={{background:"#fff",borderRadius:20,padding:"32px 40px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:40}}>
-            {[
-              ["620","Active volunteers in 2025","Across 12 ongoing programs."],
-              ["18,400","Volunteer hours logged","An average of 30 per volunteer."],
-              ["94%","Return rate","Most volunteers stay year over year."],
-            ].map(([v,l,s])=>(
-              <div key={l}>
-                <div style={{color:"var(--kroc-navy)",fontSize:60,lineHeight:1,marginBottom:8}}>{v}</div>
-                <div style={{fontSize:14.5,marginBottom:4}}>{l}</div>
-                <div style={{fontSize:12.5,color:"#575757"}}>{s}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 

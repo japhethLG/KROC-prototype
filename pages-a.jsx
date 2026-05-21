@@ -29,7 +29,6 @@ function Page_Home(){
       {k:"[hero_block]", v:"Mission-led hero, 1400×460, scrim auto"},
       {k:"[featured_programs]", v:"3-up program cards · per-region pick"},
       {k:"[featured_stories]", v:"3-up carousel · from [stories]"},
-      {k:"[impact_stats]", v:"Per-region stats from [kroc_location].impact"},
       {k:"[cta_band]", v:"Red mission band — donation conversion"},
     ]}>
       <AlertBar text="Pool closed for maintenance — Saturday 11/15 from 6 AM to 12 PM." cta="View Schedule"/>
@@ -101,17 +100,6 @@ function Page_Home(){
         </div>
       </div>
 
-      {/* Our Impact */}
-      <ImpactSection
-        filters={["All","Recreation","Education","Youth","Scholarships","Arts"]}
-        slides={[
-          {
-            featured: { n:"14,200", l:"Active Members At Our Kroc Center In 2025." },
-            support:  { headline:"$1.4M In Scholarships Awarded — No Family Turned Away.", sub:"Up 22% year-over-year." },
-            body:"Kroc Center membership keeps growing because we keep the door open. Sliding-scale rates, free youth afterschool, and a scholarship fund that quietly closes the gap mean every neighbor who wants in can get in — regardless of what they can pay.",
-          },
-        ]}
-      />
 
       {/* Latest Stories */}
       <LatestStories
@@ -254,18 +242,6 @@ function Page_ProgramCategory(){
         </div>
       </div>
 
-      {/* Aquatics Impact */}
-      <ImpactSection
-        title="Aquatics Impact"
-        filters={["All","Learn-To-Swim","Lap & Fitness","Masters","Lifeguarding"]}
-        slides={[
-          {
-            featured: { n:"3,400", l:"Swim Lessons Taught In 2025." },
-            support:  { headline:"98% Of Kids Pass The Swim-Safety Standard.", sub:"Within their first 8 weeks of class." },
-            body:"From toddler splash to masters lap swim, our Aquatics team runs 12 programs every week — and 80% of those lessons are free or sliding-scale. Drowning is the #1 cause of accidental death for kids under 4 in our region, and we treat that number like the emergency it is.",
-          },
-        ]}
-      />
 
       {/* Help by donating */}
       <div className="kroc-main" style={{marginTop:32}}>
@@ -548,6 +524,10 @@ function Page_StoryDetail(){
       {k:"[story]", v:"compact hero + share + 16:9 image + 2-col sidebar/body + tags + Recent Stories"},
       {k:"links", v:"Body links: navy text + red underline"},
       {k:"share", v:"FB, X, LinkedIn, Instagram"},
+      {k:"donation_override_link", v:"Optional URL — overrides instance donation link in sidebar"},
+      {k:"related_event", v:"Optional relational → [events] — shown in sidebar"},
+      {k:"related_program_category", v:"Optional relational → [program_categories] — shown in sidebar"},
+      {k:"external_article", v:"Optional URL — canonical source; shown as 'View Original' link above tags"},
     ]}>
       <Header active="Programs"/>
 
@@ -574,6 +554,30 @@ function Page_StoryDetail(){
             <div style={{fontSize:13,color:"#575757",marginBottom:4}}>Location</div>
             <a style={{color:"var(--kroc-red)",display:"inline-flex",alignItems:"center",gap:6,fontSize:14.5,cursor:"pointer"}}><Icon name="pin" size={14}/> Camden Kroc Center</a>
 
+            {/* donation_override_link */}
+            <div style={{height:1,background:"#eaeaee",margin:"18px 0"}}/>
+            <a className="btn btn-primary btn-block btn-sm">Donate to Support This Program</a>
+            <div style={{fontSize:11,fontFamily:"'SF Mono',Menlo,monospace",color:"#999",marginTop:6}}>donation_override_link · overrides instance default</div>
+
+            {/* related_event */}
+            <div style={{height:1,background:"#eaeaee",margin:"18px 0"}}/>
+            <div style={{fontSize:13,color:"#575757",marginBottom:8}}>Related Event</div>
+            <a style={{display:"block",background:"#EFEFEF",borderRadius:12,padding:"12px 14px",cursor:"pointer",textDecoration:"none"}}>
+              <div style={{fontSize:13,color:"#1C1B1F",marginBottom:2}}>Late-Night Basketball Open Gym</div>
+              <div style={{fontSize:12,color:"#575757"}}>Every Thu + Sat · 9 PM – 11 PM</div>
+            </a>
+            <div style={{fontSize:11,fontFamily:"'SF Mono',Menlo,monospace",color:"#999",marginTop:6}}>related_event → [events]</div>
+
+            {/* related_program_category */}
+            <div style={{marginTop:16}}>
+              <div style={{fontSize:13,color:"#575757",marginBottom:8}}>Related Program</div>
+              <a style={{display:"inline-flex",alignItems:"center",gap:8,cursor:"pointer"}}>
+                <span className="kroc-icon sm">kroc-icon</span>
+                <span style={{fontSize:14,color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42"}}>Youth Programs</span>
+              </a>
+              <div style={{fontSize:11,fontFamily:"'SF Mono',Menlo,monospace",color:"#999",marginTop:6}}>related_program_category → [program_categories]</div>
+            </div>
+
             <div style={{display:"flex",gap:8,marginTop:24,flexWrap:"wrap"}}>
               <a className="btn btn-info btn-sm">Share</a>
               <a className="btn btn-secondary btn-sm">Print</a>
@@ -594,7 +598,17 @@ function Page_StoryDetail(){
               We're now running late-night basketball every Thursday and Saturday through the spring. The waitlist is at 120. If you'd like to volunteer as a coach or sponsor next season's pizza, <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42"}}>get in touch with our Youth team</a>.
             </p>
 
-            <div style={{display:"flex",gap:6,marginTop:28,flexWrap:"wrap"}}>
+            {/* external_article */}
+            <div style={{display:"flex",alignItems:"center",gap:10,margin:"24px 0 20px",padding:"14px 18px",background:"#EFEFEF",borderRadius:12}}>
+              <Icon name="arrowUR" size={16} color="#575757"/>
+              <div>
+                <div style={{fontSize:13,color:"#575757",marginBottom:2}}>This story was originally published externally.</div>
+                <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",fontSize:14,cursor:"pointer"}}>View Original Article →</a>
+              </div>
+              <div style={{marginLeft:"auto",fontSize:11,fontFamily:"'SF Mono',Menlo,monospace",color:"#999"}}>external_article · URL</div>
+            </div>
+
+            <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
               {["Recreation","Youth","Camden","Community"].map(t=>(<span key={t} className="pill"><span style={{width:8,height:8,background:"var(--kroc-red)",borderRadius:2}}/>{t}</span>))}
             </div>
           </div>

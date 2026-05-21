@@ -253,12 +253,17 @@ function B_FacilitySection() {
     ["Body (WYSIWYG)", "rich text"],
     ["Optional CTA", "Label + URL"],
     ["Photo", "3:2 or 4:3"],
-    ["Feature Pills", "repeater · py-2 px-4"]]
+    ["Feature Pills", "repeater · py-2 px-4"],
+    ["Hours of Operation", "repeater · Day Label + Hours Text"]]
     }
-    notes="Two variants — photo-left and photo-right. Used to describe individual facilities (pool, gym, theater, chapel).">
+    notes="Two variants — photo-left and photo-right. Used to describe individual facilities (pool, gym, theater, chapel). Each block carries its own hours — pool hours differ from theater hours.">
       <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 24 }}>
-        {[0, 1].map((side) =>
-        <div key={side} style={{ background: "#fff", borderRadius: 20, overflow: "hidden", display: "grid", gridTemplateColumns: side ? "7fr 5fr" : "5fr 7fr" }}>
+        {[0, 1].map((side) => {
+          const hours = side
+            ? [["Mon–Thu", "4:00 PM – 9:00 PM"], ["Fri", "4:00 PM – 11:00 PM"], ["Sat–Sun", "10:00 AM – 11:00 PM"]]
+            : [["Mon–Fri", "5:30 AM – 9:00 PM"], ["Sat", "6:00 AM – 8:00 PM"], ["Sun", "7:00 AM – 6:00 PM"]];
+          return (
+          <div key={side} style={{ background: "#fff", borderRadius: 20, overflow: "hidden", display: "grid", gridTemplateColumns: side ? "7fr 5fr" : "5fr 7fr" }}>
             {side === 0 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
             <div style={{ padding: "36px 40px" }}>
               <h3 className="t-heading-md" style={{ margin: "0 0 12px" }}>{side ? "The Black Box Theater" : "The Aquatic Center"}</h3>
@@ -273,11 +278,25 @@ function B_FacilitySection() {
               <span key={p} className="pill sm">{p}</span>
               )}
               </div>
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 8 }}>Hours of Operation</div>
+                <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                  <tbody>
+                    {hours.map(([day, time]) => (
+                      <tr key={day} style={{ borderBottom: "1px solid #F0F0F0" }}>
+                        <td style={{ fontSize: 13, color: "#1C1B1F", fontWeight: 500, padding: "5px 0" }}>{day}</td>
+                        <td style={{ fontSize: 13, color: "#575757", padding: "5px 0", textAlign: "right" }}>{time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <a className="btn btn-secondary btn-sm">Learn More</a>
             </div>
             {side === 1 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
           </div>
-        )}
+          );
+        })}
       </div>
     </BlockFrame>);
 

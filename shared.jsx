@@ -155,71 +155,6 @@ function Connect({ crossLink }) {
   );
 }
 
-/* Impact section — featured stat over photo + supporting stat panel.
-   Used on Homepage and Program Category pages. */
-function ImpactSection({ title="Our Impact", filters=["All"], slides=[], primaryCta="Learn More", showDonate=true }){
-  const slide = slides[0] || {};
-  const featured = slide.featured || {};
-  const support  = slide.support  || {};
-  const total    = Math.max(slides.length, 3);
-  return (
-    <div className="kroc-main" style={{marginTop:48}}>
-      <div style={{maxWidth:1248,margin:"0 auto"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18,flexWrap:"wrap",gap:12}}>
-          <h2 className="t-heading-md" style={{margin:0}}>{title}</h2>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-            {filters.map((f,i)=>(<span key={f} className={`pill ${i===0?"active":""}`}>{f}</span>))}
-          </div>
-        </div>
-
-        <div style={{display:"grid",gridTemplateColumns:"7fr 5fr",background:"#fff",borderRadius:20,overflow:"hidden",boxShadow:"0 0.125rem 0.25rem rgba(0,0,0,.075)"}}>
-          {/* Left: image with overlaid featured stat */}
-          <div style={{position:"relative",minHeight:420}}>
-            <div className="img-ph" style={{position:"absolute",inset:0,borderRadius:0}}>
-              <span className="label" style={{position:"absolute",right:14,top:12,bottom:"auto"}}>{featured.imageDims || "16:11 · 720×495"}</span>
-            </div>
-            <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 100%)"}}/>
-            <div style={{position:"absolute",left:40,top:40,right:40,zIndex:2,color:"#fff"}}>
-              <div style={{fontSize:84,lineHeight:1,fontWeight:400,letterSpacing:"-.02em",marginBottom:18}}>{featured.n}</div>
-              <div style={{fontSize:22,maxWidth:380,lineHeight:1.3,fontWeight:400}}>{featured.l}</div>
-            </div>
-          </div>
-
-          {/* Right: supporting stat + body + actions */}
-          <div style={{padding:"40px 40px 28px",display:"flex",flexDirection:"column",gap:16}}>
-            <div>
-              <div style={{color:"var(--kroc-navy)",fontSize:34,lineHeight:1.15,fontWeight:400,letterSpacing:"-.01em",marginBottom:8}}>{support.headline}</div>
-              {support.sub && <div style={{fontSize:14,color:"#575757"}}>{support.sub}</div>}
-            </div>
-            <p style={{fontSize:13.5,color:"#575757",lineHeight:1.65,margin:"auto 0 0",maxWidth:420}}>{slide.body}</p>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:10,flexWrap:"wrap",marginTop:12}}>
-              <a style={{fontSize:13,color:"#1C1B1F",display:"inline-flex",alignItems:"center",gap:6,cursor:"pointer"}}>
-                <Icon name="share" size={14}/>Share Stat
-              </a>
-              <div style={{display:"flex",gap:10}}>
-                <a className="btn btn-secondary btn-sm"><Icon name="arrowUR" size={12}/>{primaryCta}</a>
-                {showDonate && <a className="btn btn-primary btn-sm">Donate</a>}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Pagination */}
-        <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",marginTop:14,gap:14}}>
-          <div style={{display:"flex",gap:8}}>
-            {Array.from({length: total}).map((_,i)=>(
-              <span key={i} style={{width:8,height:8,borderRadius:"50%",background:i===0?"var(--kroc-dark)":"#cfcfd2"}}/>
-            ))}
-          </div>
-          <div style={{display:"flex",gap:8}}>
-            <span style={{width:30,height:30,borderRadius:"50%",border:"1px solid #d8d8db",display:"inline-flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:"#575757"}}><Icon name="chevL" size={14}/></span>
-            <span style={{width:30,height:30,borderRadius:"50%",border:"1px solid #d8d8db",display:"inline-flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:"#1C1B1F"}}><Icon name="chevR" size={14}/></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* Latest Stories — editorial featured + side-stack layout for the homepage.
    Reads from [stories] pageset. */
@@ -417,6 +352,6 @@ function PinCallout({ x, y, children, anchor="topleft" }){
 
 /* expose to other scripts */
 Object.assign(window, {
-  Icon, AlertBar, Header, Connect, ImpactSection, LatestStories, FaqList, ImageGallery, StoryCard, EventCard, OppCard, CategoryCard,
+  Icon, AlertBar, Header, Connect, LatestStories, FaqList, ImageGallery, StoryCard, EventCard, OppCard, CategoryCard,
   Pagination, FrameHead, PinCallout, NAV_ITEMS
 });
