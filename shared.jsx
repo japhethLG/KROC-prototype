@@ -156,6 +156,26 @@ function Connect({ crossLink }) {
 }
 
 
+/* Donation Block — red/navy/dark mission band for donation conversion.
+   Drag-in block; renders Title + Body + up to two CTAs. */
+function DonationBlock({ title, body, primaryCta="Donate Now", primaryUrl, secondaryCta, secondaryUrl, variant="red" }){
+  const bg = variant === "navy" ? "var(--kroc-navy)" : variant === "dark" ? "#1C1B1F" : "var(--kroc-red)";
+  return (
+    <div style={{marginTop:48}}>
+      <div style={{margin:"0 16px",borderRadius:20,overflow:"hidden",background:bg,color:"#fff",padding:"48px",display:"grid",gridTemplateColumns:"3fr 2fr",gap:32,alignItems:"center"}}>
+        <div>
+          <h2 className="t-heading-lg" style={{margin:"0 0 10px"}}>{title}</h2>
+          {body && <p style={{margin:0,opacity:.9,maxWidth:540}}>{body}</p>}
+        </div>
+        <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+          <a className="btn btn-light" href={primaryUrl}>{primaryCta}</a>
+          {secondaryCta && <a className="btn btn-outline-light" href={secondaryUrl}>{secondaryCta}</a>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* Latest Stories — editorial featured + side-stack layout for the homepage.
    Reads from [stories] pageset. */
 function LatestStories({ title="Latest Stories", viewAllLabel="View All Stories", featured={}, stories=[] }){
@@ -352,6 +372,6 @@ function PinCallout({ x, y, children, anchor="topleft" }){
 
 /* expose to other scripts */
 Object.assign(window, {
-  Icon, AlertBar, Header, Connect, LatestStories, FaqList, ImageGallery, StoryCard, EventCard, OppCard, CategoryCard,
+  Icon, AlertBar, Header, Connect, DonationBlock, LatestStories, FaqList, ImageGallery, StoryCard, EventCard, OppCard, CategoryCard,
   Pagination, FrameHead, PinCallout, NAV_ITEMS
 });

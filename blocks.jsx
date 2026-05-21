@@ -447,6 +447,35 @@ function B_PeopleBlock() {
 
 }
 
+/* ---- 7.13 Donation Block ---- */
+function B_DonationBlock() {
+  return (
+    <BlockFrame id="b-donation" n="7.13 · Block" name="Donation Block"
+    schema="[donation_block]"
+    fields={[
+    ["Block Name", "internal label"],
+    ["Title", "text"],
+    ["Body", "text area"],
+    ["Primary CTA Label", "text"],
+    ["Primary CTA URL", "url · defaults to [kroc_location].donation_link"],
+    ["Secondary CTA Label", "text · optional"],
+    ["Secondary CTA URL", "url · optional"],
+    ["Background Variant", "red / navy / dark"]]
+    }
+    notes="Drag-in mission band for donation conversion. Used on Homepage and any informational page. Defaults to red; navy/dark variants available.">
+      <div style={{ padding: "24px 0" }}>
+        <DonationBlock
+          title="Every dollar opens a door at the Kroc."
+          body="Your gift funds scholarships, free programming, and the staff who make every Kroc Center the most welcoming place in town."
+          primaryCta="Donate Now"
+          secondaryCta="Other Ways"
+          variant="red"
+        />
+      </div>
+    </BlockFrame>);
+
+}
+
 /* ---- Library wrapper ---- */
 function BlocksLibrary() {
   return (
@@ -458,7 +487,8 @@ function BlocksLibrary() {
           ["7.1", "Site Alert", "b-alert"], ["7.2", "Site Header", "b-header"], ["7.3", "Connect Footer", "b-connect"],
           ["7.4", "FAQs", "b-faqs"], ["7.5", "External Embed", "b-embed"], ["7.6", "Featured Stories", "b-featured-stories"],
           ["7.7", "Featured Classes", "b-featured-classes"], ["7.8", "Facility Section", "b-facility"], ["7.9", "Featured Pages", "b-featured-pages"],
-          ["7.10", "Image Gallery", "b-gallery"], ["7.11", "Custom Forms", "b-form"], ["7.12", "People Block", "b-people"]].
+          ["7.10", "Image Gallery", "b-gallery"], ["7.11", "Custom Forms", "b-form"], ["7.12", "People Block", "b-people"],
+          ["7.13", "Donation Block", "b-donation"]].
           map(([n, l, id]) =>
           <a key={id} href={`#${id}`} className="block-toc-card">
               <div className="n">{n}</div>
@@ -469,6 +499,7 @@ function BlocksLibrary() {
       </div>
       <B_Alert /><B_Header /><B_Connect /><B_FAQs /><B_ExternalEmbed /><B_FeaturedStories />
       <B_FeaturedClasses /><B_FacilitySection /><B_FeaturedPages /><B_ImageGallery /><B_CustomForms /><B_PeopleBlock />
+      <B_DonationBlock />
     </section>);
 
 }

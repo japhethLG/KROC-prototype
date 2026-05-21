@@ -29,7 +29,7 @@ function Page_Home(){
       {k:"[hero_block]", v:"Mission-led hero, 1400×460, scrim auto"},
       {k:"[featured_programs]", v:"3-up program cards · per-region pick"},
       {k:"[featured_stories]", v:"3-up carousel · from [stories]"},
-      {k:"[cta_band]", v:"Red mission band — donation conversion"},
+      {k:"[donation_block]", v:"Drag-in block — red mission band, donation conversion"},
     ]}>
       <AlertBar text="Pool closed for maintenance — Saturday 11/15 from 6 AM to 12 PM." cta="View Schedule"/>
       <Header active="Home" location="Camden Kroc Center · Eastern Region"/>
@@ -117,19 +117,14 @@ function Page_Home(){
         ]}
       />
 
-      {/* CTA band */}
-      <div style={{marginTop:48}}>
-        <div style={{margin:"0 16px",borderRadius:20,overflow:"hidden",background:"var(--kroc-red)",color:"#fff",padding:"48px",display:"grid",gridTemplateColumns:"3fr 2fr",gap:32,alignItems:"center"}}>
-          <div>
-            <h2 className="t-heading-lg" style={{margin:"0 0 10px"}}>Every dollar opens a door at the Kroc.</h2>
-            <p style={{margin:0,opacity:.9,maxWidth:540}}>Your gift funds scholarships, free programming, and the staff who make every Kroc Center the most welcoming place in town.</p>
-          </div>
-          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-            <a className="btn btn-light">Donate Now</a>
-            <a className="btn btn-outline-light">Other Ways</a>
-          </div>
-        </div>
-      </div>
+      {/* [donation_block] */}
+      <DonationBlock
+        title="Every dollar opens a door at the Kroc."
+        body="Your gift funds scholarships, free programming, and the staff who make every Kroc Center the most welcoming place in town."
+        primaryCta="Donate Now"
+        secondaryCta="Other Ways"
+        variant="red"
+      />
 
       <Connect/>
     </PageFrame>
