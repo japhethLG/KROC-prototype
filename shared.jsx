@@ -3,9 +3,9 @@
 const NAV_ITEMS = [
   { label:"Home", href:"#" },
   { label:"Programs", href:"#", chev:true },
-  { label:"About Us", href:"#", chev:true },
+  { label:"Stories", href:"#" },
   { label:"Events", href:"#" },
-  { label:"Ways To Give", href:"#", chev:true },
+  { label:"Volunteer", href:"#" },
   { label:"Contact Us", href:"#" },
 ];
 

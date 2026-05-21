@@ -410,7 +410,7 @@ function Page_Volunteers(){
       {k:"OPEN", v:"Failure copy when Golden is down — please define"},
       {k:"[image_gallery]", v:"Drag-in block — volunteers in action, recruitment moment"},
     ]}>
-      <Header active="Ways To Give"/>
+      <Header active="Volunteer"/>
 
       <div className="kroc-main">
         <section className="kroc-hero" style={{margin:0, aspectRatio:"3/1"}}>

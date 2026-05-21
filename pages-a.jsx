@@ -27,7 +27,7 @@ function Page_Home(){
     <PageFrame id="p-home" tag="6.1 · Page" name="Homepage" annotations={[
       {k:"[site_alert]", v:"Top alert · scheduled Nov 1–Nov 30 (warning variant)"},
       {k:"[hero_block]", v:"Mission-led hero, 1400×460, scrim auto"},
-      {k:"[featured_programs]", v:"3-up program cards · per-region pick"},
+      {k:"[featured_programs]", v:"Drag-in block — 4-up category cards, curated, links to All Programs"},
       {k:"[featured_stories]", v:"3-up carousel · from [stories]"},
       {k:"[donation_block]", v:"Drag-in block — red mission band, donation conversion"},
     ]}>
@@ -81,11 +81,9 @@ function Page_Home(){
       {/* How We Serve */}
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:20}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:20}}>
             <h2 className="t-heading-md" style={{margin:0}}>How We Serve</h2>
-            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-              {["All","Aquatics","Fitness","Arts","Youth","Worship"].map((t,i)=>(<span key={t} className={`pill ${i===0?"active":""}`}>{t}</span>))}
-            </div>
+            <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>View All Programs <Icon name="arrowUR" size={14}/></a>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
             {[
@@ -198,7 +196,7 @@ function Page_AllPrograms(){
 function Page_ProgramCategory(){
   return (
     <PageFrame id="p-program-cat" tag="6.3 · Page" name="Program Category — Aquatics" annotations={[
-      {k:"[programs_category]", v:"hero + 2-col intro + stats + Help By Donating + Featured Stories + Other Services + Connect"},
+      {k:"[programs_category]", v:"hero + 2-col intro + Classes (search · filter · paginated) + Featured Stories + Connect"},
       {k:"icon", v:"kroc-icon · 'aquatics' from global icon endpoint"},
       {k:"featured_stories", v:"filtered by category=aquatics"},
     ]}>
@@ -238,23 +236,6 @@ function Page_ProgramCategory(){
       </div>
 
 
-      {/* Help by donating */}
-      <div className="kroc-main" style={{marginTop:32}}>
-        <div style={{maxWidth:1248,margin:"0 auto",background:"#fff",borderRadius:20,padding:0,overflow:"hidden",display:"grid",gridTemplateColumns:"3fr 2fr"}}>
-          <div style={{background:"#5b5b60",aspectRatio:"3/2",position:"relative"}}>
-            <div className="img-ph" style={{position:"absolute",inset:0,borderRadius:0}}><span className="label">3:2 · 660×440</span></div>
-          </div>
-          <div style={{padding:"40px 36px"}}>
-            <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:10}}>Help by Donating</div>
-            <h3 className="t-heading-sm" style={{margin:"0 0 12px"}}>Sponsor a swim scholarship.</h3>
-            <p style={{margin:"0 0 20px",fontSize:14.5,color:"#1C1B1F"}}>
-              $80 covers eight weeks of learn-to-swim for one Camden child. Every dollar goes straight to a family — never overhead.
-            </p>
-            <a className="btn btn-primary">Donate Now</a>
-          </div>
-        </div>
-      </div>
-
       {/* Featured stories */}
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
@@ -270,16 +251,41 @@ function Page_ProgramCategory(){
         </div>
       </div>
 
-      {/* Other services */}
+      {/* Aquatics Classes */}
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Other Services</h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
-            <CategoryCard name="Fitness" body="Weights, cardio, and group classes." cta="Learn More"/>
-            <CategoryCard name="Youth" body="Afterschool and summer camp." cta="Learn More"/>
-            <CategoryCard name="Arts" body="Studio, dance, and music." cta="Learn More"/>
-            <CategoryCard name="Worship" body="Sunday services and small groups." cta="Learn More"/>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14,gap:16,flexWrap:"wrap"}}>
+            <h2 className="t-heading-md" style={{margin:0}}>Aquatics Classes</h2>
+            <div className="kroc-input with-icon" style={{width:300}}><input placeholder="Search Aquatics classes"/></div>
           </div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
+            {["All","Roster","Drop-In"].map((t,i)=>(<span key={t} className={`pill ${i===0?"active":""}`}>{t}</span>))}
+          </div>
+          <div style={{fontSize:13,color:"#575757",marginBottom:14}}>1 – 6 of 24 classes</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
+            {[
+              ["Adult Learn-to-Swim","Roster","Tue & Thu · 7:00 PM","$95 / 8 weeks"],
+              ["Open Lap Swim","Drop-In","Mon–Fri · 6:00–9:00 AM","Members free · $8 drop-in"],
+              ["Masters Swim","Roster","M/W/F · 5:30 AM","$120 / 12 weeks"],
+              ["Parent & Baby Splash","Drop-In","Sat · 9:30 AM","$10 / session"],
+              ["Water Aerobics","Drop-In","T/Th · 10:00 AM","Members free · $8 drop-in"],
+              ["Teen Swim Team","Roster","Wed & Fri · 4:30 PM","$80 / 6 weeks"],
+            ].map(([t,kind,sched,price])=>(
+              <div key={t} className="kroc-card" style={{padding:0}}>
+                <div className="img" style={{aspectRatio:"16/9",position:"relative"}}>
+                  <span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`} style={{position:"absolute",top:14,left:14}}>{kind}</span>
+                  <span className="label">16:9 · class hero</span>
+                </div>
+                <div className="body" style={{padding:"18px 20px"}}>
+                  <div style={{fontSize:17,marginBottom:6}}>{t}</div>
+                  <div style={{fontSize:13,color:"#575757",marginBottom:6}}>{sched}</div>
+                  <div style={{fontSize:14,marginBottom:14}}>{price}</div>
+                  <a className="btn btn-primary btn-sm">Register</a>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"flex",justifyContent:"center",marginTop:32}}><Pagination/></div>
         </div>
       </div>
 
@@ -309,7 +315,10 @@ function Page_ClassDetail(){
 
         <div style={{maxWidth:1248,margin:"0 auto"}}>
           <h1 className="t-heading-lg" style={{margin:"0 0 16px"}}>Adult Learn-to-Swim · Beginner</h1>
-          <div className="img-ph" style={{aspectRatio:"16/7"}}><span className="label">1248×546 · 16:7</span></div>
+          <div className="img-ph" style={{aspectRatio:"16/7",position:"relative"}}>
+            <span className="pill sm red-outline" style={{position:"absolute",top:14,left:14}}>Roster</span>
+            <span className="label">1248×546 · 16:7</span>
+          </div>
         </div>
 
         <div style={{maxWidth:1248,margin:"32px auto 0",background:"#fff",borderRadius:20,padding:"40px 48px",display:"grid",gridTemplateColumns:"320px 1fr",gap:48}}>
@@ -363,14 +372,32 @@ function Page_ClassDetail(){
         </div>
       </div>
 
-      {/* Other classes */}
+      {/* Other Aquatics Classes */}
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Other Aquatics Classes</h2>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
+            <h2 className="t-heading-md" style={{margin:0}}>Other Aquatics Classes</h2>
+            <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>All Aquatics Classes <Icon name="arrowUR" size={14}/></a>
+          </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
-            <EventCard title="Masters Swim" date="M/W/F · 5:30 – 7:00 AM" address="Camden Kroc · Lap Pool" cta="View Class"/>
-            <EventCard title="Parent &amp; Baby Splash" date="Saturdays · 9:30 AM" address="Camden Kroc · Teaching Pool" cta="View Class"/>
-            <EventCard title="Water Aerobics" date="T/Th · 10:00 AM" address="Camden Kroc · Teaching Pool" cta="View Class"/>
+            {[
+              ["Masters Swim","Roster","M/W/F · 5:30–7:00 AM","$120 / 12 weeks"],
+              ["Parent & Baby Splash","Drop-In","Sat · 9:30 AM","$10 / session"],
+              ["Water Aerobics","Drop-In","T/Th · 10:00 AM","Members free · $8 drop-in"],
+            ].map(([t,kind,sched,price])=>(
+              <div key={t} className="kroc-card" style={{padding:0}}>
+                <div className="img" style={{aspectRatio:"16/9",position:"relative"}}>
+                  <span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`} style={{position:"absolute",top:14,left:14}}>{kind}</span>
+                  <span className="label">16:9 · class hero</span>
+                </div>
+                <div className="body" style={{padding:"18px 20px"}}>
+                  <div style={{fontSize:17,marginBottom:6}}>{t}</div>
+                  <div style={{fontSize:13,color:"#575757",marginBottom:6}}>{sched}</div>
+                  <div style={{fontSize:14,marginBottom:14}}>{price}</div>
+                  <a className="btn btn-primary btn-sm">Register</a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -461,7 +488,7 @@ function Page_AllStories(){
       {k:"filters", v:"Tag chips fed from [tags] (national)"},
       {k:"pagination", v:"server-side · 12 per page"},
     ]}>
-      <Header active="Programs"/>
+      <Header active="Stories"/>
       <div className="kroc-main">
         <section className="kroc-hero center" style={{margin:0,minHeight:280,aspectRatio:"unset",textAlign:"center"}}>
           <div className="ph-bg"><div className="dims">1400×360 · 16:9</div></div>
@@ -524,7 +551,7 @@ function Page_StoryDetail(){
       {k:"related_program_category", v:"Optional relational → [program_categories] — shown in sidebar"},
       {k:"external_article", v:"Optional URL — canonical source; shown as 'View Original' link above tags"},
     ]}>
-      <Header active="Programs"/>
+      <Header active="Stories"/>
 
       <div className="kroc-main">
         <div style={{maxWidth:1248,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>

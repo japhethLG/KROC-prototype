@@ -476,6 +476,39 @@ function B_DonationBlock() {
 
 }
 
+/* ---- 7.14 Featured Programs ---- */
+function B_FeaturedPrograms() {
+  return (
+    <BlockFrame id="b-featured-programs" n="7.14 · Block" name="Featured Programs"
+    schema="[featured_programs]"
+    fields={[
+    ["Block Name", "internal label"],
+    ["Block Title", "text · optional"],
+    ["View All Link", "url · optional"],
+    ["Display Mode", "Grid 3-up or 4-up"],
+    ["Featured Category (repeater)", "Relational → [program_categories]"]]
+    }
+    notes="Curates 3 or 4 [program_categories] entries for placement on the homepage or other landing pages. Each card pulls icon, name, and intro from the referenced category. Mirrors Featured Stories/Classes/Pages.">
+      <div style={{ padding: "24px 0" }}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
+          <h3 className="t-heading-md" style={{margin:0}}>How We Serve</h3>
+          <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>View All Programs <Icon name="arrowUR" size={14}/></a>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
+          {[
+            ["Aquatics","Swim, lap, and aquatic fitness."],
+            ["Fitness","Weights, cardio, and group classes."],
+            ["Youth","Afterschool, summer camp, mentoring."],
+            ["Arts","Studio, dance, and performing arts."],
+          ].map(([n,b])=>(
+            <CategoryCard key={n} name={n} body={b} cta="Learn More"/>
+          ))}
+        </div>
+      </div>
+    </BlockFrame>);
+
+}
+
 /* ---- Library wrapper ---- */
 function BlocksLibrary() {
   return (
@@ -488,7 +521,7 @@ function BlocksLibrary() {
           ["7.4", "FAQs", "b-faqs"], ["7.5", "External Embed", "b-embed"], ["7.6", "Featured Stories", "b-featured-stories"],
           ["7.7", "Featured Classes", "b-featured-classes"], ["7.8", "Facility Section", "b-facility"], ["7.9", "Featured Pages", "b-featured-pages"],
           ["7.10", "Image Gallery", "b-gallery"], ["7.11", "Custom Forms", "b-form"], ["7.12", "People Block", "b-people"],
-          ["7.13", "Donation Block", "b-donation"]].
+          ["7.13", "Donation Block", "b-donation"], ["7.14", "Featured Programs", "b-featured-programs"]].
           map(([n, l, id]) =>
           <a key={id} href={`#${id}`} className="block-toc-card">
               <div className="n">{n}</div>
@@ -499,7 +532,7 @@ function BlocksLibrary() {
       </div>
       <B_Alert /><B_Header /><B_Connect /><B_FAQs /><B_ExternalEmbed /><B_FeaturedStories />
       <B_FeaturedClasses /><B_FacilitySection /><B_FeaturedPages /><B_ImageGallery /><B_CustomForms /><B_PeopleBlock />
-      <B_DonationBlock />
+      <B_DonationBlock /><B_FeaturedPrograms />
     </section>);
 
 }
