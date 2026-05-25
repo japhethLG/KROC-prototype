@@ -481,7 +481,9 @@ body{
 .block-field:first-child{border-top:0}
 .block-field .k{color:#fff}
 .block-field .v{color:#888}
-.block-notes{font-size:11.5px;color:#aaa;line-height:1.5}
+/* TEMP — hide the entire Fields panel and Notes; restore by removing this block */
+.block-fields{display:none}
+.block-notes{font-size:11.5px;color:#aaa;line-height:1.5;display:none}
 .block-toc{max-width:1280px;margin:0 auto 40px;padding:24px;background:#0e0e10;border-radius:14px;color:#fff}
 .block-toc-h{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#ff9a9c;margin-bottom:14px}
 .block-toc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}

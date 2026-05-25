@@ -1,23 +1,29 @@
 /* Pages 6.8 – 6.13 */
 
-function PageFrameB({ id, n, name, tag="6.x · Page", children, annotations }){
+function PageFrameB({ id, n, name, schema, fields, notes, children }){
   return (
-    <>
-      <FrameHead tag={tag} name={name}/>
-      <div className="frame" id={id}>
+    <div className="frame-row" id={id}>
+      <div className="block-side">
+        <div className="block-n">{n}</div>
+        <div className="block-name">{name}</div>
+        {schema && <div className="block-schema">{schema}</div>}
+        {fields &&
+          <div className="block-fields">
+            <div className="block-fields-h">Fields</div>
+            {fields.map((f, i) =>
+              <div key={i} className="block-field">
+                <span className="k">{f[0]}</span>
+                <span className="v">{f[1]}</span>
+              </div>
+            )}
+          </div>
+        }
+        {notes && <div className="block-notes">{notes}</div>}
+      </div>
+      <div className="frame">
         <div className="kroc-page">{children}</div>
       </div>
-      {annotations && (
-        <div style={{maxWidth:1280,margin:"12px auto 32px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-          {annotations.map((a,i)=>(
-            <div key={i} className="annot" style={{fontSize:11.5,padding:"12px 14px"}}>
-              <div style={{fontFamily:"'SF Mono',Menlo,monospace",color:"#ff9a9c",fontSize:10,marginBottom:4}}>{a.k}</div>
-              <div style={{color:"#ddd"}}>{a.v}</div>
-            </div>
-          ))}
-        </div>
-      )}
-    </>
+    </div>
   );
 }
 
@@ -29,11 +35,15 @@ function Page_AllTags(){
     ["Camden",31],["Wellness",8],["Mentoring",6],["Scholarships",5],
   ];
   return (
-    <PageFrameB id="p-tags" tag="6.8 · Page" name="All Tags" annotations={[
-      {k:"[tags] — wildcard from National", v:"Index of every tag with story counts"},
-      {k:"layout", v:"4-up grid · sorted alphabetically by default"},
-      {k:"OPEN: taxonomy", v:"single-source vs national+region layered — flagged"},
-    ]}>
+    <PageFrameB id="p-tags" n="6.8 · Page" name="All Tags"
+      schema="[tags_index]"
+      fields={[
+        ["Name", "Text · required"],
+        ["Description", "Rich Text"],
+        ["Sort Options", "A-Z · Most stories · Recently used · UI only"],
+      ]}
+      notes="Single Page · Hybrid · /tags/. 4-up grid auto-fed from [tags] (wildcard, National). Story counts auto-computed.">
+
       <Header/>
       <div className="kroc-main">
         <section className="kroc-hero center" style={{margin:0,minHeight:280,aspectRatio:"unset",textAlign:"center"}}>
@@ -82,11 +92,17 @@ function Page_AllTags(){
 /* ===== 6.9 Tag Detail ===== */
 function Page_TagDetail(){
   return (
-    <PageFrameB id="p-tag" tag="6.9 · Page" name="Tag Detail — #Youth" annotations={[
-      {k:"[tag] — wildcard from National", v:"Hero with tag · 4-up card grid of tagged content"},
-      {k:"content_types", v:"Mixed feed: stories, events, programs all matching"},
-      {k:"breadcrumb", v:"← All Tags"},
-    ]}>
+    <PageFrameB id="p-tag" n="6.9 · Page" name="Tag Detail — #Youth"
+      schema="[tags]"
+      fields={[
+        ["Name", "Text · required · wildcard from National"],
+        ["Description", "Rich Text"],
+        ["Position", "Sort Order"],
+        ["Content Type Filter", "All · Stories · Events · Programs · UI only"],
+        ["Story / Event Counts", "Auto-computed · no CMS field"],
+      ]}
+      notes="Pageset · Automated · /tags/:tag_url/. Mixed feed of all content matching this tag.">
+
       <Header/>
       <div className="kroc-main">
         <span className="kroc-crumb"><Icon name="chevL" size={14}/> All Tags</span>
@@ -130,11 +146,15 @@ function Page_TagDetail(){
 /* ===== 6.10 Events Root ===== */
 function Page_Events(){
   return (
-    <PageFrameB id="p-events" tag="6.10 · Page" name="Events Root" annotations={[
-      {k:"[events] — OPEN", v:"Schema inferred (Comments 2 + 5) — flag for architect"},
-      {k:"layout", v:"hero + Upcoming 3×2 grid + pagination + Connect"},
-      {k:"filters", v:"Tag · Date range"},
-    ]}>
+    <PageFrameB id="p-events" n="6.10 · Page" name="Events Root"
+      schema="[events_root]"
+      fields={[
+        ["Hero Title", "Text · required"],
+        ["Hero Subtitle", "Text Area"],
+        ["Hero Image", "Image"],
+      ]}
+      notes="Single Page · Hybrid · /events/. Upcoming events 3-up grid auto-fed from [events], sorted by Start Datetime.">
+
       <Header active="Events"/>
       <div className="kroc-main">
         <section className="kroc-hero" style={{margin:0, aspectRatio:"3/1"}}>
@@ -189,11 +209,22 @@ function Page_Events(){
 /* ===== 6.11 Event Detail ===== */
 function Page_EventDetail(){
   return (
-    <PageFrameB id="p-event" tag="6.11 · Page" name="Event Detail — Summer Camp Open House" annotations={[
-      {k:"[event] — OPEN", v:"Same template as Class Detail (6.4)"},
-      {k:"contact", v:"Direct staff email + phone — body link style"},
-      {k:"map", v:"Embedded OSM tile · same map block as 7.5"},
-    ]}>
+    <PageFrameB id="p-event" n="6.11 · Page" name="Event Detail — Summer Camp Open House"
+      schema="[events]"
+      fields={[
+        ["Event Title", "Text · required · H1"],
+        ["Event Image", "Image · 16:7 hero"],
+        ["Start Datetime", "Datetime · required"],
+        ["End Datetime", "Datetime"],
+        ["Event Body", "Rich Text (WYSIWYG) · required · About the Event"],
+        ["Register Link", "URL / Remote API"],
+        ["Address", "Text · required"],
+        ["Contact Name", "Text"],
+        ["Contact Email", "Text"],
+        ["Contact Phone", "Text"],
+      ]}
+      notes="Pageset · Hybrid · /events/:page_slug/. Mirrors Class Detail layout: hero + 2-col sidebar/body. Map embed uses an OSM tile.">
+
       <Header active="Events"/>
 
       <div className="kroc-main">
@@ -282,12 +313,15 @@ function Page_EventDetail(){
 /* ===== 6.12 Contact Us ===== */
 function Page_Contact(){
   return (
-    <PageFrameB id="p-contact" tag="6.12 · Page" name="Contact Us" annotations={[
-      {k:"[contact_us] — OPEN (Comment 6)", v:"Hybrid template — form + sidebar"},
-      {k:"no_connect_block", v:"Replaced with cross-link card to avoid recursion"},
-      {k:"people_block — OPEN (Notes)", v:"Staff directory shown — informal model"},
-      {k:"[faqs]", v:"Drag-in block — common questions deflect inbound contact volume"},
-    ]}>
+    <PageFrameB id="p-contact" n="6.12 · Page" name="Contact Us"
+      schema="[contact_us]"
+      fields={[
+        ["Page Title", "Text · required"],
+        ["Page Intro", "Text Area"],
+        ["Department Contacts", "Repeater (Department Name, Email, Phone) · sidebar 'Reach a Team'"],
+      ]}
+      notes="Single Page · Hybrid · /contact/. Address + Hours auto from [kroc_location]. Form is a drag-in [custom_forms]. FAQs and People Block are drag-in blocks. Connect footer is replaced with a cross-link card to avoid recursion.">
+
       <Header active="Contact Us"/>
 
       <div className="kroc-main">
@@ -404,12 +438,24 @@ function Page_Contact(){
 /* ===== 6.13 Volunteers ===== */
 function Page_Volunteers(){
   return (
-    <PageFrameB id="p-volunteers" tag="6.13 · Page" name="Volunteers" annotations={[
-      {k:"[volunteers] — OPEN (Comment 7)", v:"Hybrid template — header + Featured Opportunities + Highlight + Why Volunteer + Stories"},
-      {k:"golden_api", v:"Featured Opportunity cards show skeleton state until Golden resolves"},
-      {k:"OPEN", v:"Failure copy when Golden is down — please define"},
-      {k:"[image_gallery]", v:"Drag-in block — volunteers in action, recruitment moment"},
-    ]}>
+    <PageFrameB id="p-volunteers" n="6.13 · Page" name="Volunteers"
+      schema="[volunteers]"
+      fields={[
+        ["Hero Title", "Text · required"],
+        ["Hero Subtitle", "Text Area"],
+        ["Hero Image", "Image"],
+        ["Hero CTA 1 Label + URL", "Text + URL"],
+        ["Hero CTA 2 Label + URL", "Text + URL"],
+        ["Highlight Image", "Image"],
+        ["Highlight Title", "Text"],
+        ["Highlight Body", "Rich Text"],
+        ["Highlight CTA Label + URL", "Text + URL"],
+        ["Why Volunteer Image", "Image"],
+        ["Why Volunteer Body", "Rich Text"],
+        ["Golden API Failure Copy", "Text Area · required · ⚠️ pending"],
+      ]}
+      notes="Single Page · Hybrid · /volunteer/. Featured Opportunities cards stream from the Golden API with a skeleton state. Image Gallery is a drag-in block.">
+
       <Header active="Volunteer"/>
 
       <div className="kroc-main">

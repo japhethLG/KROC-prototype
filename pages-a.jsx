@@ -1,36 +1,47 @@
 /* Pages 6.1 – 6.7 */
 
-function PageFrame({ id, n, name, tag="6.x · Page", children, annotations }){
+function PageFrame({ id, n, name, schema, fields, notes, children }){
   return (
-    <>
-      <FrameHead tag={tag} name={name}/>
-      <div className="frame" id={id}>
+    <div className="frame-row" id={id}>
+      <div className="block-side">
+        <div className="block-n">{n}</div>
+        <div className="block-name">{name}</div>
+        {schema && <div className="block-schema">{schema}</div>}
+        {fields &&
+          <div className="block-fields">
+            <div className="block-fields-h">Fields</div>
+            {fields.map((f, i) =>
+              <div key={i} className="block-field">
+                <span className="k">{f[0]}</span>
+                <span className="v">{f[1]}</span>
+              </div>
+            )}
+          </div>
+        }
+        {notes && <div className="block-notes">{notes}</div>}
+      </div>
+      <div className="frame">
         <div className="kroc-page">{children}</div>
       </div>
-      {annotations && (
-        <div style={{maxWidth:1280,margin:"12px auto 32px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-          {annotations.map((a,i)=>(
-            <div key={i} className="annot" style={{fontSize:11.5,padding:"12px 14px"}}>
-              <div style={{fontFamily:"'SF Mono',Menlo,monospace",color:"#ff9a9c",fontSize:10,marginBottom:4}}>{a.k}</div>
-              <div style={{color:"#ddd"}}>{a.v}</div>
-            </div>
-          ))}
-        </div>
-      )}
-    </>
+    </div>
   );
 }
 
 /* ===== 6.1 Homepage ===== */
 function Page_Home(){
   return (
-    <PageFrame id="p-home" tag="6.1 · Page" name="Homepage" annotations={[
-      {k:"[site_alert]", v:"Top alert · scheduled Nov 1–Nov 30 (warning variant)"},
-      {k:"[hero_block]", v:"Mission-led hero, 1400×460, scrim auto"},
-      {k:"[featured_programs]", v:"Drag-in block — 4-up category cards, curated, links to All Programs"},
-      {k:"[featured_stories]", v:"3-up carousel · from [stories]"},
-      {k:"[donation_block]", v:"Drag-in block — red mission band, donation conversion"},
-    ]}>
+    <PageFrame id="p-home" n="6.1 · Page" name="Homepage"
+      schema="Composed page — drag-in blocks"
+      fields={[
+        ["[site_alert]", "Top alert · scheduled window"],
+        ["Hero (hardcoded)", "Mission-led headline + photo · pulls Center name from [kroc_location]"],
+        ["[featured_programs]", "Curated 4-up category cards · links to All Programs"],
+        ["[featured_stories]", "3-up carousel · from [stories]"],
+        ["[donation_block]", "Red mission band · donation conversion"],
+        ["[connect_block]", "Global footer · automated from [kroc_location] + [custom_navigation]"],
+      ]}
+      notes="No dedicated schema — homepage is a composed page assembled from drag-in blocks. Center identity is read from the [kroc_location] instance.">
+
       <AlertBar text="Pool closed for maintenance — Saturday 11/15 from 6 AM to 12 PM." cta="View Schedule"/>
       <Header active="Home" location="Camden Kroc Center · Eastern Region"/>
 
@@ -142,11 +153,16 @@ function Page_AllPrograms(){
     ["Community","Drop-in events, family nights, and meeting space."],
   ];
   return (
-    <PageFrame id="p-programs" tag="6.2 · Page" name="All Programs" annotations={[
-      {k:"[programs_index]", v:"Hybrid template — pulls all [program_categories]"},
-      {k:"hero", v:"Compact — no full-bleed image required"},
-      {k:"layout", v:"4-up grid (desktop) of CategoryCard"},
-    ]}>
+    <PageFrame id="p-programs" n="6.2 · Page" name="All Programs"
+      schema="[programs_index]"
+      fields={[
+        ["Header Title", "Text · required"],
+        ["Subheader", "Text"],
+        ["Filter Pills", "Auto from [program_categories] · no CMS field"],
+        ["CTA Band", "Drag-in [donation_block]"],
+      ]}
+      notes="Single Page · Hybrid · /programs/ — auto-feeds the 4-up category grid from [program_categories].">
+
       <Header active="Programs"/>
       <div className="kroc-main">
         <section className="kroc-hero compact" style={{margin:0, aspectRatio:"unset", minHeight:280}}>
@@ -195,11 +211,19 @@ function Page_AllPrograms(){
 /* ===== 6.3 Program Category ===== */
 function Page_ProgramCategory(){
   return (
-    <PageFrame id="p-program-cat" tag="6.3 · Page" name="Program Category — Aquatics" annotations={[
-      {k:"[programs_category]", v:"hero + 2-col intro + Classes (search · filter · paginated) + Featured Stories + Connect"},
-      {k:"icon", v:"kroc-icon · 'aquatics' from global icon endpoint"},
-      {k:"featured_stories", v:"filtered by category=aquatics"},
-    ]}>
+    <PageFrame id="p-program-cat" n="6.3 · Page" name="Program Category — Aquatics"
+      schema="[program_categories]"
+      fields={[
+        ["Category Name", "Text · required · hero H1"],
+        ["Icon", "Remote API · kroc-icon in hero"],
+        ["Category Intro — Left Column", "Rich Text"],
+        ["Category Intro — Right Column", "Rich Text"],
+        ["Classes Listing — Search", "Per-list contextual · UI only"],
+        ["Classes Listing — Class Type Filter", "All · Roster · Drop-In · UI only"],
+        ["Classes Listing — Pagination", "Default 6/page · UI only"],
+      ]}
+      notes="Pageset · Hybrid · /programs/:category — auto-feeds the Classes grid from [classes] filtered by this category. Featured Stories filtered by category=this.">
+
       <Header active="Programs"/>
 
       <div className="kroc-main">
@@ -297,11 +321,22 @@ function Page_ProgramCategory(){
 /* ===== 6.4 Class Detail ===== */
 function Page_ClassDetail(){
   return (
-    <PageFrame id="p-class" tag="6.4 · Page" name="Class Detail — Adult Learn-to-Swim" annotations={[
-      {k:"[program]", v:"compact hero + 2-col sidebar/body + Other Programs"},
-      {k:"sidebar", v:"Date/Time, Audience, Price (Dynamic — skeleton state), Register CTA"},
-      {k:"price.skeleton", v:"API-driven — show skel until [program_price] resolves"},
-    ]}>
+    <PageFrame id="p-class" n="6.4 · Page" name="Class Detail — Adult Learn-to-Swim"
+      schema="[classes]"
+      fields={[
+        ["Class Name", "Text · required · hero H1"],
+        ["Program Category", "Relational · breadcrumb + Other Classes feed"],
+        ["Class Type", "Dropdown · Roster / Drop-In · pill badge"],
+        ["Description", "Remote API / Text · About this class body"],
+        ["Program Schedule", "Repeater · sidebar Date & Time"],
+        ["Audience", "Text / Dropdown · sidebar"],
+        ["Facility Location", "Text · sidebar Location"],
+        ["Dynamic Price", "Remote API · sidebar with skeleton state"],
+        ["Deep Link URL", "URL · Register Now button"],
+        ["Tags", "Relational · pill row at bottom"],
+      ]}
+      notes="Pageset · Hybrid · /programs/:category/:class. Sidebar Price uses a skeleton state until the dynamic price API resolves. Capacity is runtime-only (TractionRec), not a CMS field.">
+
       <Header active="Programs"/>
 
       <div className="kroc-main">
@@ -410,11 +445,17 @@ function Page_ClassDetail(){
 /* ===== 6.5 Informational Page ===== */
 function Page_Info(){
   return (
-    <PageFrame id="p-info" tag="6.5 · Page" name="Informational Page (Membership Policies)" annotations={[
-      {k:"[informational_page]", v:"Full-bleed red mission band + centered title/body alternation"},
-      {k:"variant", v:"Password-gated variant shown in inset"},
-      {k:"max_width", v:"Body content centered at 800px"},
-    ]}>
+    <PageFrame id="p-info" n="6.5 · Page" name="Informational Page — Membership Policies"
+      schema="[informational_pages]"
+      fields={[
+        ["Page Name", "Text · required · hero headline"],
+        ["Page Eyebrow", "Text · small uppercase label"],
+        ["Hero Subheader", "Text Area"],
+        ["Page Content", "WYSIWYG · required"],
+        ["Access Password", "Text · powers password-gate variant"],
+      ]}
+      notes="Pageset · Freestyle · /:page_slug. Hero is rendered as a red mission band. Password-gated variant locks content behind Access Password.">
+
       <Header/>
 
       <div className="kroc-main">
@@ -483,11 +524,15 @@ function Page_Info(){
 /* ===== 6.6 All Stories ===== */
 function Page_AllStories(){
   return (
-    <PageFrame id="p-stories" tag="6.6 · Page" name="All Stories" annotations={[
-      {k:"[stories]", v:"Index — centered hero + featured 3-up + filter chips + feed"},
-      {k:"filters", v:"Tag chips fed from [tags] (national)"},
-      {k:"pagination", v:"server-side · 12 per page"},
-    ]}>
+    <PageFrame id="p-stories" n="6.6 · Page" name="All Stories"
+      schema="[stories_index]"
+      fields={[
+        ["Header Title", "Text · required"],
+        ["Subheader", "Text Area"],
+        ["Tag Filter Chips", "Auto from [tags] (national) · no CMS field"],
+      ]}
+      notes="Single Page · Hybrid · /stories/. Feed auto-pulls from [stories]; pagination is server-side (12 per page).">
+
       <Header active="Stories"/>
       <div className="kroc-main">
         <section className="kroc-hero center" style={{margin:0,minHeight:280,aspectRatio:"unset",textAlign:"center"}}>
@@ -542,15 +587,25 @@ function Page_AllStories(){
 /* ===== 6.7 Story Detail ===== */
 function Page_StoryDetail(){
   return (
-    <PageFrame id="p-story" tag="6.7 · Page" name="Story Detail" annotations={[
-      {k:"[story]", v:"compact hero + share + 16:9 image + 2-col sidebar/body + tags + Recent Stories"},
-      {k:"links", v:"Body links: navy text + red underline"},
-      {k:"share", v:"FB, X, LinkedIn, Instagram"},
-      {k:"donation_override_link", v:"Optional URL — overrides instance donation link in sidebar"},
-      {k:"related_event", v:"Optional relational → [events] — shown in sidebar"},
-      {k:"related_program_category", v:"Optional relational → [program_categories] — shown in sidebar"},
-      {k:"external_article", v:"Optional URL — canonical source; shown as 'View Original' link above tags"},
-    ]}>
+    <PageFrame id="p-story" n="6.7 · Page" name="Story Detail"
+      schema="[stories]"
+      fields={[
+        ["Title", "Text · required · H1"],
+        ["Story Image", "Media · required · 16:9 hero"],
+        ["Story Date", "Datetime · required"],
+        ["Story Body", "Rich Text (WYSIWYG) · required · supports pull-quote"],
+        ["Author", "Text · required · sidebar"],
+        ["Author Location", "Relational ([kroc_location])"],
+        ["Story Excerpt", "Text Area · required · cards + feeds"],
+        ["Donation Override / Link", "URL · overrides instance donation link"],
+        ["Article Tag", "Integration Field · from National"],
+        ["Hashtag", "Repeater"],
+        ["Related Event", "Relational ([events]) · sidebar card"],
+        ["Related Program Category", "Relational ([program_categories]) · sidebar link"],
+        ["External Article", "URL · 'View Original' banner above tags"],
+      ]}
+      notes="Pageset · Fixed · /stories/:page_url/. Sidebar surfaces author, location, optional donation override, and related event/program category. External Article banner appears above the tag pills.">
+
       <Header active="Stories"/>
 
       <div className="kroc-main">

@@ -417,7 +417,7 @@ function B_CustomForms() {
 function B_PeopleBlock() {
   return (
     <BlockFrame id="b-people" n="7.12 · Block" name="People Block (informal)"
-    schema="[people_block] — OPEN, not yet formalized"
+    schema="[people_block]"
     fields={[
     ["Repeater → Person", "Name, Role, Headshot, Bio (optional), Email (optional), Phone (optional)"],
     ["Layout", "4-up cards · 3-up with bio · 1-up feature"]]
