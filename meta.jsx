@@ -20,13 +20,13 @@ function Cover(){
           <span className="f-jenson" style={{fontStyle:"italic",color:"#FF838B"}}>built block by block.</span>
         </h1>
         <p style={{fontSize:18,color:"#bbb",margin:0,maxWidth:680,lineHeight:1.6}}>
-          High-fidelity desktop prototypes for 13 page templates and 12 reusable blocks, styled in the KROC web design system. One CMS — four regions — every KROC center.
+          High-fidelity desktop prototypes for 14 page templates and 15 reusable blocks, styled in the KROC web design system. One CMS — four regions — every KROC center.
         </p>
       </div>
 
       <div style={{position:"relative",display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:24,fontSize:13,color:"#aaa",borderTop:"1px solid #2a2a2e",paddingTop:24}}>
-        <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Pages</div>13 templates</div>
-        <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Blocks</div>12 reusable patterns</div>
+        <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Pages</div>14 templates</div>
+        <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Blocks</div>15 reusable patterns</div>
         <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Regions</div>Central · Eastern · Southern · Western</div>
         <div><div style={{color:"#666",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6}}>Designed by</div>Web Design Team</div>
       </div>
@@ -54,7 +54,7 @@ function Essence(){
             The five rhythms<br/>that hold every page together.
           </h2>
           <p style={{color:"#575757",margin:0,maxWidth:540,fontSize:15.5,lineHeight:1.6}}>
-            Across all 13 templates, the same five moves repeat: a floating header pill, a full-bleed photo hero on a grey page, white cards with 20px corners, a navy in-card CTA, and the Connect With Us footer block. If a frame breaks one of these, it isn't KROC.
+            Across all 14 templates, the same five moves repeat: a floating header pill, a full-bleed photo hero on a grey page, white cards with 20px corners, a navy in-card CTA, and the Connect With Us footer block. If a frame breaks one of these, it isn't KROC.
           </p>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,alignContent:"start"}}>

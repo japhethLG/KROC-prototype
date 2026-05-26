@@ -439,7 +439,7 @@ function Page_Contact(){
 function Page_Volunteers(){
   return (
     <PageFrameB id="p-volunteers" n="6.13 · Page" name="Volunteers"
-      schema="[volunteers]"
+      schema="[volunteer_opportunities_index]"
       fields={[
         ["Hero Title", "Text · required"],
         ["Hero Subtitle", "Text Area"],
@@ -454,7 +454,7 @@ function Page_Volunteers(){
         ["Why Volunteer Body", "Rich Text"],
         ["Golden API Failure Copy", "Text Area · required · ⚠️ pending"],
       ]}
-      notes="Single Page · Hybrid · /volunteer/. Featured Opportunities cards stream from the Golden API with a skeleton state. Image Gallery is a drag-in block.">
+      notes="Single Page · Hybrid · /volunteer/. Featured block surfaces a curated subset of [volunteer_opportunities]. Image Gallery is a drag-in block.">
 
       <Header active="Volunteer"/>
 
@@ -475,19 +475,29 @@ function Page_Volunteers(){
         </section>
       </div>
 
-      {/* Featured opportunities — Golden API */}
+      {/* Featured opportunities — [featured_volunteer_opportunities] block */}
       <div className="kroc-main" style={{marginTop:40}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
+          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>Block · [featured_volunteer_opportunities] — drag-in</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
             <h2 className="t-heading-md" style={{margin:0}}>Featured Volunteer Opportunities</h2>
-            <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>View All Local Opportunities <Icon name="arrowUR" size={14}/></a>
           </div>
-          <div style={{fontSize:12,fontFamily:"'SF Mono',Menlo,monospace",color:"#575757",marginBottom:14}}>← live from Golden API · skeleton until resolved</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
-            <OppCard title="Afterschool Tutor — K–5 Math" city="Camden, NJ" body="Spend 90 minutes a week with a small group of elementary students working on number sense and fluency. Training provided; ongoing commitment preferred."/>
-            <OppCard title="Pool Deck Volunteer" city="Camden, NJ" body="Help our aquatics team during open-swim hours — towel handout, lane setup, and a friendly face at the entry desk. Lifeguard certification not required."/>
-            <OppCard skeleton/>
-            <OppCard skeleton/>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
+            {[
+              ["Summer Food Program 2026","Jun 1 – Aug 7, 2026","Mornings, two-shift options · help serve meals 11:30 AM – 1:00 PM in our community kitchen."],
+              ["Afterschool Tutor — K–5 Math","Ongoing · Sep 2026 – May 2027","90 min/week with a small group of elementary students · training provided."],
+              ["Holiday Ambassador","Dec 1 – Dec 24, 2026","Two-hour shifts at our kettle locations across Camden. Train on the day; no prior experience needed."],
+            ].map(([t,d,b])=>(
+              <div key={t} className="kroc-card" style={{padding:0}}>
+                <div className="img" style={{aspectRatio:"16/9"}}><span className="label">16:9 · opp hero</span></div>
+                <div className="body" style={{padding:"18px 22px"}}>
+                  <div style={{fontSize:17,marginBottom:4}}>{t}</div>
+                  <div style={{fontSize:12.5,color:"#575757",marginBottom:8,fontFamily:"'SF Mono',Menlo,monospace",letterSpacing:".02em"}}>{d}</div>
+                  <p style={{fontSize:13.5,color:"#1C1B1F",margin:"0 0 14px",lineHeight:1.5}}>{b}</p>
+                  <a className="btn btn-secondary btn-sm">Learn More</a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -564,4 +574,181 @@ function Page_Volunteers(){
   );
 }
 
-Object.assign(window, { Page_AllTags, Page_TagDetail, Page_Events, Page_EventDetail, Page_Contact, Page_Volunteers });
+/* ===== 6.14 Volunteer Opportunity Detail ===== */
+function Page_VolunteerDetail(){
+  return (
+    <PageFrameB id="p-volunteer-detail" n="6.14 · Page" name="Volunteer Opportunity Detail — Summer Food Program 2026"
+      schema="[volunteer_opportunities]"
+      fields={[
+        ["Opportunity Title", "Text · required · hero H1"],
+        ["Hero Image", "Image · 16:7 hero"],
+        ["Excerpt", "Text Area · required · cards + feeds"],
+        ["Start Date", "Datetime · required"],
+        ["End Date", "Datetime · blank = open-ended"],
+        ["About this Opportunity", "Rich Text (WYSIWYG) · required"],
+        ["Shifts", "Repeater (Label, Time)"],
+        ["Role Requirements", "Rich Text"],
+        ["Required Trainings", "Repeater (Name, URL)"],
+        ["Facility / Location", "Text"],
+        ["Register Link", "URL · Sign Up button"],
+        ["Contact Name", "Text"],
+        ["Contact Phone", "Text"],
+        ["Contact Email", "Text"],
+      ]}
+      notes="Pageset · Hybrid · /volunteer/:page_slug/. Sidebar carries Date Range, Shifts, Location, Required Trainings, Sign Up button, and Contact info. Body renders About this Opportunity and Role Requirements. Drag-in blocks supported below the body: [image_gallery], [faqs], [featured_volunteer_opportunities].">
+
+      <Header active="Volunteer"/>
+
+      <div className="kroc-main">
+        <div style={{maxWidth:1248,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+          <span className="kroc-crumb"><Icon name="chevL" size={14}/> Return to all opportunities</span>
+          <div style={{display:"flex",alignItems:"center",gap:14,color:"#575757",fontSize:13}}>
+            <span>Share Opportunity</span>
+            <Icon name="fb" size={16}/><Icon name="x" size={16}/><Icon name="li" size={16}/><Icon name="ig" size={16}/>
+          </div>
+        </div>
+
+        <div style={{maxWidth:1248,margin:"0 auto"}}>
+          <div style={{fontSize:12,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:10}}>Volunteer Opportunity</div>
+          <h1 className="t-heading-lg" style={{margin:"0 0 16px"}}>Summer Food Program 2026</h1>
+          <div className="img-ph" style={{aspectRatio:"16/7"}}><span className="label">1248×546 · 16:7</span></div>
+        </div>
+
+        <div style={{maxWidth:1248,margin:"32px auto 0",background:"#fff",borderRadius:20,padding:"40px 48px",display:"grid",gridTemplateColumns:"320px 1fr",gap:48}}>
+          <aside>
+            <div style={{fontSize:13,color:"#575757",marginBottom:4}}>Date Range</div>
+            <div style={{fontSize:16,marginBottom:14}}>Mon, Jun 1, 2026<br/>– Fri, Aug 7, 2026</div>
+
+            <div style={{fontSize:13,color:"#575757",marginBottom:6}}>Shifts</div>
+            <div style={{marginBottom:18}}>
+              {[
+                ["Morning","10:30 AM – 11:30 AM"],
+                ["Midday","11:15 AM – 1:15 PM"],
+              ].map(([label,time])=>(
+                <div key={label} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid #F0F0F0",fontSize:14}}>
+                  <span style={{fontWeight:500}}>{label}</span>
+                  <span style={{color:"#575757"}}>{time}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{fontSize:13,color:"#575757",marginBottom:4}}>Location</div>
+            <div style={{fontSize:15,marginBottom:14}}>Camden Kroc Center<br/>Main Kitchen</div>
+
+            <div style={{fontSize:13,color:"#575757",marginBottom:6}}>Required Trainings</div>
+            <ul style={{margin:"0 0 18px",paddingLeft:0,listStyle:"none"}}>
+              <li style={{fontSize:14,marginBottom:4,display:"flex",alignItems:"flex-start",gap:8}}>
+                <Icon name="lock" size={14}/>
+                <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",cursor:"pointer"}}>Civil Rights Training</a>
+              </li>
+            </ul>
+
+            <div style={{height:1,background:"#eaeaee",margin:"14px 0"}}/>
+            <a className="btn btn-primary btn-block" style={{marginBottom:8}}>Sign Up to Volunteer</a>
+            <a className="btn btn-info btn-block btn-sm"><Icon name="cal" size={14}/> Add to Calendar</a>
+
+            <div style={{height:1,background:"#eaeaee",margin:"18px 0"}}/>
+            <div style={{fontSize:13,color:"#575757",marginBottom:6}}>Questions?</div>
+            <div style={{fontSize:14.5,marginBottom:2}}>Dylan Reyes</div>
+            <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",fontSize:13.5,cursor:"pointer",display:"block",marginBottom:2}}>dylan@kroccenters.org</a>
+            <div style={{fontSize:13.5,color:"#575757"}}>(217) 231-5655</div>
+          </aside>
+          <div>
+            <h3 className="t-heading-sm" style={{margin:"0 0 12px"}}>About this Opportunity</h3>
+            <p style={{color:"#1C1B1F",fontSize:15,lineHeight:1.7,marginBottom:14}}>
+              Welcome to the 2026 Summer Food Program at the Camden Kroc Center. From June 1st through August 7th, we'll be serving free meals to neighborhood kids and families weekdays from 11:30 AM to 1:00 PM — and we need a steady crew of volunteers to make it happen.
+            </p>
+            <p style={{color:"#1C1B1F",fontSize:15,lineHeight:1.7,marginBottom:14}}>
+              Volunteers help serve food, keep tables clean and sanitized, and hand out additional milk or snacks as needed. It's friendly, fast-paced work alongside our kitchen staff — most volunteers say the two hours fly by.
+            </p>
+            <p style={{color:"#1C1B1F",fontSize:15,lineHeight:1.7,marginBottom:20}}>
+              Your volunteer work at The Salvation Army is invaluable to us and helps us make a positive impact and spread kindness across Camden.
+            </p>
+
+            <div style={{background:"#FFF8F8",border:"1px solid #ffe2e2",borderRadius:14,padding:"18px 22px",marginBottom:24}}>
+              <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:8}}>Role Requirements</div>
+              <ul style={{margin:0,paddingLeft:18,color:"#1C1B1F",fontSize:14.5,lineHeight:1.75}}>
+                <li>Standing for the majority of the shift</li>
+                <li>Serving food and maintaining clean, sanitized tables</li>
+                <li>Distributing additional milk or snacks as needed</li>
+                <li>Completion of <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42"}}>Civil Rights Training</a> before your first shift</li>
+              </ul>
+            </div>
+
+            <h4 style={{fontSize:17,marginTop:24,marginBottom:10}}>What to expect on your first day</h4>
+            <p style={{color:"#1C1B1F",fontSize:14.5,lineHeight:1.7,marginBottom:0}}>
+              Check in at the front desk fifteen minutes before your shift — we'll get you an apron, walk you through the kitchen, and pair you up with a returning volunteer for your first day. Please wear closed-toe shoes and tie back long hair.
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Image gallery — drag-in block */}
+      <div className="kroc-main" style={{marginTop:48}}>
+        <div style={{maxWidth:1248,margin:"0 auto"}}>
+          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>Block · [image_gallery] — drag-in</div>
+          <ImageGallery
+            title="From the 2025 Summer Food Program"
+            tiles={[
+              ["serving line",   2, 2],
+              ["kitchen prep",   1, 1],
+              ["volunteer crew", 1, 1],
+              ["family meal",    1, 2],
+              ["dish station",   2, 1],
+              ["sign-in desk",   1, 1],
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* FAQs — drag-in block */}
+      <div className="kroc-main" style={{marginTop:48}}>
+        <div style={{maxWidth:1248,margin:"0 auto"}}>
+          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>Block · [faqs] — drag-in</div>
+          <FaqList
+            title="Before You Sign Up"
+            items={[
+              ["Do I need to commit to the whole summer?", "No — pick the shifts that work for you, even if that's just one. Most volunteers sign up for a handful of slots across the summer."],
+              ["What if I can't complete Civil Rights Training in advance?", "Reach out to Dylan and we'll get you onto the next group training, or send you the self-paced version. We can't have you on a shift before it's done."],
+              ["Can I bring my teen to volunteer with me?", "Yes — volunteers under 18 can shadow you on a shift if they're 14 or older. Please email Dylan a day or two ahead so we can plan for the extra hands."],
+              ["Will food be provided for volunteers?", "Yes. Volunteers eat the same meal we serve, free of charge, before or after their shift."],
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Related opportunities — featured block */}
+      <div className="kroc-main" style={{marginTop:48}}>
+        <div style={{maxWidth:1248,margin:"0 auto"}}>
+          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>Block · [featured_volunteer_opportunities] — drag-in</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
+            <h2 className="t-heading-md" style={{margin:0}}>Other Ways to Volunteer</h2>
+            <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>View All Opportunities <Icon name="arrowUR" size={14}/></a>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
+            {[
+              ["Afterschool Tutor — K–5 Math","Ongoing · Sep 2026 – May 2027","Spend 90 minutes a week with a small group of elementary students working on number sense and fluency."],
+              ["Pool Deck Volunteer","Year-round · open shifts","Help our aquatics team during open-swim hours — towel handout, lane setup, and a friendly face at the entry desk."],
+              ["Holiday Ambassador","Dec 1 – Dec 24, 2026","Two-hour shifts at our kettle locations across Camden. Train on the day; no prior experience needed."],
+            ].map(([t,d,b])=>(
+              <div key={t} className="kroc-card" style={{padding:0}}>
+                <div className="img" style={{aspectRatio:"16/9"}}><span className="label">16:9 · opp hero</span></div>
+                <div className="body" style={{padding:"18px 22px"}}>
+                  <div style={{fontSize:17,marginBottom:4}}>{t}</div>
+                  <div style={{fontSize:12.5,color:"#575757",marginBottom:8,fontFamily:"'SF Mono',Menlo,monospace",letterSpacing:".02em"}}>{d}</div>
+                  <p style={{fontSize:13.5,color:"#1C1B1F",margin:"0 0 14px",lineHeight:1.5}}>{b}</p>
+                  <a className="btn btn-secondary btn-sm">Learn More</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <Connect/>
+    </PageFrameB>
+  );
+}
+
+Object.assign(window, { Page_AllTags, Page_TagDetail, Page_Events, Page_EventDetail, Page_Contact, Page_Volunteers, Page_VolunteerDetail });

@@ -37,7 +37,8 @@ function JumpNav(){
       ["p-events","6.10 Events Root"],
       ["p-event","6.11 Event Detail"],
       ["p-contact","6.12 Contact Us"],
-      ["p-volunteers","6.13 Volunteers"],
+      ["p-volunteers","6.13 Volunteer Opportunities Index"],
+      ["p-volunteer-detail","6.14 Volunteer Opportunity Detail"],
     ]],
   ];
   const [open, setOpen] = React.useState(false);
@@ -89,6 +90,7 @@ function App(){
       <Page_EventDetail/>
       <Page_Contact/>
       <Page_Volunteers/>
+      <Page_VolunteerDetail/>
 
       <a id="open"></a>
       {/*<OpenQuestions/>*/}

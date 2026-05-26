@@ -509,6 +509,46 @@ function B_FeaturedPrograms() {
 
 }
 
+/* ---- 7.15 Featured Volunteer Opportunities ---- */
+function B_FeaturedVolunteerOpps() {
+  return (
+    <BlockFrame id="b-featured-volunteers" n="7.15 · Block" name="Featured Volunteer Opportunities"
+    schema="[featured_volunteer_opportunities]"
+    fields={[
+    ["Block Name", "internal label"],
+    ["Block Title", "text · optional"],
+    ["View All Link", "url · optional"],
+    ["Display Mode", "Grid 3-up or 4-up"],
+    ["Featured Opportunity (repeater)", "Relational → [volunteer_opportunities]"]]
+    }
+    notes="Curates 3-4 [volunteer_opportunities] entries for placement on the Volunteer landing, related-opps modules, or any informational page. Each card pulls Hero Image, Title, Date Range, and Excerpt from the referenced opportunity. Mirrors Featured Stories/Classes/Pages/Programs.">
+      <div style={{ padding: "24px 0" }}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
+          <h3 className="t-heading-md" style={{margin:0}}>Volunteer With Us</h3>
+          <a style={{fontSize:13,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>View All Opportunities <Icon name="arrowUR" size={14}/></a>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
+          {[
+            ["Summer Food Program 2026","Jun 1 – Aug 7, 2026","Mornings, two-shift options · help serve meals 11:30 AM – 1:00 PM."],
+            ["Afterschool Tutor — K–5 Math","Ongoing · Sep 2026 – May 2027","90 min/week with a small group · training provided."],
+            ["Pool Deck Volunteer","Year-round · open shifts","Help our aquatics team during open-swim hours · lifeguard cert not required."],
+          ].map(([t,d,b])=>(
+            <div key={t} className="kroc-card" style={{padding:0}}>
+              <div className="img" style={{aspectRatio:"16/9"}}><span className="label">16:9 · opp hero</span></div>
+              <div className="body" style={{padding:"18px 22px"}}>
+                <div style={{fontSize:17,marginBottom:4}}>{t}</div>
+                <div style={{fontSize:12.5,color:"#575757",marginBottom:8,fontFamily:"'SF Mono',Menlo,monospace",letterSpacing:".02em"}}>{d}</div>
+                <p style={{fontSize:13.5,color:"#1C1B1F",margin:"0 0 14px",lineHeight:1.5}}>{b}</p>
+                <a className="btn btn-secondary btn-sm">Learn More</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </BlockFrame>);
+
+}
+
 /* ---- Library wrapper ---- */
 function BlocksLibrary() {
   return (
@@ -521,7 +561,8 @@ function BlocksLibrary() {
           ["7.4", "FAQs", "b-faqs"], ["7.5", "External Embed", "b-embed"], ["7.6", "Featured Stories", "b-featured-stories"],
           ["7.7", "Featured Classes", "b-featured-classes"], ["7.8", "Facility Section", "b-facility"], ["7.9", "Featured Pages", "b-featured-pages"],
           ["7.10", "Image Gallery", "b-gallery"], ["7.11", "Custom Forms", "b-form"], ["7.12", "People Block", "b-people"],
-          ["7.13", "Donation Block", "b-donation"], ["7.14", "Featured Programs", "b-featured-programs"]].
+          ["7.13", "Donation Block", "b-donation"], ["7.14", "Featured Programs", "b-featured-programs"],
+          ["7.15", "Featured Volunteer Opps", "b-featured-volunteers"]].
           map(([n, l, id]) =>
           <a key={id} href={`#${id}`} className="block-toc-card">
               <div className="n">{n}</div>
@@ -532,7 +573,7 @@ function BlocksLibrary() {
       </div>
       <B_Alert /><B_Header /><B_Connect /><B_FAQs /><B_ExternalEmbed /><B_FeaturedStories />
       <B_FeaturedClasses /><B_FacilitySection /><B_FeaturedPages /><B_ImageGallery /><B_CustomForms /><B_PeopleBlock />
-      <B_DonationBlock /><B_FeaturedPrograms />
+      <B_DonationBlock /><B_FeaturedPrograms /><B_FeaturedVolunteerOpps />
     </section>);
 
 }

@@ -31,16 +31,16 @@ function PageFrame({ id, n, name, schema, fields, notes, children }){
 function Page_Home(){
   return (
     <PageFrame id="p-home" n="6.1 · Page" name="Homepage"
-      schema="Composed page — drag-in blocks"
+      schema="[homepage]"
       fields={[
-        ["[site_alert]", "Top alert · scheduled window"],
-        ["Hero (hardcoded)", "Mission-led headline + photo · pulls Center name from [kroc_location]"],
-        ["[featured_programs]", "Curated 4-up category cards · links to All Programs"],
-        ["[featured_stories]", "3-up carousel · from [stories]"],
-        ["[donation_block]", "Red mission band · donation conversion"],
-        ["[connect_block]", "Global footer · automated from [kroc_location] + [custom_navigation]"],
+        ["Hero Eyebrow", "Text · small uppercase label above the H1"],
+        ["Hero Title", "Text · required · mission-led H1"],
+        ["Hero Subtitle", "Text Area"],
+        ["Hero Image", "Image · required · 1400×460 (3:1)"],
+        ["Hero Primary CTA Label + URL", "Text + URL"],
+        ["Hero Secondary CTA Label + URL", "Text + URL"],
       ]}
-      notes="No dedicated schema — homepage is a composed page assembled from drag-in blocks. Center identity is read from the [kroc_location] instance.">
+      notes="Single Page · Hybrid · /. Schema owns the hero only; body is assembled from drag-in blocks ([featured_programs], [featured_stories], [donation_block], [facility_section]). Global identity (logo, donation link, address, social) pulls from [kroc_location].">
 
       <AlertBar text="Pool closed for maintenance — Saturday 11/15 from 6 AM to 12 PM." cta="View Schedule"/>
       <Header active="Home" location="Camden Kroc Center · Eastern Region"/>
