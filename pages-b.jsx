@@ -145,6 +145,21 @@ function Page_TagDetail(){
 
 /* ===== 6.10 Events Root ===== */
 function Page_Events(){
+  const [tab, setTab] = React.useState("upcoming");
+  const upcoming = [
+    ["Summer Camp Open House","June 14, 2026 · 10 AM – 1 PM"],
+    ["Family Pool Night","June 21, 2026 · 5 – 8 PM"],
+    ["Teen Open Mic","June 27, 2026 · 7 PM"],
+    ["Senior Health Fair","July 9, 2026 · 9 AM – 12 PM"],
+    ["Volunteer Onboarding","July 12, 2026 · 6 PM"],
+    ["Independence Day BBQ","July 4, 2026 · 12 – 4 PM"],
+  ];
+  const past = [
+    ["Spring Family 5K","April 12, 2026 · 8 AM"],
+    ["Community Easter Egg Hunt","March 30, 2026 · 11 AM"],
+    ["Winter Talent Showcase","February 21, 2026 · 6 PM"],
+  ];
+  const events = tab === "upcoming" ? upcoming : past;
   return (
     <PageFrameB id="p-events" n="6.10 · Page" name="Events Root"
       schema="[events_root]"
@@ -152,8 +167,10 @@ function Page_Events(){
         ["Hero Title", "Text · required"],
         ["Hero Subtitle", "Text Area"],
         ["Hero Image", "Image"],
+        ["Upcoming / Past Filter", "UI only · past auto-flagged"],
+        ["Month Filter", "UI only"],
       ]}
-      notes="Single Page · Hybrid · /events/. Upcoming events 3-up grid auto-fed from [events], sorted by Start Datetime.">
+      notes="Single Page · Hybrid · /events/. Upcoming/Past tabs + month filter. Past events are kept on the site and auto-flagged 'Past Event' rather than removed.">
 
       <Header active="Events"/>
       <div className="kroc-main">
@@ -177,24 +194,24 @@ function Page_Events(){
 
       <div className="kroc-main" style={{marginTop:40}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:6}}>
-            <h2 className="t-heading-md" style={{margin:0}}>Upcoming Events</h2>
-            <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:16,flexWrap:"wrap"}}>
+            <div style={{display:"flex",gap:6}}>
+              {[["upcoming","Upcoming"],["past","Past"]].map(([k,l])=>(
+                <span key={k} onClick={()=>setTab(k)} className={`pill ${tab===k?"active":""}`} style={{cursor:"pointer"}}>{l}</span>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+              <div className="kroc-input" style={{padding:"8px 14px"}}><span>June 2026</span><Icon name="chev" size={14}/></div>
               <div className="kroc-input" style={{padding:"8px 14px"}}><span>Sort: Soonest</span><Icon name="chev" size={14}/></div>
             </div>
           </div>
-          <div style={{fontSize:13,color:"#575757",marginBottom:18}}>1 – 6 of 20 events</div>
+          <div style={{fontSize:13,color:"#575757",marginBottom:18}}>
+            {tab==="upcoming" ? "1 – 6 of 20 upcoming events" : "1 – 3 of 42 past events"}
+          </div>
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
-            {[
-              ["Summer Camp Open House","June 14, 2026 · 10 AM – 1 PM"],
-              ["Family Pool Night","June 21, 2026 · 5 – 8 PM"],
-              ["Teen Open Mic","June 27, 2026 · 7 PM"],
-              ["Senior Health Fair","July 9, 2026 · 9 AM – 12 PM"],
-              ["Volunteer Onboarding","July 12, 2026 · 6 PM"],
-              ["Independence Day BBQ","July 4, 2026 · 12 – 4 PM"],
-            ].map(([t,d])=>(
-              <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way"/>
+            {events.map(([t,d])=>(
+              <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way" past={tab==="past"}/>
             ))}
           </div>
           <div style={{display:"flex",justifyContent:"center",marginTop:40}}><Pagination/></div>

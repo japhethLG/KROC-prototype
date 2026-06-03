@@ -210,6 +210,17 @@ function Page_AllPrograms(){
 
 /* ===== 6.3 Program Category ===== */
 function Page_ProgramCategory(){
+  const [view, setView] = React.useState("card");
+  const classes = [
+    ["Adult Learn-to-Swim","Roster","Tue & Thu · 7:00 PM","$95 / 8 weeks"],
+    ["Open Lap Swim","Drop-In","Mon–Fri · 6:00–9:00 AM","Members free · $8 drop-in"],
+    ["Masters Swim","Roster","M/W/F · 5:30 AM","$120 / 12 weeks"],
+    ["Parent & Baby Splash","Drop-In","Sat · 9:30 AM","$10 / session"],
+    ["Water Aerobics","Drop-In","T/Th · 10:00 AM","Members free · $8 drop-in"],
+    ["Teen Swim Team","Roster","Wed & Fri · 4:30 PM","$80 / 6 weeks"],
+  ];
+  const th = { padding:"13px 22px", fontSize:11.5, color:"#888", fontWeight:600, textTransform:"uppercase", letterSpacing:".05em" };
+  const td = { padding:"14px 22px", fontSize:14, color:"#1C1B1F", verticalAlign:"middle" };
   return (
     <PageFrame id="p-program-cat" n="6.3 · Page" name="Program Category — Aquatics"
       schema="[program_categories]"
@@ -220,6 +231,8 @@ function Page_ProgramCategory(){
         ["Category Intro — Right Column", "Rich Text"],
         ["Classes Listing — Search", "Per-list contextual · UI only"],
         ["Classes Listing — Class Type Filter", "All · Roster · Drop-In · UI only"],
+        ["Classes Listing — Date Filter", "Any time · This week · Month · UI only"],
+        ["Classes Listing — View Toggle", "Card · Table · UI only"],
         ["Classes Listing — Pagination", "Default 6/page · UI only"],
       ]}
       notes="Pageset · Hybrid · /programs/:category — auto-feeds the Classes grid from [classes] filtered by this category. Featured Stories filtered by category=this.">
@@ -278,37 +291,65 @@ function Page_ProgramCategory(){
       {/* Aquatics Classes */}
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14,gap:16,flexWrap:"wrap"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,gap:16,flexWrap:"wrap"}}>
             <h2 className="t-heading-md" style={{margin:0}}>Aquatics Classes</h2>
-            <div className="kroc-input with-icon" style={{width:300}}><input placeholder="Search Aquatics classes"/></div>
+            <div style={{display:"inline-flex",background:"#fff",borderRadius:999,padding:3}}>
+              {[["card","Cards"],["table","Table"]].map(([k,l])=>(
+                <button key={k} onClick={()=>setView(k)} style={{border:0,cursor:"pointer",fontFamily:"inherit",fontSize:13,padding:"7px 16px",borderRadius:999,background:view===k?"var(--kroc-red)":"transparent",color:view===k?"#fff":"#1C1B1F"}}>{l}</button>
+              ))}
+            </div>
           </div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
-            {["All","Roster","Drop-In"].map((t,i)=>(<span key={t} className={`pill ${i===0?"active":""}`}>{t}</span>))}
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18,gap:16,flexWrap:"wrap"}}>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              {["All","Roster","Drop-In"].map((t,i)=>(<span key={t} className={`pill ${i===0?"active":""}`}>{t}</span>))}
+            </div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+              <div className="kroc-input" style={{padding:"8px 14px"}}><span style={{color:"#575757"}}>Any time</span><Icon name="chev" size={14} color="#575757"/></div>
+              <div className="kroc-input with-icon" style={{width:240}}><input placeholder="Search Aquatics classes"/></div>
+            </div>
           </div>
           <div style={{fontSize:13,color:"#575757",marginBottom:14}}>1 – 6 of 24 classes</div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
-            {[
-              ["Adult Learn-to-Swim","Roster","Tue & Thu · 7:00 PM","$95 / 8 weeks"],
-              ["Open Lap Swim","Drop-In","Mon–Fri · 6:00–9:00 AM","Members free · $8 drop-in"],
-              ["Masters Swim","Roster","M/W/F · 5:30 AM","$120 / 12 weeks"],
-              ["Parent & Baby Splash","Drop-In","Sat · 9:30 AM","$10 / session"],
-              ["Water Aerobics","Drop-In","T/Th · 10:00 AM","Members free · $8 drop-in"],
-              ["Teen Swim Team","Roster","Wed & Fri · 4:30 PM","$80 / 6 weeks"],
-            ].map(([t,kind,sched,price])=>(
-              <div key={t} className="kroc-card" style={{padding:0}}>
-                <div className="img" style={{aspectRatio:"16/9",position:"relative"}}>
-                  <span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`} style={{position:"absolute",top:14,left:14}}>{kind}</span>
-                  <span className="label">16:9 · class hero</span>
+
+          {view==="card" ? (
+            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
+              {classes.map(([t,kind,sched,price])=>(
+                <div key={t} className="kroc-card" style={{padding:0}}>
+                  <div className="img" style={{aspectRatio:"16/9",position:"relative"}}>
+                    <span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`} style={{position:"absolute",top:14,left:14}}>{kind}</span>
+                    <span className="label">16:9 · class hero</span>
+                  </div>
+                  <div className="body" style={{padding:"18px 20px"}}>
+                    <div style={{fontSize:17,marginBottom:6}}>{t}</div>
+                    <div style={{fontSize:13,color:"#575757",marginBottom:6}}>{sched}</div>
+                    <div style={{fontSize:14,marginBottom:14}}>{price}</div>
+                    <a className="btn btn-primary btn-sm">Register</a>
+                  </div>
                 </div>
-                <div className="body" style={{padding:"18px 20px"}}>
-                  <div style={{fontSize:17,marginBottom:6}}>{t}</div>
-                  <div style={{fontSize:13,color:"#575757",marginBottom:6}}>{sched}</div>
-                  <div style={{fontSize:14,marginBottom:14}}>{price}</div>
-                  <a className="btn btn-primary btn-sm">Register</a>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{background:"#fff",borderRadius:20,overflow:"hidden"}}>
+              <table style={{width:"100%",borderCollapse:"collapse"}}>
+                <thead>
+                  <tr style={{textAlign:"left",borderBottom:"1px solid #eaeaee"}}>
+                    <th style={th}>Class</th><th style={th}>Type</th><th style={th}>Schedule</th><th style={th}>Price</th><th style={{...th,textAlign:"right"}}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {classes.map(([t,kind,sched,price],i)=>(
+                    <tr key={t} style={{borderBottom:i<classes.length-1?"1px solid #F0F0F0":"none"}}>
+                      <td style={{...td,fontWeight:500}}>{t}</td>
+                      <td style={td}><span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`}>{kind}</span></td>
+                      <td style={{...td,color:"#575757"}}>{sched}</td>
+                      <td style={td}>{price}</td>
+                      <td style={{...td,textAlign:"right"}}><a className="btn btn-primary btn-sm">Register</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           <div style={{display:"flex",justifyContent:"center",marginTop:32}}><Pagination/></div>
         </div>
       </div>

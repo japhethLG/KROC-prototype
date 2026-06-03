@@ -296,17 +296,20 @@ function StoryCard({ category="Recreation", title="Story Title", date="March 202
   );
 }
 
-function EventCard({ title="Title", date="August 9th, 2024 | 6PM - 8PM", address="1234 Address Lane, 75035 TX", cta="View Event" }){
+function EventCard({ title="Title", date="August 9th, 2024 | 6PM - 8PM", address="1234 Address Lane, 75035 TX", cta="View Event", past=false }){
   return (
-    <div className="kroc-card">
-      <div className="img"><span className="label">16:9 · 456×256</span></div>
+    <div className="kroc-card" style={past?{opacity:.9}:undefined}>
+      <div className="img">
+        {past && <span style={{position:"absolute",top:14,left:14,zIndex:2,display:"inline-flex",alignItems:"center",gap:6,padding:"4px 11px",borderRadius:999,background:"rgba(28,27,31,.72)",color:"#fff",fontSize:11.5,fontWeight:500,letterSpacing:".02em"}}>Past Event</span>}
+        <span className="label">16:9 · 456×256</span>
+      </div>
       <div className="body">
         <h3 className="title">{title}</h3>
         <p style={{color:"#575757",marginBottom:6}}>{date}</p>
         <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",fontSize:13.5,cursor:"pointer"}}>{address}</a>
       </div>
       <div className="footer">
-        <a className="btn btn-secondary btn-sm btn-block"><Icon name="arrowUR" size={14}/> {cta}</a>
+        <a className="btn btn-secondary btn-sm btn-block"><Icon name="arrowUR" size={14}/> {past?"View Recap":cta}</a>
       </div>
     </div>
   );

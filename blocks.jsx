@@ -95,37 +95,54 @@ function B_Connect() {
 /* ---- 7.4 FAQs ---- */
 function B_FAQs() {
   const [open, setOpen] = React.useState(0);
-  const qs = [
-  ["What should I bring to my first class?", "Bring a refillable water bottle, a towel, and clothes you can move in. Lockers are first-come; we recommend a small lock or you can rent one at the front desk for a dollar."],
-  ["Do I need to be a member to register?", "No — Kroc programs are open to the community. Members get priority registration (one week early) and discounted pricing on most classes."],
-  ["What's your cancellation policy?", "Cancel up to 24 hours before the class start time for a full credit. Same-day cancellations forfeit the session fee but never the relationship."],
-  ["Is financial assistance available?", "Yes. Our Open Door scholarship covers up to 100% of program fees on a sliding scale based on household income. Apply at the front desk."]];
+  const groups = [
+  { key: "local", label: "Local FAQs", locked: false, items: [
+    ["What are the Camden Kroc's pool hours?", "The lap pool is open Mon–Fri 5:30 AM – 9 PM, Sat 6 AM – 8 PM, and Sun 7 AM – 6 PM. The warm-water teaching pool follows class schedules — check the Aquatics page for open-swim windows."],
+    ["Do you offer financial assistance for membership?", "Yes. Our Open Door scholarship covers up to 100% of membership and program fees on a sliding scale based on household income. Apply at the front desk — no one is turned away."]] },
+  { key: "national", label: "National FAQs", locked: true, items: [
+    ["What is The Salvation Army's mission?", "The Salvation Army, an international movement, is an evangelical part of the universal Christian Church. Its message is based on the Bible, and its ministry is motivated by the love of God to meet human needs in His name without discrimination."],
+    ["Are my donations tax-deductible?", "Yes. The Salvation Army is a registered 501(c)(3) nonprofit, so contributions are tax-deductible to the full extent allowed by law. You'll receive a receipt for every gift."]] }];
 
+  let idx = -1;
   return (
     <BlockFrame id="b-faqs" n="7.4 · Block" name="FAQs"
     schema="[faqs]"
     fields={[
     ["Block Name (admin)", "internal label"],
-    ["Repeater · Question", "text"],
-    ["Repeater · Answer", "Media (rich text or media)"]]
+    ["FAQ Scope", "Local · Global (National)"],
+    ["Repeater · Question", "text area"],
+    ["Repeater · Answer", "Rich Text / WYSIWYG"]]
     }
-    notes="Accordion list · default first item open · keyboard-accessible · used on Class Detail, Program Category, Info pages.">
+    notes="Hybrid hierarchy — National (global) FAQs are fed from Kroc USA and locked locally; Local FAQs are center-authored and render ABOVE the national set. Accordion · default first item open · answers support links/CTAs/images.">
       <div style={{ padding: "24px 0 8px", maxWidth: 880 }}>
         <h3 className="t-heading-md" style={{ margin: "0 0 16px" }}>Frequently Asked Questions</h3>
-        <div style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
-          {qs.map(([q, a], i) =>
-          <div key={i} style={{ borderTop: i ? "1px solid #eaeaee" : "none" }}>
-              <button onClick={() => setOpen(open === i ? -1 : i)}
-            style={{ width: "100%", textAlign: "left", background: "none", border: 0, padding: "22px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, cursor: "pointer", fontFamily: "inherit", fontSize: 16, color: "#1C1B1F" }}>
-                <span>{q}</span>
-                <span style={{ flex: "0 0 24px", width: 24, height: 24, borderRadius: "50%", background: "#EFEFEF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14, transform: open === i ? "rotate(45deg)" : "none", transition: "transform .2s" }}>+</span>
-              </button>
-              {open === i &&
-            <div style={{ padding: "0 28px 24px", color: "#1C1B1F", fontSize: 14.5, lineHeight: 1.65, maxWidth: 680 }}>{a}</div>
+        {groups.map((g) =>
+        <div key={g.key} style={{ marginBottom: 20 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <span style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: ".08em", color: "#888" }}>{g.label}</span>
+              {g.locked &&
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "2px 9px", borderRadius: 999, background: "#EFEFEF", color: "#575757", fontSize: 11 }}><Icon name="lock" size={11} /> From Kroc USA · locked</span>
             }
             </div>
-          )}
-        </div>
+            <div style={{ background: "#fff", borderRadius: 20, overflow: "hidden", border: g.locked ? "1px dashed #d9d9de" : "none" }}>
+              {g.items.map(([q, a], gi) => {
+              const i = ++idx;
+              return (
+                <div key={i} style={{ borderTop: gi ? "1px solid #eaeaee" : "none" }}>
+                    <button onClick={() => setOpen(open === i ? -1 : i)}
+                  style={{ width: "100%", textAlign: "left", background: "none", border: 0, padding: "22px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, cursor: "pointer", fontFamily: "inherit", fontSize: 16, color: "#1C1B1F" }}>
+                      <span>{q}</span>
+                      <span style={{ flex: "0 0 24px", width: 24, height: 24, borderRadius: "50%", background: "#EFEFEF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14, transform: open === i ? "rotate(45deg)" : "none", transition: "transform .2s" }}>+</span>
+                    </button>
+                    {open === i &&
+                  <div style={{ padding: "0 28px 24px", color: "#1C1B1F", fontSize: 14.5, lineHeight: 1.65, maxWidth: 680 }}>{a}</div>
+                  }
+                  </div>);
+
+            })}
+            </div>
+          </div>
+        )}
       </div>
     </BlockFrame>);
 
@@ -254,19 +271,28 @@ function B_FacilitySection() {
     ["Optional CTA", "Label + URL"],
     ["Photo", "3:2 or 4:3"],
     ["Feature Pills", "repeater · py-2 px-4"],
-    ["Hours of Operation", "repeater · Day Label + Hours Text"]]
+    ["Hours of Operation", "repeater · Day Label + Hours Text"],
+    ["Status Mode", "Auto · Closed–Seasonal · Closed–Maintenance"],
+    ["Status Message", "text · shown when closed"]]
     }
-    notes="Two variants — photo-left and photo-right. Used to describe individual facilities (pool, gym, theater, chapel). Each block carries its own hours — pool hours differ from theater hours.">
+    notes="Auto status shows a live Open/Closed badge computed from the block's hours + [kroc_location] timezone. A per-facility closure override (seasonal / maintenance) swaps the hours table for a status message. Two layout variants — photo-left and photo-right.">
       <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 24 }}>
         {[0, 1].map((side) => {
+          const closed = side === 1;
           const hours = side
             ? [["Mon–Thu", "4:00 PM – 9:00 PM"], ["Fri", "4:00 PM – 11:00 PM"], ["Sat–Sun", "10:00 AM – 11:00 PM"]]
             : [["Mon–Fri", "5:30 AM – 9:00 PM"], ["Sat", "6:00 AM – 8:00 PM"], ["Sun", "7:00 AM – 6:00 PM"]];
+          const badge = closed
+            ? <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, background: "#FBEAEA", color: "#B42318", fontSize: 12, fontWeight: 500 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "#B42318" }} />Closed · Maintenance</span>
+            : <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, background: "#E7F4EA", color: "#1E7A34", fontSize: 12, fontWeight: 500 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "#28A745" }} />Open now</span>;
           return (
           <div key={side} style={{ background: "#fff", borderRadius: 20, overflow: "hidden", display: "grid", gridTemplateColumns: side ? "7fr 5fr" : "5fr 7fr" }}>
             {side === 0 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
             <div style={{ padding: "36px 40px" }}>
-              <h3 className="t-heading-md" style={{ margin: "0 0 12px" }}>{side ? "The Black Box Theater" : "The Aquatic Center"}</h3>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
+                <h3 className="t-heading-md" style={{ margin: 0 }}>{side ? "The Black Box Theater" : "The Aquatic Center"}</h3>
+                {badge}
+              </div>
               <p style={{ fontSize: 15, lineHeight: 1.6, color: "#1C1B1F", margin: "0 0 16px" }}>
                 {side ?
               "A 120-seat flexible performance space with retractable bleachers, full lighting grid, and a sprung dance floor. Booked nightly for community theater, dance recitals, and weekly worship." :
@@ -278,6 +304,13 @@ function B_FacilitySection() {
               <span key={p} className="pill sm">{p}</span>
               )}
               </div>
+              {closed ?
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 8 }}>Status</div>
+                <div style={{ background: "#FBEAEA", border: "1px solid #f3cccc", borderRadius: 12, padding: "12px 16px", color: "#8a1f1f", fontSize: 13.5, lineHeight: 1.5 }}>
+                  Closed for seasonal maintenance through March 1 — the lighting grid is being replaced. All other facilities remain open as usual.
+                </div>
+              </div> :
               <div style={{ marginBottom: 20 }}>
                 <div style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 8 }}>Hours of Operation</div>
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -291,6 +324,7 @@ function B_FacilitySection() {
                   </tbody>
                 </table>
               </div>
+              }
               <a className="btn btn-secondary btn-sm">Learn More</a>
             </div>
             {side === 1 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
@@ -340,29 +374,66 @@ function B_FeaturedPages() {
 /* ---- 7.10 Image Gallery ---- */
 function B_ImageGallery() {
   const [light, setLight] = React.useState(false);
+  const [layout, setLayout] = React.useState("mosaic");
+  const tiles = [
+  ["1 / 1", 2, 2], ["3 / 2", 1, 1], ["3 / 2", 1, 1],
+  ["4 / 5", 1, 2], ["16 / 9", 2, 1],
+  ["3 / 2", 1, 1], ["3 / 2", 1, 1]];
+
   return (
     <BlockFrame id="b-gallery" n="7.10 · Block" name="Image Gallery"
     schema="[image_gallery]"
     fields={[
     ["Block Name", "internal label"],
     ["Repeater → Image", "src · alt · caption"],
-    ["Layout", "3-col masonry · 4-up fixed"],
+    ["Layout", "Mosaic · Grid · Carousel"],
     ["Lightbox", "click → modal"]]
     }
-    notes="Masonry grid · click for lightbox with prev/next + caption. Closed grid state and one open lightbox example shown.">
+    notes="Admin toggles Mosaic · Grid · Carousel. Any tile opens a lightbox with prev/next + caption.">
       <div style={{ padding: "24px 20px" }}>
+        <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+          {["Mosaic", "Grid", "Carousel"].map((l) =>
+          <span key={l} onClick={() => setLayout(l.toLowerCase())} className={`pill ${layout === l.toLowerCase() ? "active" : ""}`} style={{ cursor: "pointer" }}>{l}</span>
+          )}
+        </div>
+
+        {layout === "mosaic" &&
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "160px", gridAutoFlow: "dense", gap: 10 }}>
-          {[
-          ["1 / 1", 2, 2], ["3 / 2", 1, 1], ["3 / 2", 1, 1],
-          ["4 / 5", 1, 2], ["16 / 9", 2, 1],
-          ["3 / 2", 1, 1], ["3 / 2", 1, 1]].
-          map(([r, cs, rs], i) =>
+          {tiles.map(([r, cs, rs], i) =>
           <div key={i} onClick={() => setLight(true)} className="img-ph"
           style={{ gridColumn: `span ${cs}`, gridRow: `span ${rs}`, aspectRatio: "unset", borderRadius: 14, cursor: "pointer" }}>
               <span className="label">{r}</span>
             </div>
           )}
         </div>
+        }
+
+        {layout === "grid" &&
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+          {tiles.map((t, i) =>
+          <div key={i} onClick={() => setLight(true)} className="img-ph"
+          style={{ aspectRatio: "1", borderRadius: 14, cursor: "pointer" }}>
+              <span className="label">1 : 1</span>
+            </div>
+          )}
+        </div>
+        }
+
+        {layout === "carousel" &&
+        <div>
+          <div style={{ position: "relative", borderRadius: 14, overflow: "hidden", cursor: "pointer" }} onClick={() => setLight(true)}>
+            <div className="img-ph" style={{ aspectRatio: "16/9", borderRadius: 0 }}><span className="label">16:9 · slide 1 of 7</span></div>
+            <button onClick={(e) => e.stopPropagation()} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", background: "rgba(14,14,16,.55)", color: "#fff", border: 0, width: 40, height: 40, borderRadius: "50%", cursor: "pointer", fontSize: 18 }}>‹</button>
+            <button onClick={(e) => e.stopPropagation()} style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "rgba(14,14,16,.55)", color: "#fff", border: 0, width: 40, height: 40, borderRadius: "50%", cursor: "pointer", fontSize: 18 }}>›</button>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 7, marginTop: 12 }}>
+            {tiles.map((t, i) =>
+            <span key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: i === 0 ? "var(--kroc-red)" : "#d2d2d6" }} />
+            )}
+          </div>
+        </div>
+        }
+
         <button onClick={() => setLight(true)} style={{ marginTop: 14, fontSize: 12, fontFamily: "'SF Mono',Menlo,monospace", color: "#575757", background: "none", border: 0, cursor: "pointer" }}>→ open lightbox demo</button>
 
         {light &&
