@@ -453,31 +453,134 @@ function B_ImageGallery() {
 }
 
 /* ---- 7.11 Custom Forms ---- */
+function FormField({ label, req, help, children }) {
+  return (
+    <div className="kroc-field">
+      {label && <label>{label}{req && <span className="req">*</span>}</label>}
+      {children}
+      {help && <div className="help">{help}</div>}
+    </div>);
+
+}
+
+function FormSelect({ placeholder, options, defaultValue }) {
+  const [open, setOpen] = React.useState(false);
+  const [val, setVal] = React.useState(defaultValue || "");
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const close = (e) => {if (ref.current && !ref.current.contains(e.target)) setOpen(false);};
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <button type="button" className="kroc-input kroc-trigger" onClick={() => setOpen((o) => !o)} aria-haspopup="listbox" aria-expanded={open}>
+        <span style={{ color: val ? "var(--kroc-dark-100)" : "#888" }}>{val || placeholder}</span>
+        <Icon name="chev" size={14} color="#575757" />
+      </button>
+      {open &&
+      <div className="kroc-menu" role="listbox" style={{ left: 0, right: 0 }}>
+          {options.map((o) =>
+        <button type="button" key={o} className={val === o ? "sel" : ""} role="option" aria-selected={val === o} onClick={() => {setVal(o);setOpen(false);}}>
+              {o}{val === o && <Icon name="check" size={15} color="var(--kroc-red)" />}
+            </button>
+        )}
+        </div>
+      }
+    </div>);
+
+}
+
+function DateField({ placeholder = "Select a date" }) {
+  return (
+    <div className="kroc-input kroc-trigger" style={{ cursor: "pointer" }} role="button">
+      <span style={{ color: "#888" }}>{placeholder}</span>
+      <Icon name="cal" size={16} color="#575757" />
+    </div>);
+
+}
+
+function FileUpload() {
+  return (
+    <label className="kroc-dropzone">
+      <span className="ico"><Icon name="upload" size={18} color="var(--kroc-navy)" /></span>
+      <div>
+        <div className="t">Choose a file or drag it here</div>
+        <div className="h">PDF, DOC, or image — up to 10 MB</div>
+      </div>
+      <input type="file" style={{ display: "none" }} />
+    </label>);
+
+}
+
 function B_CustomForms() {
   return (
     <BlockFrame id="b-form" n="7.11 · Block" name="Custom Forms"
     schema="[custom_forms]"
     fields={[
     ["Block Name", "internal label"],
-    ["Form Fields", "repeater · text · email · select · textarea"],
+    ["Form Fields", "repeater · type / label / placeholder / required — text · email · tel · number · date · select · radio · checkbox · textarea · file"],
     ["Submit Label", "text"],
-    ["Webhook / Recipient", "URL or address"],
-    ["Success Message", "text"]]
+    ["Webhook / Recipient", "URL · fixed submission target"],
+    ["Post-Submit Behavior", "Show Message · Redirect to URL"],
+    ["Success Message", "text · when 'Show Message'"],
+    ["Redirect URL", "URL · when 'Redirect to URL'"]]
     }
-    notes="Grey #EFEFEF input bg · no border · 12px 20px padding · textarea min-height 10em. Used for Contact Us, program signups, volunteer interest.">
-      <div style={{ padding: "24px 0", maxWidth: 560 }}>
-        <div style={{ background: "#fff", borderRadius: 20, padding: "32px 36px" }}>
-          <h3 className="t-heading-sm" style={{ margin: "0 0 18px" }}>Get in Touch</h3>
-          <div className="kroc-input" style={{ marginBottom: 12 }}><input placeholder="Name" /></div>
-          <div className="kroc-input" style={{ marginBottom: 12 }}><input placeholder="Email" /></div>
-          <div className="kroc-input" style={{ marginBottom: 12, justifyContent: "space-between" }}>
-            <span style={{ color: "#575757" }}>Subject — pick one</span>
-            <Icon name="chev" size={14} color="#575757" />
+    notes="Native drag-and-drop builder — drop in field types, set label / placeholder / required per field. Grey #EFEFEF inputs, no border, 6px radius. Used for Contact Us, program signups, volunteer interest, Request-a-Program. Example below shows the full field-type palette.">
+      <div style={{ padding: "24px 0", maxWidth: 620 }}>
+        <div style={{ fontSize: 11, color: "var(--kroc-red)", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 6 }}>native form builder · all field types</div>
+        <h3 className="t-heading-md" style={{ margin: "0 0 4px" }}>Volunteer Interest Form</h3>
+        <p style={{ fontSize: 13.5, color: "#575757", margin: "0 0 18px", maxWidth: 520 }}>Every control below is a draggable form-builder component — text, email, phone, number, date, dropdown, radio, checkboxes, long text, file upload, and a consent box.</p>
+
+        <div className="kroc-form" style={{ background: "#fff", borderRadius: 20, padding: "32px 36px" }}>
+          <div className="kroc-form-sec">Your information</div>
+          <div className="kroc-row2">
+            <FormField label="First name" req><div className="kroc-input"><input placeholder="Jordan" /></div></FormField>
+            <FormField label="Last name" req><div className="kroc-input"><input placeholder="Rivera" /></div></FormField>
           </div>
-          <div className="kroc-input" style={{ marginBottom: 18, alignItems: "flex-start", minHeight: "10em" }}>
-            <textarea rows="6" placeholder="How can we help?" style={{ flex: 1, background: "none", border: 0, outline: "none", fontFamily: "inherit", fontSize: 14, resize: "vertical" }} />
+          <FormField label="Email" req help="We'll only use this to follow up about volunteering.">
+            <div className="kroc-input"><input type="email" placeholder="you@example.com" /></div>
+          </FormField>
+          <FormField label="Phone">
+            <div className="kroc-input"><input type="tel" placeholder="(555) 123-4567" /></div>
+          </FormField>
+
+          <div className="kroc-form-sec">Your interest</div>
+          <FormField label="Program of interest" req>
+            <FormSelect placeholder="Select a program…" options={["Aquatics", "Fitness & Wellness", "Youth Programs", "Arts & Music"]} />
+          </FormField>
+          <div className="kroc-row2">
+            <FormField label="Preferred start date"><DateField /></FormField>
+            <FormField label="Group size" help="How many people?"><div className="kroc-input"><input type="number" min="1" placeholder="1" /></div></FormField>
           </div>
-          <a className="btn btn-primary">Send Message</a>
+          <FormField label="How did you hear about us?">
+            <div className="kroc-choices">
+              {["A friend or family member", "Social media", "A Kroc event", "Other"].map((o, i) =>
+              <label key={o} className="kroc-check"><input type="radio" name="kf-hear" defaultChecked={i === 0} /><span>{o}</span></label>
+              )}
+            </div>
+          </FormField>
+          <FormField label="Areas you'd like to help with" help="Choose all that apply.">
+            <div className="kroc-choices">
+              {[["Aquatics", true], ["Fitness", false], ["Arts & music", true], ["Youth mentoring", false], ["Events", false]].map(([o, c]) =>
+              <label key={o} className="kroc-check"><input type="checkbox" defaultChecked={c} /><span>{o}</span></label>
+              )}
+            </div>
+          </FormField>
+          <FormField label="Anything else?">
+            <div className="kroc-input" style={{ alignItems: "flex-start", minHeight: "8em" }}>
+              <textarea rows="5" placeholder="Tell us about your availability or questions…" style={{ flex: 1, background: "none", border: 0, outline: "none", fontFamily: "inherit", fontSize: 14, resize: "vertical" }} />
+            </div>
+          </FormField>
+          <FormField label="Attach a résumé or document">
+            <FileUpload />
+          </FormField>
+
+          <label className="kroc-check" style={{ margin: "6px 0 22px" }}><input type="checkbox" /><span>I agree to be contacted by the Kroc Center about volunteer opportunities.<span className="req">*</span></span></label>
+
+          <a className="btn btn-primary" style={{ display: "block", textAlign: "center" }}>Submit Interest Form</a>
+          <div className="kroc-form-success"><Icon name="info" size={15} color="#12825F" /> Post-submit preview — “Thanks! We'll be in touch within 3–5 business days.” (or redirect to a custom page)</div>
         </div>
       </div>
     </BlockFrame>);

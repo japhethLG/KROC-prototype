@@ -209,8 +209,38 @@ function Page_AllPrograms(){
 }
 
 /* ===== 6.3 Program Category ===== */
+function FilterDropdown({ label, value, options, onChange }){
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  React.useEffect(()=>{
+    if(!open) return;
+    const close = (e)=>{ if(ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", close);
+    return ()=>document.removeEventListener("mousedown", close);
+  },[open]);
+  return (
+    <div ref={ref} style={{position:"relative"}}>
+      <button type="button" className="kroc-input kroc-dd-btn" onClick={()=>setOpen(o=>!o)} aria-haspopup="listbox" aria-expanded={open}>
+        <span style={{color:"#575757"}}>{label}: <span style={{color:"#1C1B1F"}}>{value}</span></span>
+        <Icon name="chev" size={14} color="#575757"/>
+      </button>
+      {open && (
+        <div className="kroc-menu" role="listbox">
+          {options.map(opt=>(
+            <button type="button" key={opt} className={value===opt?"sel":""} role="option" aria-selected={value===opt} onClick={()=>{ onChange(opt); setOpen(false); }}>
+              {opt}{value===opt && <Icon name="check" size={15} color="var(--kroc-red)"/>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Page_ProgramCategory(){
   const [view, setView] = React.useState("card");
+  const [dateF, setDateF] = React.useState("Any time");
+  const [typeF, setTypeF] = React.useState("All");
   const classes = [
     ["Adult Learn-to-Swim","Roster","Tue & Thu · 7:00 PM","$95 / 8 weeks"],
     ["Open Lap Swim","Drop-In","Mon–Fri · 6:00–9:00 AM","Members free · $8 drop-in"],
@@ -219,6 +249,7 @@ function Page_ProgramCategory(){
     ["Water Aerobics","Drop-In","T/Th · 10:00 AM","Members free · $8 drop-in"],
     ["Teen Swim Team","Roster","Wed & Fri · 4:30 PM","$80 / 6 weeks"],
   ];
+  const shown = classes.filter(c => typeF==="All" || c[1]===typeF);
   const th = { padding:"13px 22px", fontSize:11.5, color:"#888", fontWeight:600, textTransform:"uppercase", letterSpacing:".05em" };
   const td = { padding:"14px 22px", fontSize:14, color:"#1C1B1F", verticalAlign:"middle" };
   return (
@@ -230,8 +261,8 @@ function Page_ProgramCategory(){
         ["Category Intro — Left Column", "Rich Text"],
         ["Category Intro — Right Column", "Rich Text"],
         ["Classes Listing — Search", "Per-list contextual · UI only"],
-        ["Classes Listing — Class Type Filter", "All · Roster · Drop-In · UI only"],
-        ["Classes Listing — Date Filter", "Any time · This week · Month · UI only"],
+        ["Classes Listing — Type Filter", "Dropdown · All · Roster · Drop-In · UI only"],
+        ["Classes Listing — Date Filter", "Dropdown · Any time · This week · Next week · This month · UI only"],
         ["Classes Listing — View Toggle", "Card · Table · UI only"],
         ["Classes Listing — Pagination", "Default 6/page · UI only"],
       ]}
@@ -300,19 +331,17 @@ function Page_ProgramCategory(){
             </div>
           </div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18,gap:16,flexWrap:"wrap"}}>
-            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-              {["All","Roster","Drop-In"].map((t,i)=>(<span key={t} className={`pill ${i===0?"active":""}`}>{t}</span>))}
-            </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-              <div className="kroc-input" style={{padding:"8px 14px"}}><span style={{color:"#575757"}}>Any time</span><Icon name="chev" size={14} color="#575757"/></div>
-              <div className="kroc-input with-icon" style={{width:240}}><input placeholder="Search Aquatics classes"/></div>
+              <FilterDropdown label="Date" value={dateF} options={["Any time","This week","Next week","This month"]} onChange={setDateF}/>
+              <FilterDropdown label="Type" value={typeF} options={["All","Roster","Drop-In"]} onChange={setTypeF}/>
             </div>
+            <div className="kroc-input with-icon" style={{width:240}}><input placeholder="Search Aquatics classes"/></div>
           </div>
-          <div style={{fontSize:13,color:"#575757",marginBottom:14}}>1 – 6 of 24 classes</div>
+          <div style={{fontSize:13,color:"#575757",marginBottom:14}}>Showing {shown.length} of 24 classes</div>
 
           {view==="card" ? (
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
-              {classes.map(([t,kind,sched,price])=>(
+              {shown.map(([t,kind,sched,price])=>(
                 <div key={t} className="kroc-card" style={{padding:0}}>
                   <div className="img" style={{aspectRatio:"16/9",position:"relative"}}>
                     <span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`} style={{position:"absolute",top:14,left:14}}>{kind}</span>
@@ -336,8 +365,8 @@ function Page_ProgramCategory(){
                   </tr>
                 </thead>
                 <tbody>
-                  {classes.map(([t,kind,sched,price],i)=>(
-                    <tr key={t} style={{borderBottom:i<classes.length-1?"1px solid #F0F0F0":"none"}}>
+                  {shown.map(([t,kind,sched,price],i)=>(
+                    <tr key={t} style={{borderBottom:i<shown.length-1?"1px solid #F0F0F0":"none"}}>
                       <td style={{...td,fontWeight:500}}>{t}</td>
                       <td style={td}><span className={`pill sm ${kind==="Drop-In"?"red-fill":"red-outline"}`}>{kind}</span></td>
                       <td style={{...td,color:"#575757"}}>{sched}</td>

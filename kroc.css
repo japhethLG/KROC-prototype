@@ -497,5 +497,44 @@ body{
 .pill.red-outline{background:transparent;color:var(--kroc-red);border:1px solid var(--kroc-red)}
 .kroc-input.with-icon{position:relative}
 
+/* filter dropdown */
+.kroc-dd-btn{width:auto;cursor:pointer;border:0;justify-content:space-between;gap:10px;white-space:nowrap;padding:10px 16px}
+.kroc-menu{
+  position:absolute;top:calc(100% + 6px);left:0;min-width:100%;
+  background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.16);
+  padding:6px;z-index:40;white-space:nowrap;
+}
+.kroc-menu button{
+  display:flex;align-items:center;justify-content:space-between;gap:28px;width:100%;
+  border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:14px;
+  color:var(--kroc-dark-100);padding:9px 12px;border-radius:8px;text-align:left;
+}
+.kroc-menu button:hover{background:var(--kroc-area)}
+.kroc-menu button.sel{background:var(--kroc-area);font-weight:500}
+
+/* custom form — field-type showcase */
+.kroc-form-sec{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#888;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid #EFEFEF}
+.kroc-form .kroc-form-sec ~ .kroc-form-sec,.kroc-form > div + .kroc-form-sec{margin-top:24px}
+.kroc-field{margin-bottom:16px}
+.kroc-field > label{display:block;font-size:13px;font-weight:500;color:var(--kroc-dark-100);margin-bottom:7px}
+.kroc-field .req{color:var(--kroc-red);margin-left:2px}
+.kroc-field .help{font-size:12px;color:#888;margin-top:6px}
+.kroc-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kroc-choices{display:flex;flex-direction:column;gap:10px}
+.kroc-check{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--kroc-dark-100);cursor:pointer;line-height:1.4}
+.kroc-check input{accent-color:var(--kroc-red);width:17px;height:17px;margin:1px 0 0;flex:0 0 17px;cursor:pointer}
+/* dropdown / date field trigger — styled like an input */
+.kroc-trigger{width:100%;justify-content:space-between;gap:10px;cursor:pointer;border:0;font-family:inherit;font-size:14px;text-align:left}
+/* number field — drop the native spinners */
+.kroc-input input[type=number]{-moz-appearance:textfield}
+.kroc-input input[type=number]::-webkit-outer-spin-button,.kroc-input input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+/* file upload — dropzone */
+.kroc-dropzone{display:flex;align-items:center;gap:14px;background:var(--kroc-area);border:1.5px dashed #cfcfcf;border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color .15s, background .15s}
+.kroc-dropzone:hover{border-color:var(--kroc-red);background:#fff}
+.kroc-dropzone .ico{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 40px}
+.kroc-dropzone .t{font-size:14px;font-weight:500;color:var(--kroc-dark-100)}
+.kroc-dropzone .h{font-size:12px;color:#888;margin-top:2px}
+.kroc-form-success{margin-top:16px;display:flex;align-items:center;gap:8px;font-size:13px;color:#12825F;background:rgba(18,130,95,.08);border-radius:8px;padding:12px 14px}
+
 /* block frames: ensure horizontal padding for content */
 .frame-row .frame .kroc-page{padding-left:32px !important;padding-right:32px !important}
