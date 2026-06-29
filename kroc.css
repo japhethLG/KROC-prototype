@@ -171,6 +171,7 @@ body{
 .kroc-util-links .sep{color:#c8c8cf}
 .kroc-header-main{
   display:flex;align-items:center;gap:24px;padding:12px 24px;
+  position:relative;
 }
 .kroc-header-main .kroc-nav{flex:1;justify-content:flex-start}
 .kroc-header-cta{display:flex;align-items:center;gap:10px;margin-left:auto}
@@ -197,7 +198,38 @@ body{
 .kroc-nav a.active::after{
   content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--kroc-red);border-radius:2px;
 }
-.kroc-nav a .chev{display:inline-block;margin-left:2px;font-size:9px;color:#999;transform:translateY(-1px)}
+/* mega-menu trigger + rotating chevron (NAV-2) */
+.kroc-nav a.has-mega{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.kroc-nav a .chev{display:inline-flex;align-items:center;color:#9a9aa2;transition:transform .18s ease}
+.kroc-nav a.open{color:var(--kroc-red)}
+.kroc-nav a.open .chev{transform:rotate(180deg);color:var(--kroc-red)}
+/* mega-menu panel */
+.kroc-mega{
+  position:absolute;top:calc(100% + 6px);left:8px;right:8px;
+  background:#fff;border-radius:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.18);
+  padding:20px 26px 26px;z-index:30;
+  animation:kroc-mega-in .14s ease-out;
+}
+@keyframes kroc-mega-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.kroc-mega-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:13px;margin-bottom:16px;border-bottom:1px solid #ececec;
+}
+.kroc-mega-title{font-size:15px;font-weight:600;color:var(--kroc-dark-100)}
+.kroc-mega-all{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--kroc-red);font-size:13.5px;font-weight:500;cursor:pointer;text-decoration:none;
+}
+.kroc-mega-all:hover{text-decoration:underline}
+.kroc-mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px}
+.kroc-mega-item{
+  display:flex;align-items:center;gap:12px;
+  color:var(--kroc-dark-100);font-size:14px;text-decoration:none;cursor:pointer;
+  padding:8px 10px;border-radius:10px;transition:background .12s ease;
+}
+.kroc-mega-item:hover{background:var(--kroc-area)}
+.kroc-mega-item .ic{color:var(--kroc-red);display:inline-flex;flex:0 0 20px}
 .kroc-nav .seasonal{
   color:var(--kroc-red);font-style:italic;
   background:rgba(239,62,66,.08);padding:4px 10px;border-radius:999px;
@@ -256,6 +288,9 @@ body{
   background:#fff;border-radius:var(--r-5);border:0;overflow:hidden;
   display:flex;flex-direction:column;
 }
+/* BLK-2: clickable class card (box-shadow only — no transform, which would break the fixed modal) */
+.kroc-card-click{cursor:pointer;transition:box-shadow .15s ease}
+.kroc-card-click:hover{box-shadow:0 12px 32px rgba(0,0,0,.12)}
 .kroc-card .img{
   position:relative;width:100%;aspect-ratio:16/9;
   background:#5b5b60 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'><defs><pattern id='p' width='8' height='8' patternUnits='userSpaceOnUse' patternTransform='rotate(45)'><line x1='0' y1='0' x2='0' y2='8' stroke='%23717177' stroke-width='8'/></pattern></defs><rect fill='url(%23p)' width='100%25' height='100%25'/></svg>");
@@ -405,7 +440,18 @@ body{
 }
 .kroc-connect .card.mission{background:var(--kroc-red);color:#fff}
 .kroc-connect .card h5{margin:0 0 12px;font-size:18px;font-weight:400}
-.kroc-connect .newsletter-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+/* NAV-4: newsletter callout (links to vendor form, no inline inputs) */
+.kroc-connect .card.newsletter{display:flex;align-items:center;justify-content:space-between;gap:28px}
+.kroc-connect .card.newsletter .nl-text{flex:1;min-width:0}
+.kroc-connect .card.newsletter .nl-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.kroc-connect .card.newsletter .nl-head h5{margin:0}
+.kroc-connect .card.newsletter .nl-ic{
+  width:34px;height:34px;flex:0 0 34px;border-radius:50%;
+  background:rgba(239,62,66,.10);color:var(--kroc-red);
+  display:flex;align-items:center;justify-content:center;
+}
+.kroc-connect .card.newsletter p{margin:0;font-size:13.5px;color:#575757;line-height:1.5;max-width:46ch}
+.kroc-connect .card.newsletter .nl-btn{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .kroc-connect .nav-pills{
   background:#fff;border-radius:var(--r-4);padding:14px 22px;margin-top:12px;
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;
@@ -418,7 +464,8 @@ body{
   align-items:center;font-size:12.5px;color:var(--kroc-dark);
 }
 .kroc-connect .socials{display:flex;gap:14px;color:var(--kroc-dark-100)}
-.kroc-connect .socials .s{width:18px;height:18px;background:var(--kroc-dark-100);border-radius:50%}
+.kroc-connect .socials .s{display:inline-flex;align-items:center;color:var(--kroc-dark-100);cursor:pointer}
+.kroc-connect .socials .s:hover{color:var(--kroc-red)}
 .kroc-connect .affiliates{
   background:#fff;border-radius:var(--r-4);margin-top:12px;padding:14px 22px;
   display:flex;align-items:center;gap:28px;font-size:12.5px;color:var(--kroc-dark);

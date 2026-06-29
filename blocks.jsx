@@ -205,7 +205,7 @@ function B_FeaturedStories() {
     notes="Each card uses universal scrim + category pill + date/author footer + navy `View Article` CTA.">
       <div style={{ padding: "24px 0" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 18 }}>
-          <h3 className="t-heading-md" style={{ margin: 0 }}>Featured Stories</h3>
+          <h3 className="t-heading-md" style={{ margin: 0 }}>Kroc Highlights</h3>{/* BLK-4 relabel: was "Featured Stories" */}
           <a style={{ fontSize: 13, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>View All Stories <Icon name="arrowUR" size={14} /></a>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
@@ -220,6 +220,13 @@ function B_FeaturedStories() {
 
 /* ---- 7.7 Featured Classes ---- */
 function B_FeaturedClasses() {
+  // BLK-2: reuse the shared ClassCard so featured + listing cards are identical
+  // (same red Register CTA, click → marketing-description pop-up, and no-image variant).
+  const classes = [
+    {title:"Adult Learn-to-Swim", kind:"Roster", sched:"Tuesdays · 6 PM", dates:"8 weeks · Sep 8 – Nov 3, 2026", memberPrice:"$76", publicPrice:"$95", desc:"A confidence-first course for adults — small groups, certified instructors, and a warm-water teaching pool. By week eight you'll swim the length of the pool.", noImage:false},
+    {title:"Open Lap Swim", kind:"Drop-In", sched:"Mon–Fri · 6 AM – 9 AM", memberPrice:"Free", publicPrice:"$8 / visit", desc:"Reserved lap lanes during posted hours, first-come first-served. Free for members; $8 drop-in for guests.", noImage:true},
+    {title:"Teen Strength Foundations", kind:"Roster", sched:"Wed + Fri · 4:30 PM", dates:"6 weeks · Sep 9 – Oct 16, 2026", memberPrice:"$48", publicPrice:"$60", desc:"A coached intro to strength training for ages 13–17 — movement basics, safe form, and a progression they can keep building on.", noImage:false},
+  ];
   return (
     <BlockFrame id="b-featured-classes" n="7.7 · Block" name="Featured Classes"
     schema="[featured_classes]"
@@ -228,30 +235,15 @@ function B_FeaturedClasses() {
     ["Repeater → Class Ref", "[classes]"],
     ["Display Mode", "Grid 3-up or 4-up"]]
     }
-    notes="Class card shows program_type chip (Drop-In filled vs Roster outlined), title, schedule line, dynamic price (skeleton until API resolves), navy Register CTA.">
+    notes="Uses the shared Class card (BLK-2): program-type chip, title, schedule, roster session dates, Member/Public price points (PAGE-2), red Register CTA, click → marketing-description pop-up. Supports the no-image color-cover variant (shown here on Open Lap Swim).">
       <div style={{ padding: "24px 0" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 18 }}>
           <h3 className="t-heading-md" style={{ margin: 0 }}>Featured Classes</h3>
           <a style={{ fontSize: 13, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>View All Classes <Icon name="arrowUR" size={14} /></a>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
-          {[
-          ["Adult Learn-to-Swim", "Roster", "Tuesdays · 6 PM", "$95 / 8 weeks"],
-          ["Open Lap Swim", "Drop-In", "Mon–Fri · 6 AM – 9 AM", "Members free · $8 drop-in"],
-          ["Teen Strength Foundations", "Roster", "Wed + Fri · 4:30 PM", "$60 / 6 weeks"]].
-          map(([t, kind, sched, price]) =>
-          <div key={t} className="kroc-card" style={{ padding: 0 }}>
-              <div className="img" style={{ aspectRatio: "16/9" }}>
-                <span className={`pill sm ${kind === "Drop-In" ? "red-fill" : "red-outline"}`} style={{ position: "absolute", top: 14, left: 14 }}>{kind}</span>
-                <span className="label">16:9 · class hero</span>
-              </div>
-              <div className="body" style={{ padding: "20px 24px" }}>
-                <div style={{ fontSize: 18, marginBottom: 6 }}>{t}</div>
-                <div style={{ color: "#575757", fontSize: 13, marginBottom: 2 }}>{sched}</div>
-                <div style={{ color: "#022056", fontSize: 13.5, marginBottom: 14 }}>{price}</div>
-                <a className="btn btn-secondary btn-sm">Register</a>
-              </div>
-            </div>
+          {classes.map(c =>
+            <ClassCard key={c.title} title={c.title} kind={c.kind} sched={c.sched} dates={c.dates} memberPrice={c.memberPrice} publicPrice={c.publicPrice} desc={c.desc} noImage={c.noImage} />
           )}
         </div>
       </div>
@@ -268,69 +260,57 @@ function B_FacilitySection() {
     ["Layout Variant", "Photo-left / Photo-right"],
     ["Title", "text"],
     ["Body (WYSIWYG)", "rich text"],
-    ["Optional CTA", "Label + URL"],
-    ["Photo", "3:2 or 4:3"],
-    ["Feature Pills", "repeater · py-2 px-4"],
-    ["Hours of Operation", "repeater · Day Label + Hours Text"],
+    ["Photos", "repeater · 3:2 · carousel when >1 (arrows + dots)"],
+    ["Feature Pills", "repeater"],
+    ["Hours of Operation", "repeater · Day + one-or-more time ranges, or Closed · optional (omit for rentals)"],
     ["Status Mode", "Auto · Closed–Seasonal · Closed–Maintenance"],
-    ["Status Message", "text · shown when closed"]]
+    ["Status Message", "text · shown when closed"],
+    ["Optional CTA", "Label + URL · optional"]]
     }
-    notes="Auto status shows a live Open/Closed badge computed from the block's hours + [kroc_location] timezone. A per-facility closure override (seasonal / maintenance) swaps the hours table for a status message. Two layout variants — photo-left and photo-right.">
+    notes="Reusable FacilityCard (BLK-7). Photos repeater renders a carousel (arrows + dots) when >1. Hours support multiple time ranges per day and Closed days, and can be omitted entirely for rentable spaces (no-hours variant). A closure override swaps the hours for a status message. CTA is optional. Same component reused on the Rentals page (NEW-4).">
       <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 24 }}>
-        {[0, 1].map((side) => {
-          const closed = side === 1;
-          const hours = side
-            ? [["Mon–Thu", "4:00 PM – 9:00 PM"], ["Fri", "4:00 PM – 11:00 PM"], ["Sat–Sun", "10:00 AM – 11:00 PM"]]
-            : [["Mon–Fri", "5:30 AM – 9:00 PM"], ["Sat", "6:00 AM – 8:00 PM"], ["Sun", "7:00 AM – 6:00 PM"]];
-          const badge = closed
-            ? <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, background: "#FBEAEA", color: "#B42318", fontSize: 12, fontWeight: 500 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "#B42318" }} />Closed · Maintenance</span>
-            : <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, background: "#E7F4EA", color: "#1E7A34", fontSize: 12, fontWeight: 500 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "#28A745" }} />Open now</span>;
-          return (
-          <div key={side} style={{ background: "#fff", borderRadius: 20, overflow: "hidden", display: "grid", gridTemplateColumns: side ? "7fr 5fr" : "5fr 7fr" }}>
-            {side === 0 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
-            <div style={{ padding: "36px 40px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
-                <h3 className="t-heading-md" style={{ margin: 0 }}>{side ? "The Black Box Theater" : "The Aquatic Center"}</h3>
-                {badge}
-              </div>
-              <p style={{ fontSize: 15, lineHeight: 1.6, color: "#1C1B1F", margin: "0 0 16px" }}>
-                {side ?
-              "A 120-seat flexible performance space with retractable bleachers, full lighting grid, and a sprung dance floor. Booked nightly for community theater, dance recitals, and weekly worship." :
-              "An eight-lane competition pool, a separate warm-water teaching pool, and a kids' splash deck — open 18 hours a day with certified lifeguards on every shift."
-              }
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
-                {(side ? ["120 seats", "Sprung floor", "Full lighting grid", "Green room"] : ["8 lanes", "Warm-water pool", "Splash deck", "Open 5:30 AM"]).map((p) =>
-              <span key={p} className="pill sm">{p}</span>
-              )}
-              </div>
-              {closed ?
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 8 }}>Status</div>
-                <div style={{ background: "#FBEAEA", border: "1px solid #f3cccc", borderRadius: 12, padding: "12px 16px", color: "#8a1f1f", fontSize: 13.5, lineHeight: 1.5 }}>
-                  Closed for seasonal maintenance through March 1 — the lighting grid is being replaced. All other facilities remain open as usual.
-                </div>
-              </div> :
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 8 }}>Hours of Operation</div>
-                <table style={{ borderCollapse: "collapse", width: "100%" }}>
-                  <tbody>
-                    {hours.map(([day, time]) => (
-                      <tr key={day} style={{ borderBottom: "1px solid #F0F0F0" }}>
-                        <td style={{ fontSize: 13, color: "#1C1B1F", fontWeight: 500, padding: "5px 0" }}>{day}</td>
-                        <td style={{ fontSize: 13, color: "#575757", padding: "5px 0", textAlign: "right" }}>{time}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              }
-              <a className="btn btn-secondary btn-sm">Learn More</a>
-            </div>
-            {side === 1 && <div className="img-ph" style={{ aspectRatio: "unset", borderRadius: 0, minHeight: 300 }}><span className="label">3:2 · facility</span></div>}
-          </div>
-          );
-        })}
+
+        {/* Carousel + complex multi-range schedule + open status + CTA */}
+        <FacilityCard
+          side="left"
+          title="Family Resource Center"
+          status={{ tone: "open", label: "Open now" }}
+          body="Drop-in help with benefits, job applications, and family services — plus a quiet study space and free Wi-Fi."
+          photos={["3:2 · lobby", "3:2 · study room", "3:2 · front desk"]}
+          pills={["Free Wi-Fi", "Study space", "Walk-ins welcome"]}
+          hours={[
+            ["Monday", ["8:30 AM – 12 PM", "1 PM – 4:30 PM"]],
+            ["Tuesday", ["8:30 AM – 12 PM", "1 PM – 4:30 PM"]],
+            ["Wednesday", ["8:30 AM – 12 PM", "1 PM – 4:30 PM"]],
+            ["Thursday", ["8:30 AM – 12 PM", "1 PM – 4:30 PM"]],
+            ["Friday", "CLOSED"],
+            ["Saturday", "CLOSED"],
+            ["Sunday", "CLOSED"],
+          ]}
+          cta="Learn More"
+        />
+
+        {/* Closure override (existing capability) + optional CTA omitted */}
+        <FacilityCard
+          side="right"
+          title="The Black Box Theater"
+          status={{ tone: "closed", label: "Closed · Maintenance" }}
+          body="A 120-seat flexible performance space with retractable bleachers, full lighting grid, and a sprung dance floor."
+          photos={["3:2 · stage", "3:2 · seating"]}
+          pills={["120 seats", "Sprung floor", "Full lighting grid"]}
+          closure="Closed for seasonal maintenance through March 1 — the lighting grid is being replaced. All other facilities remain open as usual."
+        />
+
+        {/* No-hours variant (Rentals reuse) — rentable space, no schedule */}
+        <FacilityCard
+          side="left"
+          title="Community Room A"
+          body="A flexible 40-person room with tables, chairs, and A/V — available to rent for meetings, classes, and small events."
+          photos={["3:2 · room", "3:2 · setup", "3:2 · A/V"]}
+          pills={["Seats 40", "A/V included", "Kitchenette"]}
+          cta="Request a Rental"
+        />
+
       </div>
     </BlockFrame>);
 
@@ -344,26 +324,20 @@ function B_FeaturedPages() {
     fields={[
     ["Block Title (optional)", "+ View All link"],
     ["Repeater → Page Ref", "any internal page"],
+    ["Card Media (per item)", "Icon or Image (BLK-5)"],
     ["Display Mode", "Grid 3-up or 4-up"]]
     }
-    notes="Curates landing pages from homepage — Membership, Day Passes, Personal Training. Same component used for Western variant 'quick-action card row' under hero.">
+    notes="Curates landing pages from homepage — Membership, Day Passes, Personal Training. Same component used for Western variant 'quick-action card row' under hero. BLK-5: each card chooses icon OR image for its media — the icon sits on a tinted panel of the same footprint so the grid stays aligned.">
       <div style={{ padding: "24px 0" }}>
         <h3 className="t-heading-md" style={{ margin: "0 0 18px" }}>Get Started</h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
           {[
-          ["Membership", "Unlimited access to pools, gym, fitness studios, and member-only programs.", "Explore Plans"],
-          ["Day Passes", "Drop-in for a workout, swim, or open gym — no commitment.", "Buy a Pass"],
-          ["Personal Training", "One-on-one and small-group training with our certified staff.", "Book a Session"],
-          ["Birthday Parties", "Pool parties, gym parties, theme rooms — Sundays book out fast.", "Reserve a Date"]].
-          map(([t, b, c]) =>
-          <div key={t} className="kroc-card" style={{ padding: 0 }}>
-              <div className="img" style={{ aspectRatio: "4/3" }}><span className="label">4:3 · 320×240</span></div>
-              <div className="body" style={{ padding: "20px 22px" }}>
-                <div style={{ fontSize: 18, marginBottom: 6 }}>{t}</div>
-                <p style={{ fontSize: 13.5, color: "#1C1B1F", margin: "0 0 14px", lineHeight: 1.5 }}>{b}</p>
-                <a className="btn btn-secondary btn-sm">{c}</a>
-              </div>
-            </div>
+          ["Membership", "Unlimited access to pools, gym, fitness studios, and member-only programs.", "Explore Plans", "icon", "users"],
+          ["Day Passes", "Drop-in for a workout, swim, or open gym — no commitment.", "Buy a Pass", "icon", "ticket"],
+          ["Personal Training", "One-on-one and small-group training with our certified staff.", "Book a Session", "image", null],
+          ["Birthday Parties", "Pool parties, gym parties, theme rooms — Sundays book out fast.", "Reserve a Date", "image", null]].
+          map(([t, b, c, media, icon]) =>
+            <FeaturedPageCard key={t} title={t} body={b} cta={c} media={media} icon={icon} />
           )}
         </div>
       </div>
@@ -589,6 +563,7 @@ function B_CustomForms() {
 
 /* ---- 7.12 People Block (informal) ---- */
 function B_PeopleBlock() {
+  const cap = { fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 12 };
   return (
     <BlockFrame id="b-people" n="7.12 · Block" name="People Block (informal)"
     schema="[people_block]"
@@ -596,26 +571,61 @@ function B_PeopleBlock() {
     ["Repeater → Person", "Name, Role, Headshot, Bio (optional), Email (optional), Phone (optional)"],
     ["Layout", "4-up cards · 3-up with bio · 1-up feature"]]
     }
-    notes="No formal Architecture Proposal schema — prototyped informally on Contact Us / Volunteers / Program Category (instructor). Flag for architect to formalize.">
-      <div style={{ padding: "24px 0" }}>
-        <div style={{ fontSize: 11, color: "var(--kroc-red)", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 6 }}>open · informal model</div>
-        <h3 className="t-heading-md" style={{ margin: "0 0 18px" }}>Camden Leadership</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
-          {[
-          ["Marcus Johnson", "Executive Director"],
-          ["Jennifer Smith", "Director of Programs"],
-          ["Reggie Lewis", "Director of Recreation"],
-          ["Priya Patel", "Director of Volunteers"]].
-          map(([n, r]) =>
-          <div key={n} className="kroc-card" style={{ padding: 0 }}>
-              <div className="img" style={{ aspectRatio: "4/5" }}><span className="label">portrait · 4:5</span></div>
-              <div className="body" style={{ padding: "16px 20px" }}>
-                <div style={{ fontSize: 17 }}>{n}</div>
-                <div style={{ fontSize: 13, color: "#575757" }}>{r}</div>
+    notes="No formal Architecture Proposal schema — prototyped informally on Contact Us / Volunteers / Program Category (instructor). Flag for architect to formalize. BLK-3 adds a single-card-with-bio feature layout (centered greeting + circular portrait + bio + name/role), matching the 'Hello from the …' example on a current site.">
+      <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 36 }}>
+
+        {/* Layout · 4-up cards (existing) */}
+        <div>
+          <div style={cap}>Layout · 4-up cards</div>
+          <div style={{ fontSize: 11, color: "var(--kroc-red)", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 6 }}>open · informal model</div>
+          <h3 className="t-heading-md" style={{ margin: "0 0 18px" }}>Meet the Team</h3>{/* BLK-3 relabel: was "Camden Leadership" */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, alignItems: "start" }}>
+            {[
+            ["Marcus Johnson", "Executive Director", "Fifteen years leading community recreation in South Jersey.", "marcus.johnson@kroccenters.org", "(856) 555-0100"],
+            ["Jennifer Smith", "Director of Programs", "Builds the seasonal program calendar across every department.", "jennifer.smith@kroccenters.org", "(856) 555-0110"],
+            ["Reggie Lewis", "Director of Recreation", "Runs aquatics, gym, and youth sports day to day.", "reggie.lewis@kroccenters.org", "(856) 555-0120"],
+            ["Priya Patel", "Director of Volunteers", "Coordinates 300+ volunteers across the center's programs.", "priya.patel@kroccenters.org", "(856) 555-0130"]].
+            map(([n, r, bio, email, phone]) =>
+            <div key={n} className="kroc-card" style={{ padding: 0 }}>
+                <div className="img" style={{ aspectRatio: "4/5" }}><span className="label">portrait · 4:5</span></div>
+                <div className="body" style={{ padding: "16px 20px" }}>
+                  <div style={{ fontSize: 17 }}>{n}</div>
+                  <div style={{ fontSize: 13, color: "#575757", marginBottom: 10 }}>{r}</div>
+                  <p style={{ fontSize: 13, color: "#1C1B1F", lineHeight: 1.5, margin: "0 0 12px" }}>{bio}</p>
+                  <a style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12.5, color: "#022056", textDecoration: "none", marginBottom: 5, cursor: "pointer" }}><Icon name="mail" size={14}/> {email}</a>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12.5, color: "#575757" }}><Icon name="phone" size={14}/> {phone}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Layout · 1-up feature — single card with bio (BLK-3) */}
+        <div>
+          <div style={cap}>Layout · 1-up feature — single card with bio</div>
+          <div className="kroc-card" style={{ padding: "44px 48px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 44, alignItems: "start" }}>
+              {/* Left — profile panel (portrait + identity + contact grouped) */}
+              <div style={{ background: "#F6F6F8", borderRadius: 16, padding: "30px 26px", textAlign: "center" }}>
+                <div style={{ width: 150, height: 150, borderRadius: "50%", background: "#E6E6E9", display: "flex", alignItems: "center", justifyContent: "center", color: "#9a9aa2", fontSize: 12, fontFamily: "'SF Mono',Menlo,monospace", margin: "0 auto 18px" }}>portrait</div>
+                <div style={{ fontSize: 19, fontWeight: 600, color: "#1C1B1F", marginBottom: 8 }}>Denise Carter</div>
+                <span style={{ display: "inline-block", padding: "4px 12px", borderRadius: 999, background: "rgba(0,32,86,.08)", color: "var(--kroc-navy)", fontSize: 12.5, fontWeight: 600 }}>Membership Manager</span>
+                <div style={{ height: 1, background: "#E4E4E7", margin: "20px 0" }} />
+                <a style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontSize: 13, color: "#022056", textDecoration: "none", marginBottom: 10, cursor: "pointer" }}><Icon name="mail" size={15}/> denise.carter@kroccenters.org</a>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontSize: 13, color: "#575757" }}><Icon name="phone" size={15}/> (856) 555-0140</div>
+              </div>
+              {/* Right — heading + greeting + bio */}
+              <div>
+                <h3 style={{ margin: "0 0 18px", fontSize: 28, fontWeight: 400, color: "#575757", letterSpacing: "-.01em" }}>Hello from the Membership Manager</h3>
+                <p style={{ margin: "0 0 12px", fontWeight: 600, fontSize: 16, color: "#1C1B1F" }}>Hello everyone!</p>
+                <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: "#1C1B1F" }}>
+                  My name is Denise, and I'm the Membership Manager here at the Camden Kroc Center. In my role, I work to make every guest's first visit feel like a welcome home. Faith, family, and this community mean everything to me — I'm a lifelong South Jersey resident and the proud mother of three. For over a decade I've helped families find the programs that fit their lives, and I'm passionate about building safe, encouraging spaces where everyone belongs. Please stop by the Welcome Desk and say hi — I'd love to hear what brings you to the Kroc.
+                </p>
               </div>
             </div>
-          )}
+          </div>
         </div>
+
       </div>
     </BlockFrame>);
 
@@ -723,6 +733,105 @@ function B_FeaturedVolunteerOpps() {
 
 }
 
+/* ---- 7.16 Welcome / Intro Band ---- */
+/* BLK-1: not a new component family — same text(+optional photo) section as Facility Section,
+   configured as the Membership intro. Two variants: no-photo (palette background) + with-photo. */
+function B_WelcomeIntro() {
+  const eyebrow = "Membership";
+  const title = "Membership is for everyone.";
+  const body = "Becoming a member at The Salvation Army Kroc Center is much more than signing up for a health club or wellness center. This is a place where you will feel welcomed and supported no matter what your physical, educational or social goals — and every person in our community is a critical component. Day passes are also available.";
+  const cap = { fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 10 };
+  return (
+    <BlockFrame id="b-welcome-intro" n="7.16 · Block" name="Welcome / Intro Band"
+      schema="[intro_band]"
+      fields={[
+        ["Layout Variant", "No photo / Photo-right"],
+        ["Eyebrow", "text · optional"],
+        ["Title", "text"],
+        ["Body (WYSIWYG)", "rich text"],
+        ["CTAs", "up to 2 · Label + URL"],
+        ["Photo", "3:2 · photo variant only"],
+        ["Background Color", "palette · text-only variant"]]
+      }
+      notes="Same section pattern as the Facility Section (text + optional photo), configured here as the Membership intro. Two layouts: text-only over a palette background color, and text + photo. Copy is the client's membership statement; day-pass CTA included.">
+      <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 28 }}>
+
+        {/* Variant 1 — no photo, palette background */}
+        <div>
+          <div style={cap}>Variant · No photo — palette background</div>
+          <IntroBand variant="color" eyebrow={eyebrow} title={title} body={body} primaryCta="Become a Member" secondaryCta="View Day Passes" />
+        </div>
+
+        {/* Variant 2 — with photo (text-left / photo-right) */}
+        <div>
+          <div style={cap}>Variant · With photo</div>
+          <IntroBand variant="photo" eyebrow={eyebrow} title={title} body={body} primaryCta="Become a Member" secondaryCta="View Day Passes" photoLabel="3:2 · membership" />
+        </div>
+
+      </div>
+    </BlockFrame>);
+
+}
+
+/* ---- 7.17 Featured Events ---- */
+function B_FeaturedEvents() {
+  // HOME-2: Featured Classes (7.7) already exists; this is the Events half of "Featured Classes and Events".
+  // Reuses the shared EventCard (now with a short description) — pairs with 7.7 on the homepage.
+  const events = [
+    { title: "Summer Camp Open House", date: "June 14, 2026 · 10 AM – 1 PM", desc: "Tour every camp track in 90 minutes, meet the counselors, and register on the spot.", memberPrice: "Free", publicPrice: "$5" },
+    { title: "Family Pool Night", date: "June 21, 2026 · 5 – 8 PM", desc: "Open swim, games, and poolside snacks for the whole family on a summer evening.", memberPrice: "Free", publicPrice: "$8" },
+    { title: "Independence Day BBQ", date: "July 4, 2026 · 12 – 4 PM", desc: "Food, lawn games, and live music on the plaza to celebrate the Fourth together.", memberPrice: "$5", publicPrice: "$10" },
+  ];
+  return (
+    <BlockFrame id="b-featured-events" n="7.17 · Block" name="Featured Events"
+    schema="[featured_events]"
+    fields={[
+    ["Block Title (optional)", "+ View All link"],
+    ["Repeater → Event Ref", "[events]"],
+    ["Display Mode", "Grid 3-up or 4-up"],
+    ["Custom Card", "Manual alternative to a referenced event (HOME-2)"]]
+    }
+    notes="HOME-2: pairs with Featured Classes (7.7) for the homepage 'Featured Classes and Events' ask. Uses the shared Event card — title, date, short description, Member/Public price, View Event CTA. Pulls a curated subset from [events] (dynamic) or a manually-authored custom card.">
+      <div style={{ padding: "24px 0" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 18 }}>
+          <h3 className="t-heading-md" style={{ margin: 0 }}>Featured Events</h3>
+          <a style={{ fontSize: 13, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>View All Events <Icon name="arrowUR" size={14} /></a>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
+          {events.map(e =>
+            <EventCard key={e.title} title={e.title} date={e.date} desc={e.desc} address="Camden Kroc Center" memberPrice={e.memberPrice} publicPrice={e.publicPrice} />
+          )}
+        </div>
+      </div>
+    </BlockFrame>);
+
+}
+
+/* ---- 7.18 Map Block ---- */
+function B_MapBlock() {
+  // HOME-4: the homepage "Find a center" map, extracted into a reusable block.
+  const cap = { fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "#888", marginBottom: 10 };
+  return (
+    <BlockFrame id="b-map" n="7.18 · Block" name="Map Block"
+    schema="[map_block]"
+    fields={[
+    ["Variant", "Locator (apex · multi-center) / Single (instance · one location)"],
+    ["Title", "text"],
+    ["Body", "text · optional"],
+    ["Address", "Single variant · from [kroc_location]"],
+    ["CTA / Search", "Single: Get Directions · Locator: City/ZIP search + Find Center"]]
+    }
+    notes="HOME-4: extracted from the homepage 'Find a center' section. APEX site uses the Locator variant (multi-center finder) on its homepage; individual Kroc instances OMIT it on the homepage and place the Single variant on About Us (NEW-3). Apex-only conditionality + site-type flag tracked in SCHEMA-12.">
+      <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={cap}>Variant · Locator (apex — multi-center finder)</div>
+        <MapBlock variant="locator" title={<>27 Kroc Centers,<br/>one community network.</>} body="Find programs, classes, events, and volunteer opportunities at the Kroc Center nearest you." />
+        <div style={{ ...cap, marginTop: 18 }}>Variant · Single (instance — one location, e.g. About Us)</div>
+        <MapBlock variant="single" title="Visit the Camden Kroc Center" body="Find us on Community Way — free parking, an accessible entrance, and transit one block away." address="1234 Community Way, Camden, NJ 08103" cta="Get Directions" />
+      </div>
+    </BlockFrame>);
+
+}
+
 /* ---- Library wrapper ---- */
 function BlocksLibrary() {
   return (
@@ -736,7 +845,9 @@ function BlocksLibrary() {
           ["7.7", "Featured Classes", "b-featured-classes"], ["7.8", "Facility Section", "b-facility"], ["7.9", "Featured Pages", "b-featured-pages"],
           ["7.10", "Image Gallery", "b-gallery"], ["7.11", "Custom Forms", "b-form"], ["7.12", "People Block", "b-people"],
           ["7.13", "Donation Block", "b-donation"], ["7.14", "Featured Programs", "b-featured-programs"],
-          ["7.15", "Featured Volunteer Opps", "b-featured-volunteers"]].
+          ["7.15", "Featured Volunteer Opps", "b-featured-volunteers"],
+          ["7.16", "Welcome / Intro Band", "b-welcome-intro"], ["7.17", "Featured Events", "b-featured-events"],
+          ["7.18", "Map Block", "b-map"]].
           map(([n, l, id]) =>
           <a key={id} href={`#${id}`} className="block-toc-card">
               <div className="n">{n}</div>
@@ -747,7 +858,7 @@ function BlocksLibrary() {
       </div>
       <B_Alert /><B_Header /><B_Connect /><B_FAQs /><B_ExternalEmbed /><B_FeaturedStories />
       <B_FeaturedClasses /><B_FacilitySection /><B_FeaturedPages /><B_ImageGallery /><B_CustomForms /><B_PeopleBlock />
-      <B_DonationBlock /><B_FeaturedPrograms /><B_FeaturedVolunteerOpps />
+      <B_DonationBlock /><B_FeaturedPrograms /><B_FeaturedVolunteerOpps /><B_WelcomeIntro /><B_FeaturedEvents /><B_MapBlock />
     </section>);
 
 }

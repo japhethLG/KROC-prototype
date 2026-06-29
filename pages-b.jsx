@@ -131,7 +131,7 @@ function Page_TagDetail(){
             {Array.from({length:8}).map((_,i) => (
               i % 2 === 0
                 ? <StoryCard key={i} category="Youth" title={["Robotics club takes nationals","A new kind of pickup game","The summer-camp class of 2025","Mentoring, year one"][i/2]}/>
-                : <EventCard key={i} title={["Teen Open Mic","Youth Career Day","Summer Camp Open House","Family Movie Night"][(i-1)/2]} date="August 9, 2026 · 6–8 PM" address="Camden Kroc · Main Hall"/>
+                : <EventCard key={i} title={["Teen Open Mic","Youth Career Day","Summer Camp Open House","Family Movie Night"][(i-1)/2]} date="August 9, 2026 · 6–8 PM" address="Camden Kroc · Main Hall" memberPrice="Free" publicPrice="$5"/>
             ))}
           </div>
           <div style={{display:"flex",justifyContent:"center",marginTop:40}}><Pagination/></div>
@@ -146,13 +146,14 @@ function Page_TagDetail(){
 /* ===== 6.10 Events Root ===== */
 function Page_Events(){
   const [tab, setTab] = React.useState("upcoming");
+  // [title, date, memberPrice, publicPrice] — Member/Public price points on the card (PAGE-7 item 2)
   const upcoming = [
-    ["Summer Camp Open House","June 14, 2026 · 10 AM – 1 PM"],
-    ["Family Pool Night","June 21, 2026 · 5 – 8 PM"],
-    ["Teen Open Mic","June 27, 2026 · 7 PM"],
-    ["Senior Health Fair","July 9, 2026 · 9 AM – 12 PM"],
-    ["Volunteer Onboarding","July 12, 2026 · 6 PM"],
-    ["Independence Day BBQ","July 4, 2026 · 12 – 4 PM"],
+    ["Summer Camp Open House","June 14, 2026 · 10 AM – 1 PM","Free","$5"],
+    ["Family Pool Night","June 21, 2026 · 5 – 8 PM","Free","$8"],
+    ["Teen Open Mic","June 27, 2026 · 7 PM","Free","Free"],
+    ["Senior Health Fair","July 9, 2026 · 9 AM – 12 PM","Free","Free"],
+    ["Volunteer Onboarding","July 12, 2026 · 6 PM","Free","Free"],
+    ["Independence Day BBQ","July 4, 2026 · 12 – 4 PM","$5","$10"],
   ];
   const past = [
     ["Spring Family 5K","April 12, 2026 · 8 AM"],
@@ -210,8 +211,8 @@ function Page_Events(){
           </div>
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,rowGap:24}}>
-            {events.map(([t,d])=>(
-              <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way" past={tab==="past"}/>
+            {events.map(([t,d,mp,pp])=>(
+              <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way" past={tab==="past"} memberPrice={mp} publicPrice={pp}/>
             ))}
           </div>
           <div style={{display:"flex",justifyContent:"center",marginTop:40}}><Pagination/></div>
@@ -230,17 +231,19 @@ function Page_EventDetail(){
       schema="[events]"
       fields={[
         ["Event Title", "Text · required · H1"],
-        ["Event Image", "Image · 16:7 hero"],
+        ["Event Image — Desktop / Mobile / Thumbnail", "Image · 16:7 hero · supports predesigned campaign artwork (PAGE-7 item 1 — already in schema)"],
         ["Start Datetime", "Datetime · required"],
         ["End Datetime", "Datetime"],
         ["Event Body", "Rich Text (WYSIWYG) · required · About the Event"],
         ["Register Link", "URL / Remote API"],
+        ["Member Price / Public Price", "Remote API (Traction Rec) · two price points · same as classes (PAGE-7 item 2)"],
         ["Address", "Text · required"],
         ["Contact Name", "Text"],
         ["Contact Email", "Text"],
         ["Contact Phone", "Text"],
+        ["Additional Blocks", "Drag-in blocks (e.g. Image Gallery) · page is Hybrid (PAGE-7 item 3)"],
       ]}
-      notes="Pageset · Hybrid · /events/:page_slug/. Mirrors Class Detail layout: hero + 2-col sidebar/body. Map embed uses an OSM tile.">
+      notes="Pageset · Hybrid · /events/:page_slug/. Mirrors Class Detail layout: hero + 2-col sidebar/body. Header image supports Desktop/Mobile + predesigned artwork (schema verified; a dedicated 'tablet' size is the only gap — see SCHEMA-16). Hybrid page accepts additional drag-in blocks (Image Gallery shown). Map embed uses an OSM tile.">
 
       <Header active="Events"/>
 
@@ -266,6 +269,10 @@ function Page_EventDetail(){
             <a style={{display:"inline-flex",alignItems:"center",gap:6,color:"var(--kroc-red)",fontSize:13.5,marginBottom:18,cursor:"pointer"}}>
               <Icon name="cal" size={14}/> Add to Calendar
             </a>
+
+            {/* PAGE-7 item 2: Member / Public price points (same style as Class Detail) */}
+            <PricePoints member="Free" publicPrice="$5" dynamic/>
+
             <div style={{display:"flex",gap:8,marginBottom:24}}>
               <a className="btn btn-primary btn-sm">Register Here</a>
             </div>
@@ -311,13 +318,31 @@ function Page_EventDetail(){
         </div>
       </div>
 
+      {/* PAGE-7 item 3: additional drag-in block — Image Gallery (mosaic), same as Class Detail */}
+      <div className="kroc-main" style={{marginTop:48}}>
+        <div style={{maxWidth:1248,margin:"0 auto"}}>
+          <ImageGallery
+            title="Event Gallery"
+            variant="mosaic"
+            tiles={[
+              ["Open house crowd",2,2],
+              ["Camp studios tour",1,1],
+              ["Swim test",1,1],
+              ["Counselor meet-and-greet",1,2],
+              ["Lunch on the plaza",2,1],
+              ["Sign-up table",1,1],
+              ["Family photo wall",1,1],
+            ]}/>
+        </div>
+      </div>
+
       <div className="kroc-main" style={{marginTop:48}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
           <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Other Events</h2>
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
-            <EventCard title="Family Pool Night" date="June 21, 2026 · 5–8 PM" address="Camden Kroc · Pool"/>
-            <EventCard title="Teen Open Mic" date="June 27, 2026 · 7 PM" address="Camden Kroc · Main Hall"/>
-            <EventCard title="Independence Day BBQ" date="July 4, 2026 · 12–4 PM" address="Camden Kroc · Plaza"/>
+            <EventCard title="Family Pool Night" date="June 21, 2026 · 5–8 PM" address="Camden Kroc · Pool" memberPrice="Free" publicPrice="$8"/>
+            <EventCard title="Teen Open Mic" date="June 27, 2026 · 7 PM" address="Camden Kroc · Main Hall" memberPrice="Free" publicPrice="Free"/>
+            <EventCard title="Independence Day BBQ" date="July 4, 2026 · 12–4 PM" address="Camden Kroc · Plaza" memberPrice="$5" publicPrice="$10"/>
           </div>
         </div>
       </div>
@@ -337,7 +362,7 @@ function Page_Contact(){
         ["Page Intro", "Text Area"],
         ["Department Contacts", "Repeater (Department Name, Email, Phone) · sidebar 'Reach a Team'"],
       ]}
-      notes="Single Page · Hybrid · /contact/. Address + Hours auto from [kroc_location]. Form is a drag-in [custom_forms]. FAQs and People Block are drag-in blocks. Connect footer is replaced with a cross-link card to avoid recursion.">
+      notes="Single Page · Hybrid · /contact/. Address + Hours auto from [kroc_location]; sidebar has a 'View all hours' link (PAGE-8). Form is a drag-in [custom_forms]. FAQs + People Block ('Meet The Kroc Center Team') are drag-in blocks. Uses the standard global Connect footer — its Social Media links (from [kroc_location]) cover the client's 'add social links' ask (PAGE-8).">
 
       <Header active="Contact Us"/>
 
@@ -381,7 +406,9 @@ function Page_Contact(){
               <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",fontSize:13.5,cursor:"pointer"}}>Get Directions →</a>
               <div style={{height:1,background:"#eaeaee",margin:"16px 0"}}/>
               <div style={{fontSize:13,color:"#575757",marginBottom:4}}>Center Hours</div>
-              <div style={{fontSize:14}}>Mon–Fri · 5:30 AM – 10 PM<br/>Saturday · 7 AM – 8 PM<br/>Sunday · 9 AM – 6 PM</div>
+              <div style={{fontSize:14,marginBottom:8}}>Mon–Fri · 5:30 AM – 10 PM<br/>Saturday · 7 AM – 8 PM<br/>Sunday · 9 AM – 6 PM</div>
+              {/* PAGE-8 item 1 */}
+              <a style={{color:"#022056",textDecoration:"underline",textDecorationColor:"#EF3E42",fontSize:13.5,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>View all hours <Icon name="arrowUR" size={13}/></a>
             </div>
             <div style={{background:"#fff",borderRadius:20,padding:"24px 28px"}}>
               <h4 style={{fontSize:16,margin:"0 0 10px"}}>Reach a Team</h4>
@@ -401,10 +428,10 @@ function Page_Contact(){
           </div>
         </div>
 
-        {/* People block — informal */}
+        {/* People block — "Meet the Team" (PAGE-8 item 3) */}
         <div style={{maxWidth:1248,margin:"48px auto 0"}}>
-          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>People Block · open question — informal model</div>
-          <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Camden Leadership</h2>
+          <div style={{fontSize:11,color:"var(--kroc-red)",letterSpacing:".14em",textTransform:"uppercase",marginBottom:6}}>People Block · [people_block] (drag-in)</div>
+          <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Meet The Kroc Center Team</h2>
           <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
             {[
               ["Marcus Johnson","Executive Director"],
@@ -438,16 +465,10 @@ function Page_Contact(){
           />
         </div>
 
-        {/* Cross-link replaces Connect on Contact */}
-        <div style={{maxWidth:1248,margin:"48px auto 32px",background:"var(--kroc-navy)",color:"#fff",borderRadius:20,padding:"40px 48px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:24,flexWrap:"wrap"}}>
-          <div>
-            <div style={{fontSize:11,letterSpacing:".14em",textTransform:"uppercase",opacity:.7,marginBottom:8}}>Stay In Touch</div>
-            <h3 className="t-heading-sm" style={{margin:"0 0 6px"}}>Sign up for Kroc updates without leaving Contact.</h3>
-            <p style={{margin:0,opacity:.85,fontSize:14}}>The full Connect block lives on every other page — head back to the homepage to subscribe.</p>
-          </div>
-          <a className="btn btn-light">Visit Home →</a>
-        </div>
       </div>
+
+      {/* PAGE-8 item 2: this page was missing its footer — the standard Connect footer carries the Social Media links (from [kroc_location]) */}
+      <Connect/>
     </PageFrameB>
   );
 }
