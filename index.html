@@ -17,6 +17,7 @@
 <script type="text/babel" src="meta.jsx"></script>
 <script type="text/babel" src="pages-a.jsx"></script>
 <script type="text/babel" src="pages-b.jsx"></script>
+<script type="text/babel" src="pages-new.jsx"></script>
 
 <script type="text/babel" data-presets="react">
 function JumpNav(){
@@ -39,6 +40,14 @@ function JumpNav(){
       ["p-contact","6.12 Contact Us"],
       ["p-volunteers","6.13 Volunteer Opportunities Index"],
       ["p-volunteer-detail","6.14 Volunteer Opportunity Detail"],
+    ]],
+    ["New Pages", [
+      ["p-membership","6.15 Membership"],
+      ["p-daypass","6.16 Day Pass"],
+      ["p-about","6.17 About Us"],
+      ["p-rentals","6.18 Rentals"],
+      ["p-church","6.19 Kroc Church"],
+      ["p-careers","6.20 Careers"],
     ]],
   ];
   const [open, setOpen] = React.useState(false);
@@ -91,6 +100,13 @@ function App(){
       <Page_Contact/>
       <Page_Volunteers/>
       <Page_VolunteerDetail/>
+
+      <Page_Membership/>
+      <Page_DayPass/>
+      <Page_AboutUs/>
+      <Page_Rentals/>
+      <Page_Church/>
+      <Page_Careers/>
 
       <a id="open"></a>
       {/*<OpenQuestions/>*/}

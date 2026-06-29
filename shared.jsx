@@ -573,7 +573,19 @@ function MapBlock({ variant="single", title, body, address, cta="Get Directions"
 
 /* Featured Pages / Quick Links card (BLK-5 / HOME-3). media: "icon" | "image".
    icon variant sits on a tinted 4:3 panel of the same footprint so grids stay aligned. */
-function FeaturedPageCard({ title, body, cta, media="image", icon=null }){
+/* media: icon | image (BLK-5).
+   variant: "full" (icon/image panel + title + body + CTA — homepage "Get Started", About Us, etc.)
+          | "compact" (quick-link: red-tinted icon chip + label, whole card clickable —
+            homepage Quick Links + Membership section jump-nav). compact uses icon + title only. */
+function FeaturedPageCard({ title, body, cta, media="image", icon=null, variant="full" }){
+  if (variant === "compact") {
+    return (
+      <a style={{ background:"#fff", borderRadius:16, padding:"18px 14px", display:"flex", flexDirection:"column", alignItems:"center", gap:10, textAlign:"center", cursor:"pointer", textDecoration:"none", color:"#1C1B1F" }}>
+        <span style={{ width:42, height:42, borderRadius:"50%", background:"#FFEBEB", color:"var(--kroc-red)", display:"flex", alignItems:"center", justifyContent:"center" }}><Icon name={icon} size={20}/></span>
+        <span style={{ fontSize:12.5, lineHeight:1.25 }}>{title}</span>
+      </a>
+    );
+  }
   return (
     <div className="kroc-card" style={{ padding: 0 }}>
       {media === "icon" ? (

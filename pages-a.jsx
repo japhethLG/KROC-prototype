@@ -64,15 +64,17 @@ function Page_Home(){
         </section>
       </div>
 
-      {/* HOME-3: Quick Links = the Featured Pages "Get Started" block (7.9), placed directly under the hero. Shared FeaturedPageCard. */}
+      {/* HOME-3: Quick Links = Featured Pages "compact" variant (shared FeaturedPageCard), directly under the hero.
+          Cards-only (no heading). Same component/variant as the Membership section jump-nav. Icons are placeholder (pending the icon-library refresh). */}
       <div className="kroc-main" style={{marginTop:40}}>
         <div style={{maxWidth:1248,margin:"0 auto"}}>
-          <h2 className="t-heading-md" style={{margin:"0 0 18px"}}>Get Started</h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
-            <FeaturedPageCard title="Membership" body="Unlimited access to pools, gym, fitness studios, and member-only programs." cta="Explore Plans" media="icon" icon="users"/>
-            <FeaturedPageCard title="Day Passes" body="Drop-in for a workout, swim, or open gym — no commitment." cta="Buy a Pass" media="icon" icon="ticket"/>
-            <FeaturedPageCard title="Personal Training" body="One-on-one and small-group training with our certified staff." cta="Book a Session" media="image"/>
-            <FeaturedPageCard title="Birthday Parties" body="Pool parties, gym parties, theme rooms — Sundays book out fast." cta="Reserve a Date" media="image"/>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:12}}>
+            {[
+              ["Membership","users"],["Day Passes","ticket"],["Classes","dumbbell"],
+              ["Events","cal"],["Rentals","music"],["Church","heart"],
+            ].map(([t,ic])=>(
+              <FeaturedPageCard key={t} variant="compact" title={t} icon={ic}/>
+            ))}
           </div>
         </div>
       </div>

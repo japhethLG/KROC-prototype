@@ -324,11 +324,13 @@ function B_FeaturedPages() {
     fields={[
     ["Block Title (optional)", "+ View All link"],
     ["Repeater → Page Ref", "any internal page"],
-    ["Card Media (per item)", "Icon or Image (BLK-5)"],
-    ["Display Mode", "Grid 3-up or 4-up"]]
+    ["Card Style", "Full or Compact"],
+    ["Card Media (per item)", "Icon or Image (BLK-5) · Full style"],
+    ["Display Mode", "Grid 3-up / 4-up / 6-up"]]
     }
-    notes="Curates landing pages from homepage — Membership, Day Passes, Personal Training. Same component used for Western variant 'quick-action card row' under hero. BLK-5: each card chooses icon OR image for its media — the icon sits on a tinted panel of the same footprint so the grid stays aligned.">
+    notes="Curates landing pages — Membership, Day Passes, Personal Training, etc. Two card styles: FULL (icon/image panel + body + CTA — the homepage 'Get Started' / Western 'quick-action card row') and COMPACT (icon chip + label, whole card clickable — the homepage Quick Links bar + the Membership section jump-nav; same shared component). BLK-5: Full cards choose icon OR image; the icon sits on a tinted panel of the same footprint so the grid stays aligned.">
       <div style={{ padding: "24px 0" }}>
+        <div style={{ fontSize: 11, color: "#888", fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 10 }}>Style · Full</div>
         <h3 className="t-heading-md" style={{ margin: "0 0 18px" }}>Get Started</h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
           {[
@@ -338,6 +340,15 @@ function B_FeaturedPages() {
           ["Birthday Parties", "Pool parties, gym parties, theme rooms — Sundays book out fast.", "Reserve a Date", "image", null]].
           map(([t, b, c, media, icon]) =>
             <FeaturedPageCard key={t} title={t} body={b} cta={c} media={media} icon={icon} />
+          )}
+        </div>
+        <div style={{ fontSize: 11, color: "#888", fontFamily: "'SF Mono',Menlo,monospace", textTransform: "uppercase", letterSpacing: ".08em", margin: "28px 0 10px" }}>Style · Compact (Quick Links)</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12 }}>
+          {[
+          ["Membership", "users"], ["Day Passes", "ticket"], ["Classes", "dumbbell"],
+          ["Events", "cal"], ["Rentals", "music"], ["Church", "heart"]].
+          map(([t, icon]) =>
+            <FeaturedPageCard key={t} variant="compact" title={t} icon={icon} />
           )}
         </div>
       </div>
