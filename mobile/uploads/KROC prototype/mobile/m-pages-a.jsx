@@ -1,76 +1,8 @@
 /* ============================================================
-   KROC Mobile v2 — Pages 6.1 – 6.7
-   Updated to the desktop prototype: HOME-2/3/4/5/6, PAGE-1/2/3/5.
+   KROC Mobile — Pages 6.1 – 6.7
    ============================================================ */
 
-const grid2 = { display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 12 };
-
-/* Reusable class search + listing (PAGE-1 / SYNC-12) — mobile ClassFinder.
-   Pass `categories` to enable the cross-category filter (All Programs);
-   omit it on a single-category page (Program Category). */
-function ClassFinder({ title = "Classes", classes = [], categories = null, searchPlaceholder = "Search classes", total = null }) {
-  const [view, setView] = React.useState("card");
-  const [typeF, setTypeF] = React.useState("All");
-  const [catF, setCatF] = React.useState("All Categories");
-  const [q, setQ] = React.useState("");
-  const shown = classes.filter(c =>
-    (typeF === "All" || c.kind === typeF) &&
-    (!categories || catF === "All Categories" || c.category === catF) &&
-    (q.trim() === "" || (c.title + " " + (c.desc || "")).toLowerCase().includes(q.trim().toLowerCase()))
-  );
-  return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 12 }}>
-        <h2 className="t-h2" style={{ margin: 0 }}>{title}</h2>
-        <div style={{ display: "inline-flex", background: "#fff", borderRadius: 99, padding: 3, flex: "0 0 auto" }}>
-          {[["card", "Cards"], ["list", "List"]].map(([k, l]) => (
-            <button key={k} onClick={() => setView(k)} style={{ border: 0, cursor: "pointer", fontFamily: "inherit", fontSize: 12.5, padding: "6px 13px", borderRadius: 99, background: view === k ? "var(--kroc-red)" : "transparent", color: view === k ? "#fff" : "var(--kroc-dark-100)" }}>{l}</button>
-          ))}
-        </div>
-      </div>
-      <div className="m-input" style={{ marginBottom: 12 }}><span className="lead"><Icon name="search" size={16} /></span><input placeholder={searchPlaceholder} value={q} onChange={e => setQ(e.target.value)} /></div>
-      {categories && <FilterRow items={["All Categories", ...categories]} value={catF} onChange={setCatF} />}
-      <FilterRow items={["All", "Roster", "Drop-In"]} value={typeF} onChange={setTypeF} />
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        <span className="m-select">Date: Any time <Icon name="chev" size={14} /></span>
-      </div>
-      <div className="t-sm text-muted" style={{ marginBottom: 14 }}>Showing {shown.length} of {total != null ? total : classes.length} classes</div>
-
-      {shown.length === 0 ? (
-        <div className="m-panel" style={{ textAlign: "center", padding: "40px 20px" }}>
-          <p className="t-sm text-muted" style={{ margin: 0 }}>No classes match your search. Try a different filter or clear the search.</p>
-        </div>
-      ) : view === "card" ? (
-        <div style={{ display: "grid", gap: 14 }}>
-          {shown.map(c => (
-            <ClassCard key={c.title} title={c.title} kind={c.kind} sched={c.sched} dates={c.dates} price={c.price} memberPrice={c.memberPrice} publicPrice={c.publicPrice} desc={c.desc} noImage={c.noImage} />
-          ))}
-        </div>
-      ) : (
-        <div className="m-panel" style={{ padding: "4px 18px" }}>
-          {shown.map((c, i) => (
-            <div key={c.title} style={{ padding: "14px 0", borderTop: i ? "1px solid #f0f0f2" : "none" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline", marginBottom: 3 }}>
-                <div className="t-title" style={{ fontWeight: 500 }}>{c.title}</div>
-                <span className={"pill sm " + (c.kind === "Drop-In" ? "red-fill" : "red-outline")}>{c.kind}</span>
-              </div>
-              {categories && <div className="t-xs text-muted" style={{ marginBottom: 2 }}>{c.category}</div>}
-              <div className="t-sm text-muted">{c.sched}</div>
-              {c.dates && <div className="t-xs text-muted" style={{ marginTop: 2 }}>{c.dates}</div>}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 8 }}>
-                {(c.memberPrice || c.publicPrice)
-                  ? <PricePoints member={c.memberPrice} publicPrice={c.publicPrice} size="card" />
-                  : <div className="t-sm">{c.price}</div>}
-                <a className="btn btn-primary btn-sm">Register</a>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      <Pagination />
-    </div>
-  );
-}
+const grid2 = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 };
 
 /* ===== 6.1 Homepage ===== */
 function Page_Home() {
@@ -87,51 +19,33 @@ function Page_Home() {
           sub="Membership opens 100+ weekly classes, two pools, a fitness center, arts studios, a chapel, and a community calendar bigger than the neighborhood."
           dims="1400×460">
           <div style={{ display: "grid", gap: 10 }}>
-            <a className="btn btn-light btn-lg btn-block" onClick={() => navigate("membership")}>Become a Member</a>
+            <a className="btn btn-light btn-lg btn-block" onClick={() => navigate("info")}>Become a Member</a>
             <a className="btn btn-outline-light btn-block">Tour the Center</a>
           </div>
         </Hero>
       </div>
 
-      {/* HOME-3 / SYNC-27: Quick Links — Compact Featured Pages cards, directly under the hero (cards-only, no heading) */}
+      {/* Find a center */}
       <div className="m-section">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-          {[
-            ["Membership", "users", "membership"], ["Day Passes", "ticket", "daypass"], ["Classes", "dumbbell", "programs"],
-            ["Events", "cal", "events"], ["Rentals", "music", "rentals"], ["Church", "heart", "church"],
-          ].map(([t, ic, r]) => <QuickLinkCard key={t} title={t} icon={ic} onClick={() => navigate(r)} />)}
+        <div className="m-panel">
+          <h2 className="t-h2" style={{ margin: "0 0 10px" }}>27 Kroc Centers, one network.</h2>
+          <p className="t-sm" style={{ margin: "0 0 16px" }}>Find programs, classes, events, and volunteer opportunities at the Kroc Center nearest you.</p>
+          <div style={{ aspectRatio: "5/3", background: "#EFEFEF", borderRadius: 14, position: "relative", overflow: "hidden", marginBottom: 12 }}>
+            <svg viewBox="0 0 400 240" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+              <path d="M30 70 Q90 50 140 80 T260 70 T380 110 L380 200 Q310 220 250 200 T120 210 T20 190 Z" fill="#dcdcdf" stroke="#c4c4c8" />
+              {[[100, 110], [170, 80], [230, 140], [290, 100], [150, 170], [330, 150]].map(([x, y], i) => (
+                <g key={i} transform={`translate(${x},${y})`}><path d="M0-14 a8 8 0 1 1 0-.01 z" fill="#002056" /><circle cx="0" cy="-8" r="3" fill="#fff" /></g>
+              ))}
+            </svg>
+          </div>
+          <div className="m-input" style={{ marginBottom: 10 }}><span className="lead"><Icon name="search" size={16} /></span><input placeholder="City or ZIP" /></div>
+          <a className="btn btn-secondary btn-block">Find a Center</a>
         </div>
       </div>
 
-      {/* HOME-2: Featured Classes + Featured Events, before the map block */}
+      {/* How We Serve */}
       <div className="m-section">
-        <SectionHead title="Featured Classes" seeAll="View All" onSeeAll={() => navigate("programs")} />
-        <Carousel width="80%">
-          <ClassCard title="Adult Learn-to-Swim" kind="Roster" sched="Tue & Thu · 7:00 PM" dates="8 weeks · Sep 8 – Nov 3, 2026" memberPrice="$76" publicPrice="$95" desc="A confidence-first course for adults who want to learn or refresh the basics in a warm-water teaching pool." />
-          <ClassCard title="Sunrise Yoga" kind="Drop-In" sched="M/W/F · 6:30 AM" memberPrice="Free" publicPrice="$10 / visit" desc="Start the day grounded — a flowing all-levels practice in the studio with natural light." noImage />
-          <ClassCard title="Beginning Guitar" kind="Roster" sched="Wed · 6:00 PM" dates="8 weeks · Sep 16 – Nov 4, 2026" memberPrice="$72" publicPrice="$90" desc="Chords, strumming, and your first songs — no experience or instrument required to start." />
-        </Carousel>
-      </div>
-
-      <div className="m-section">
-        <SectionHead title="Featured Events" seeAll="View All" onSeeAll={() => navigate("events")} />
-        <Carousel width="80%">
-          <EventCard title="Summer Camp Open House" date="June 14, 2026 · 10 AM – 1 PM" desc="Tour every camp track in 90 minutes, meet the counselors, and register on the spot." memberPrice="Free" publicPrice="$5" />
-          <EventCard title="Family Pool Night" date="June 21, 2026 · 5 – 8 PM" desc="Open swim, games, and poolside snacks for the whole family on a summer evening." memberPrice="Free" publicPrice="$8" />
-          <EventCard title="Independence Day BBQ" date="July 4, 2026 · 12 – 4 PM" desc="Food, lawn games, and live music on the plaza to celebrate the Fourth together." memberPrice="$5" publicPrice="$10" />
-        </Carousel>
-      </div>
-
-      {/* HOME-4: Map block — APEX-ONLY locator (on instances this moves to About Us as the Single variant) */}
-      <div className="m-section">
-        <MapBlock variant="locator"
-          title="27 Kroc Centers, one network."
-          body="Find programs, classes, events, and volunteer opportunities at the Kroc Center nearest you." />
-      </div>
-
-      {/* HOME-5 relabel: was "How We Serve" */}
-      <div className="m-section">
-        <SectionHead title="Programs and Classes" seeAll="All Programs" onSeeAll={() => navigate("programs")} />
+        <SectionHead title="How We Serve" seeAll="All Programs" onSeeAll={() => navigate("programs")} />
         <Carousel width="60%">
           {[["Aquatics", "Swim, lap & aquatic fitness."], ["Fitness", "Weights, cardio, classes."], ["Youth", "Camp, mentoring, teen nights."], ["Arts", "Studio, dance, performance."]].map(([n, b]) => (
             <CategoryCard key={n} name={n} body={b} cta="Learn More" />
@@ -139,9 +53,9 @@ function Page_Home() {
         </Carousel>
       </div>
 
-      {/* HOME-5 relabel: was "Latest Stories" */}
+      {/* Latest Stories */}
       <div className="m-section">
-        <SectionHead title="Kroc Highlights" seeAll="View All Highlights" onSeeAll={() => navigate("stories")} />
+        <SectionHead title="Latest Stories" seeAll="View All" onSeeAll={() => navigate("stories")} />
         <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 420, background: "#1C1B1F", marginBottom: 12 }} onClick={() => navigate("story")}>
           <div className="ph" style={{ position: "absolute", inset: 0, borderRadius: 0 }}><span className="lbl" /></div>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.82) 100%)" }} />
@@ -159,18 +73,7 @@ function Page_Home() {
         </Carousel>
       </div>
 
-      {/* HOME-6: membership callout — same IntroBand as BLK-1 (no-photo, navy). Replaces the donation band. */}
-      <div className="m-section">
-        <IntroBand
-          variant="color"
-          eyebrow="Membership"
-          title="Membership is for everyone."
-          body="Becoming a member at The Salvation Army Kroc Center is much more than signing up for a health club or wellness center. This is a place where you will feel welcomed and supported no matter what your physical, educational or social goals — and every person in our community is a critical component. Day passes are also available."
-          primaryCta="Become a Member"
-          secondaryCta="View Day Passes"
-        />
-      </div>
-
+      <DonationBand title="Every dollar opens a door." body="Your gift funds scholarships, free programming, and the staff who make the Kroc the most welcoming place in town." primaryCta="Donate Now" secondaryCta="Other Ways" />
       <Connect />
     </div>
   );
@@ -190,17 +93,6 @@ function Page_AllPrograms() {
     ["Education", "Tutoring, GED prep & adult learning."],
     ["Community", "Drop-in events, family nights & meeting space."],
   ];
-  // PAGE-1: cross-category sample for the "Search for Classes" block (auto-fed from [classes])
-  const allClasses = [
-    { title: "Adult Learn-to-Swim", category: "Aquatics", kind: "Roster", sched: "Tue & Thu · 7:00 PM", dates: "8 weeks · Sep 8 – Nov 3, 2026", memberPrice: "$76", publicPrice: "$95", desc: "A confidence-first course for adults who want to learn or refresh the basics in a warm-water teaching pool." },
-    { title: "Open Lap Swim", category: "Aquatics", kind: "Drop-In", sched: "Mon–Fri · 6:00–9:00 AM", memberPrice: "Free", publicPrice: "$8 / visit", desc: "Reserved lap lanes during posted hours, first-come first-served. Free for members.", noImage: true },
-    { title: "Sunrise Yoga", category: "Fitness", kind: "Drop-In", sched: "M/W/F · 6:30 AM", memberPrice: "Free", publicPrice: "$10 / visit", desc: "Start the day grounded — a flowing all-levels practice in the studio with natural light." },
-    { title: "Strength 101", category: "Fitness", kind: "Roster", sched: "Tue & Thu · 5:30 PM", dates: "6 weeks · Sep 15 – Oct 22, 2026", memberPrice: "$60", publicPrice: "$75", desc: "A coached introduction to the weight floor: form, programming, and confidence under the bar." },
-    { title: "Teen Open Gym", category: "Youth", kind: "Drop-In", sched: "Fri · 7:00–10:00 PM", memberPrice: "Free", publicPrice: "$5 / visit", desc: "Basketball, games, and music — a place for teens to belong on Friday nights.", noImage: true },
-    { title: "Beginning Guitar", category: "Arts", kind: "Roster", sched: "Wed · 6:00 PM", dates: "8 weeks · Sep 16 – Nov 4, 2026", memberPrice: "$72", publicPrice: "$90", desc: "Chords, strumming, and your first songs — no experience or instrument required to start." },
-    { title: "Silver Strength", category: "Seniors", kind: "Drop-In", sched: "T/Th · 9:00 AM", memberPrice: "Free", publicPrice: "$6 / visit", desc: "Gentle, seated-option strength and balance training designed for active aging." },
-    { title: "GED Prep Lab", category: "Education", kind: "Roster", sched: "Mon & Wed · 6:00 PM", dates: "Rolling · Sep – Dec 2026", memberPrice: "Free", publicPrice: "Free", desc: "Small-group tutoring and practice tests to earn your high-school equivalency." },
-  ];
   return (
     <div>
       <MobileHeader active="programs" onOpenMenu={openMenu} />
@@ -209,25 +101,13 @@ function Page_AllPrograms() {
           sub="From toddler swim to senior strength, the Kroc runs hundreds of programs a season — most free or included with membership." short dims="1400×360" />
       </div>
 
-      {/* PAGE-1 item 3: "Browse by Category" heading distinguishes browse vs. search */}
       <div className="m-section">
-        <SectionHead title="Browse by Category" />
-        <div className="m-input" style={{ marginBottom: 12 }}><span className="lead"><Icon name="search" size={16} /></span><input placeholder="Search programs" /></div>
+        <div className="m-input" style={{ marginBottom: 14 }}><span className="lead"><Icon name="search" size={16} /></span><input placeholder="Search programs" /></div>
         <FilterRow items={["All", "Aquatics", "Fitness", "Arts", "Youth", "Seniors", "Worship", "Education"]} value={f} onChange={setF} />
         <div style={grid2}>
           {cats.map(([n, b]) => <CategoryCard key={n} name={n} body={b} />)}
         </div>
         <Pagination />
-      </div>
-
-      {/* PAGE-1: Search for Classes — same ClassFinder as Program Category, plus a Category filter */}
-      <div className="m-section">
-        <ClassFinder
-          title="Search for Classes"
-          classes={allClasses}
-          categories={["Aquatics", "Fitness", "Youth", "Arts", "Seniors", "Education"]}
-          searchPlaceholder="Search all classes"
-          total={240} />
       </div>
 
       <div className="m-section">
@@ -246,15 +126,16 @@ function Page_AllPrograms() {
 /* ===== 6.3 Program Category ===== */
 function Page_ProgramCategory() {
   const { navigate, openMenu } = useNav();
-  // PAGE-2: roster classes carry Session Dates; all carry Member/Public price points; desc powers the pop-up (BLK-2)
+  const [kind, setKind] = React.useState("All");
   const classes = [
-    { title: "Adult Learn-to-Swim", kind: "Roster", sched: "Tue & Thu · 7:00 PM", dates: "8 weeks · Sep 8 – Nov 3, 2026", memberPrice: "$76", publicPrice: "$95", desc: "A confidence-first course for adults who never learned — or want to refresh the basics. Small groups of six, certified instructors, and a warm-water teaching pool make every session feel safe." },
-    { title: "Open Lap Swim", kind: "Drop-In", sched: "Mon–Fri · 6:00–9:00 AM", memberPrice: "Free", publicPrice: "$8 / visit", desc: "Reserved lap lanes during posted hours, first-come first-served. Kickboards and pull buoys at the front desk. Free for members.", noImage: true },
-    { title: "Masters Swim", kind: "Roster", sched: "M/W/F · 5:30 AM", dates: "12 weeks · Sep 1 – Nov 20, 2026", memberPrice: "$96", publicPrice: "$120", desc: "Coached workouts for competitive and fitness swimmers 18+, with sets scaled to every level from triathlete to weekend lap swimmer." },
-    { title: "Parent & Baby Splash", kind: "Drop-In", sched: "Sat · 9:30 AM", memberPrice: "$8 / session", publicPrice: "$10 / session", desc: "A gentle 30-minute water-acclimation class for babies 6–36 months and a caregiver. Songs, floating games, and lots of smiles." },
-    { title: "Water Aerobics", kind: "Drop-In", sched: "T/Th · 10:00 AM", memberPrice: "Free", publicPrice: "$8 / visit", desc: "Low-impact, high-energy fitness in the shallow end — easy on the joints, tough on the calories.", noImage: true },
-    { title: "Teen Swim Team", kind: "Roster", sched: "Wed & Fri · 4:30 PM", dates: "6 weeks · Sep 8 – Oct 15, 2026", memberPrice: "$64", publicPrice: "$80", desc: "A six-week intro to competitive swimming for ages 13–17, capped by a friendly intra-club meet." },
+    ["Adult Learn-to-Swim", "Roster", "Tue & Thu · 7:00 PM", "$95 / 8 weeks"],
+    ["Open Lap Swim", "Drop-In", "Mon–Fri · 6:00–9:00 AM", "Members free · $8"],
+    ["Masters Swim", "Roster", "M/W/F · 5:30 AM", "$120 / 12 weeks"],
+    ["Parent & Baby Splash", "Drop-In", "Sat · 9:30 AM", "$10 / session"],
+    ["Water Aerobics", "Drop-In", "T/Th · 10:00 AM", "Members free · $8"],
+    ["Teen Swim Team", "Roster", "Wed & Fri · 4:30 PM", "$80 / 6 weeks"],
   ];
+  const shown = kind === "All" ? classes : classes.filter((c) => c[1] === kind);
   return (
     <div>
       <MobileHeader active="programs" onOpenMenu={openMenu}
@@ -287,9 +168,15 @@ function Page_ProgramCategory() {
         </Carousel>
       </div>
 
-      {/* classes — shared ClassFinder (single category, no Category filter) */}
+      {/* classes */}
       <div className="m-section">
-        <ClassFinder title="Aquatics Classes" classes={classes} searchPlaceholder="Search Aquatics classes" total={24} />
+        <SectionHead title="Aquatics Classes" />
+        <FilterRow items={["All", "Roster", "Drop-In"]} value={kind} onChange={setKind} />
+        <div className="t-sm text-muted" style={{ marginBottom: 14 }}>{shown.length} of 24 classes</div>
+        <div style={{ display: "grid", gap: 14 }}>
+          {shown.map(([t, k, s, p]) => <ClassCard key={t} title={t} kind={k} sched={s} price={p} />)}
+        </div>
+        <Pagination />
       </div>
 
       <Connect />
@@ -320,17 +207,13 @@ function Page_ClassDetail() {
         <div className="m-panel">
           <div className="m-meta-k">Date &amp; Time</div>
           <div className="m-meta-v">Tuesdays &amp; Thursdays · 7:00–7:45 PM</div>
-
-          {/* PAGE-2 item 1: roster session date range */}
-          <div className="m-meta-k">Session Dates</div>
-          <div className="m-meta-v" style={{ display: "flex", alignItems: "center", gap: 7 }}><Icon name="cal" size={14} color="#575757" /> 8 weeks · Sep 8 – Nov 3, 2026</div>
-
           <div className="m-meta-k">Audience</div>
           <div className="m-meta-v"><span className="pill sm">Adults · 18+</span></div>
-
-          {/* PAGE-2 item 2: Member / Public price points (dynamic from Traction Rec) */}
           <div style={grid2}>
-            <PricePoints member="$76" publicPrice="$95" dynamic />
+            <div>
+              <div className="m-meta-k">Price <span className="mono" style={{ fontSize: 10, color: "#999" }}>dynamic</span></div>
+              <div className="m-meta-v"><span className="skel" style={{ width: 70 }} /></div>
+            </div>
             <div>
               <div className="m-meta-k">Capacity</div>
               <div className="m-meta-v">8 of 12 left</div>
@@ -364,18 +247,13 @@ function Page_ClassDetail() {
         </div>
       </div>
 
-      {/* PAGE-5 item 2: additional drag-in block — Image Gallery (mosaic) */}
-      <div className="m-section">
-        <ImageGallery title="Class Photos" variant="mosaic" tiles={[["teaching pool", 2, 2], ["lesson in progress", 1, 1], ["instructor on deck", 1, 1], ["lane markers", 1, 1], ["group session", 2, 1], ["poolside", 1, 1]]} />
-      </div>
-
-      {/* other classes — shared ClassCard with dates + Member/Public + pop-up */}
+      {/* other classes */}
       <div className="m-section">
         <SectionHead title="Other Aquatics Classes" seeAll="All" onSeeAll={() => navigate("program-cat")} />
         <Carousel width="80%">
-          <ClassCard title="Masters Swim" kind="Roster" sched="M/W/F · 5:30 AM" dates="12 weeks · Sep 1 – Nov 20, 2026" memberPrice="$96" publicPrice="$120" desc="Coached workouts for competitive and fitness swimmers 18+, with sets scaled to every level." />
-          <ClassCard title="Parent & Baby Splash" kind="Drop-In" sched="Sat · 9:30 AM" memberPrice="$8 / session" publicPrice="$10 / session" desc="A gentle 30-minute water-acclimation class for babies 6–36 months and a caregiver." />
-          <ClassCard title="Water Aerobics" kind="Drop-In" sched="T/Th · 10:00 AM" memberPrice="Free" publicPrice="$8 / visit" desc="Low-impact, high-energy fitness in the shallow end — easy on the joints, tough on the calories." noImage />
+          <ClassCard title="Masters Swim" kind="Roster" sched="M/W/F · 5:30 AM" price="$120 / 12 weeks" />
+          <ClassCard title="Parent & Baby Splash" kind="Drop-In" sched="Sat · 9:30 AM" price="$10 / session" />
+          <ClassCard title="Water Aerobics" kind="Drop-In" sched="T/Th · 10:00 AM" price="Members free · $8" />
         </Carousel>
       </div>
 
@@ -390,24 +268,31 @@ function Page_Info() {
   return (
     <div>
       <MobileHeader active="info" onOpenMenu={openMenu}
-        crumb={{ label: "Return to About Us", onClick: () => navigate("about") }} />
+        crumb={{ label: "Return to About Us", onClick: () => navigate("home") }} />
 
-      {/* PAGE-3 item 1: background-image hero (PageHero also supports the palette-color band variant) */}
-      <PageHero
-        variant="image"
-        eyebrow="Membership Policies"
-        title="Everyone is welcome, and everyone follows the same handful of rules."
-        subtitle="We keep our policies short, clear, and the same for every member — from the day you join to the day you renew." />
-
-      {/* PAGE-3 item 2: Page Content rendered as an accordion (reuses the FAQ block) */}
       <div className="m-section">
-        <Faq title="Facility Policies" items={[
-          ["Membership dues & financial assistance", "Dues are on a sliding scale based on household size and income — maximum $42/month for adults, minimum $0. Nobody is turned away for inability to pay; ask the front desk about financial assistance."],
-          ["Code of conduct & safety", "We expect every member to treat staff, members, and the building with respect: no harassment, discrimination, or violence. Children under 12 must stay with an adult in pool and fitness areas."],
-          ["Guest & day pass policy", "Members may bring guests with a day pass, available at the front desk. All guests complete a waiver and follow the same conduct and safety rules as members."],
-          ["Locker rooms & changing areas", "Locker rooms are gendered; family changing rooms are available to anyone for any reason. Lockers are day-use only — bring your own lock and clear it before close."],
-          ["Cancellations & refunds", "Cancel anytime, in person at the front desk or online from your member dashboard. Refunds on class fees are pro-rated to the day."],
-        ]} />
+        <div className="m-band center">
+          <div className="eyebrow" style={{ opacity: .85, marginBottom: 8 }}>Membership Policies</div>
+          <h1 className="t-h1" style={{ margin: "0 0 12px" }}>Everyone is welcome, and everyone follows the same handful of rules.</h1>
+          <p className="t-body" style={{ margin: 0, opacity: .92 }}>We keep our policies short, clear, and the same for every member — from the day you join to the day you renew.</p>
+        </div>
+      </div>
+
+      <div className="m-section">
+        <div className="m-panel">
+          <h2 className="t-h3" style={{ margin: "0 0 10px" }}>1 · Sliding-scale dues</h2>
+          <p className="t-body" style={{ margin: "0 0 20px" }}>Membership at any Camden Kroc Center is on a sliding scale based on household size and income. The maximum monthly rate is $42 for adults; the minimum is $0. Nobody is turned away — full stop.</p>
+          <h2 className="t-h3" style={{ margin: "0 0 10px" }}>2 · Conduct &amp; safety</h2>
+          <p className="t-body" style={{ margin: "0 0 8px" }}>We expect every member to treat staff, other members, and the building with respect:</p>
+          <ul style={{ margin: "0 0 20px", paddingLeft: 20, lineHeight: 1.75 }} className="t-body">
+            <li>No harassment, discrimination, or violence.</li>
+            <li>Children under 12 stay with an adult in pool and fitness areas.</li>
+            <li>Family changing rooms are available for any reason.</li>
+          </ul>
+          <h2 className="t-h3" style={{ margin: "0 0 10px" }}>3 · Cancellation</h2>
+          <p className="t-body" style={{ margin: "0 0 14px" }}>Cancel anytime, in person at the front desk or online from your member dashboard. Refunds are pro-rated to the day.</p>
+          <a className="link t-sm">Download the full policy PDF →</a>
+        </div>
       </div>
 
       {/* password gate variant */}
@@ -427,7 +312,7 @@ function Page_Info() {
   );
 }
 
-/* ===== 6.6 All Stories (display label: Kroc Highlights) ===== */
+/* ===== 6.6 All Stories ===== */
 function Page_AllStories() {
   const { navigate, openMenu } = useNav();
   const [f, setF] = React.useState("All");
@@ -494,6 +379,7 @@ function Page_StoryDetail() {
         <blockquote className="f-jenson m-quote">The gym was the point, but the pizza is what kept them. Once they kept showing up, the rest took care of itself.</blockquote>
         <p className="t-body" style={{ margin: "0 0 18px" }}>We're now running late-night basketball every Thursday and Saturday through the spring. The waitlist is at 120. If you'd like to volunteer as a coach or sponsor next season's pizza, <a className="link">get in touch with our Youth team</a>.</p>
 
+        {/* external article banner */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", background: "#EFEFEF", borderRadius: 12, marginBottom: 18 }}>
           <Icon name="arrowUR" size={16} color="#575757" />
           <div><div className="t-xs text-muted">Originally published externally.</div><a className="link t-sm">View Original Article →</a></div>
@@ -504,6 +390,7 @@ function Page_StoryDetail() {
         </div>
       </div>
 
+      {/* sidebar content stacked: donate + related */}
       <div className="m-section">
         <a className="btn btn-primary btn-block" style={{ marginBottom: 14 }}>Donate to Support This Program</a>
         <div className="m-panel">
@@ -534,6 +421,6 @@ function Page_StoryDetail() {
 }
 
 Object.assign(window, {
-  ClassFinder, Page_Home, Page_AllPrograms, Page_ProgramCategory, Page_ClassDetail,
+  Page_Home, Page_AllPrograms, Page_ProgramCategory, Page_ClassDetail,
   Page_Info, Page_AllStories, Page_StoryDetail,
 });

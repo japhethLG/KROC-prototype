@@ -1,5 +1,5 @@
 /* ============================================================
-   KROC Mobile v2 — Component / Block Library + Screens Directory
+   KROC Mobile — Component / Block Library + Screens Directory
    ============================================================ */
 
 function Swatch({ name, hex, dark }) {
@@ -21,7 +21,7 @@ function Page_Library() {
       <div className="m-section">
         <div className="eyebrow text-red" style={{ marginBottom: 6 }}>Mobile Design System</div>
         <h1 className="t-h1" style={{ margin: "0 0 10px" }}>Block &amp; Component Library</h1>
-        <p className="t-body text-muted">The mobile-scaled building blocks every KROC screen is assembled from — tokens, type, buttons, cards, and patterns. Updated with the 6/29–7/07 desktop sync batch.</p>
+        <p className="t-body text-muted">The mobile-scaled building blocks every KROC screen is assembled from — tokens, type, buttons, cards, and patterns.</p>
       </div>
 
       {/* Colors */}
@@ -89,14 +89,6 @@ function Page_Library() {
         </div>
       </div>
 
-      {/* Price points */}
-      <div className="lib-h"><div className="k">Components · X3</div><h3>Member / Public Price Points</h3></div>
-      <div className="lib-block">
-        <p className="lib-note" style={{ margin: "0 0 12px", paddingLeft: 0 }}>Shared PricePoints style — <b>detail</b> (sidebars) and <b>card</b> (compact) sizes. Values resolve dynamically from Traction Rec.</p>
-        <PricePoints member="$76" publicPrice="$95" dynamic />
-        <PricePoints member="Free" publicPrice="$8 / visit" size="card" />
-      </div>
-
       {/* Inputs */}
       <div className="lib-h"><div className="k">Components</div><h3>Form Inputs</h3></div>
       <div className="lib-block">
@@ -115,63 +107,25 @@ function Page_Library() {
         <AlertBar text="Severe weather closure in effect today." variant="danger" />
       </div>
 
-      {/* Quick links */}
-      <div className="lib-h"><div className="k">Blocks · 7.9 / SYNC-27</div><h3>Quick Links (Compact Featured Pages)</h3></div>
-      <div className="m-section" style={{ marginTop: 0 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
-          <QuickLinkCard title="Membership" icon="users" />
-          <QuickLinkCard title="Day Passes" icon="ticket" />
-          <QuickLinkCard title="Classes" icon="dumbbell" />
-        </div>
-      </div>
-
       {/* Cards */}
       <div className="lib-h"><div className="k">Blocks</div><h3>Cards</h3></div>
       <div className="m-section" style={{ marginTop: 0 }}>
         <div style={{ display: "grid", gap: 14 }}>
           <StoryCard category="Recreation" title="Story card" body="16:9 image, category chip, title, two-line excerpt, meta row." onClick={() => {}} />
-          <EventCard title="Event card" date="June 14, 2026 · 10 AM" desc="Short event description (HOME-2) above the address." memberPrice="Free" publicPrice="$5" onClick={() => {}} />
-          <ClassCard title="Class card — tap for pop-up" kind="Roster" sched="Tue & Thu · 7 PM" dates="8 weeks · Sep 8 – Nov 3, 2026" memberPrice="$76" publicPrice="$95"
-            desc="BLK-2: the whole card opens a marketing-description pop-up with schedule, session dates, Member/Public price, and Register." />
-          <ClassCard title="No-image class card" kind="Drop-In" sched="M/W/F · 6:30 AM" memberPrice="Free" publicPrice="$10 / visit"
-            desc="BLK-2 no-image variant — a branded navy cover carries the type pill and class title in the same 16:9 footprint." noImage />
+          <EventCard title="Event card" date="June 14, 2026 · 10 AM" address="Camden Kroc Center" onClick={() => {}} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <CategoryCard name="Category" body="Icon, title, blurb, CTA." onClick={() => {}} />
-            <PersonCard name="Person card" role="Role pill · SYNC-11" email="x" phone="(000) 000-0000" />
+            <ClassCard title="Class card" kind="Roster" sched="Tue & Thu · 7 PM" price="$95 / 8 wks" onClick={() => {}} />
           </div>
-          <TierCard name="Membership tier (BLK-9)" price="$52" note="Ages 26–61" />
           <StoryRow category="Education" title="Compact story row — thumbnail + title + meta" onClick={() => {}} />
           <OppCard title="Volunteer opportunity card" dateline="Jun 1 – Aug 7, 2026" body="Dateline, three-line excerpt, and a Learn More CTA." onClick={() => {}} />
         </div>
       </div>
 
-      {/* Facility card */}
-      <div className="lib-h"><div className="k">Blocks · 7.8 / BLK-7</div><h3>Facility Card</h3></div>
-      <div className="m-section" style={{ marginTop: 0 }}>
-        <FacilityCard
-          title="Family Resource Center"
-          status={{ tone: "open", label: "Open Now" }}
-          photos={["lobby · 3:2", "meeting room · 3:2", "kitchen · 3:2"]}
-          body="Photo carousel, feature pills, structured hours (multi-range days + Closed), and an optional CTA."
-          pills={["Case management", "Food pantry"]}
-          hours={[["Mon–Thu", ["8:30 AM – 12 PM", "1 – 4:30 PM"]], ["Fri", "CLOSED"], ["Sat–Sun", "CLOSED"]]}
-          cta="Learn More" />
-      </div>
-
-      {/* Intro band + map */}
-      <div className="lib-h"><div className="k">Blocks · 7.16 / 7.18</div><h3>Intro Band &amp; Map Block</h3></div>
-      <div className="m-section" style={{ marginTop: 0 }}>
-        <div style={{ display: "grid", gap: 14 }}>
-          <IntroBand variant="color" eyebrow="Membership" title="Membership is for everyone."
-            body="BLK-1: palette-background variant. Also available with a photo (photo variant) — see Day Pass." primaryCta="Become a Member" secondaryCta="View Day Passes" />
-          <MapBlock variant="single" title="Map Block — Single" body="HOME-4: Locator (apex) and Single (instance) variants." address="1234 Community Way, Camden, NJ 08103" />
-        </div>
-      </div>
-
       {/* Accordion */}
-      <div className="lib-h"><div className="k">Blocks</div><h3>FAQ / Accordion</h3></div>
+      <div className="lib-h"><div className="k">Blocks</div><h3>FAQ Accordion</h3></div>
       <div className="m-section" style={{ marginTop: 0 }}>
-        <Faq items={[["Tap to expand a question", "The answer reveals with a smooth height transition; the + rotates into a red ×-style marker."], ["Reused as page content (PAGE-3)", "The same accordion renders informational-page content like facility policies, rental rates & specs, and membership holds."]]} />
+        <Faq items={[["Tap to expand a question", "The answer reveals with a smooth height transition; the + rotates into a red ×-style marker."], ["Only one open at a time", "Opening one collapses the others, keeping the list compact on a small screen."]]} />
       </div>
 
       {/* Placeholders / icon */}
@@ -190,8 +144,7 @@ function Page_Library() {
       <div className="lib-block">
         <p className="t-sm" style={{ margin: "0 0 6px" }}><b>Slide-up drawer</b> — sheet rises from the bottom with a grab bar (the DS default).</p>
         <p className="t-sm" style={{ margin: "0 0 6px" }}><b>Hamburger overlay</b> — full-screen menu slides in from the right.</p>
-        <p className="t-sm" style={{ margin: "0 0 6px" }}><b>Bottom tab bar</b> — persistent Home / Classes / Events / Membership / More.</p>
-        <p className="t-sm" style={{ margin: 0 }}>Classes &amp; Events expand into the mobile mega menu — category items + a red "All …" index link (NAV-2).</p>
+        <p className="t-sm" style={{ margin: 0 }}><b>Bottom tab bar</b> — persistent Home / Programs / Stories / Events / More.</p>
         <p className="lib-note" style={{ margin: "10px 0 0", paddingLeft: 0 }}>Switch live in the <b>Tweaks</b> panel to compare.</p>
       </div>
 
@@ -207,10 +160,7 @@ const SCREENS = [
   ["6.4", "Class Detail", "class"], ["6.5", "Informational", "info"], ["6.6", "All Stories", "stories"],
   ["6.7", "Story Detail", "story"], ["6.8", "All Tags", "tags"], ["6.9", "Tag Detail", "tag"],
   ["6.10", "Events Root", "events"], ["6.11", "Event Detail", "event"], ["6.12", "Contact Us", "contact"],
-  ["6.13", "Volunteers", "volunteers"], ["6.14", "Volunteer Detail", "volunteer-detail"],
-  ["6.15", "Membership", "membership"], ["6.16", "Day Pass", "daypass"], ["6.17", "About Us", "about"],
-  ["6.18", "Rentals", "rentals"], ["6.19", "Kroc Church", "church"], ["6.20", "Careers", "careers"],
-  ["—", "Component Library", "library"],
+  ["6.13", "Volunteers", "volunteers"], ["6.14", "Volunteer Detail", "volunteer-detail"], ["—", "Component Library", "library"],
 ];
 
 function Page_Directory() {
@@ -221,7 +171,7 @@ function Page_Directory() {
       <div className="m-section">
         <div className="eyebrow text-red" style={{ marginBottom: 6 }}>Prototype Index</div>
         <h1 className="t-h1" style={{ margin: "0 0 10px" }}>All Screens</h1>
-        <p className="t-body text-muted">Every KROC mobile page in one place — now including the six new pages (6.15–6.20). Tap any card to jump straight to it.</p>
+        <p className="t-body text-muted">Every KROC mobile page in one place. Tap any card to jump straight to it.</p>
       </div>
       <div className="m-section tight">
         <div className="dir-grid">

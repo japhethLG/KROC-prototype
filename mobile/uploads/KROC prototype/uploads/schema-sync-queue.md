@@ -5,46 +5,46 @@ These feed the architecture docs — **schema-decisions.md**, **architecture-pro
 
 > **Process (going forward):** after finishing a ticket, update **both** this doc and [figma-sync-queue.md](figma-sync-queue.md). Figma-sync = the visual/design push; Schema-sync = the content-model changes. A ticket may touch one, both, or neither.
 
-> Status: ☑ **SCHEMA-1…26 all formalized in [architecture-proposal-v3.md](KROC%20prototype/uploads/architecture-proposal-v3.md)** — SCHEMA-1…22 in the v3 consolidation, SCHEMA-23…26 folded in 2026-07-13 (rows tagged **(7/13)**; see the v3-changes Addendum). Remaining architect decisions are tracked as v3 "Pending items" #1–17.
+> Status: ☐ pending architect formalization · all entries below are **proposed** from the prototype work.
 
 ---
 
-## ☑ SCHEMA-1 — NAV-1: Navigation model — **formalized · v3 §1 / §4**
+## ☐ SCHEMA-1 — NAV-1: Navigation model
 - **Primary nav**: an ordered, editable menu — list of items `{ label, target }` where target is an internal page ref or external URL. Current set: Home · About Us · Membership · Classes · Events · Rentals · Church.
 - **Utility bar**: editable secondary links `{ label, url }` — Careers, Donate, Hours & Closures.
 - **New page types referenced** (formalize via the NEW-* tickets): About Us, Membership, Rentals, Church, Careers. **Donate** = external link, not a page (**resolved 2026-06-29: external link** — OQ-1 closed).
 - Search intentionally omitted for now.
 
-## ☑ SCHEMA-2 — NAV-2: Mega-menu model — **formalized · v3 §4 · §5 `[event_categories]` 🆕**
+## ☐ SCHEMA-2 — NAV-2: Mega-menu model
 - A nav item gains an optional **mega menu**: a set of child links + a **"View All" index** link.
 - **Classes** mega items should be driven by **`[program_categories]`** (each category → a mega link) + an "All Classes" index → All Programs.
-- **Events** mega needs an **event category/type taxonomy** — *does one exist?* If not, add `[event_categories]` (or an `event_type` field) to drive the items + an "All Events" index. **Flag for architect.** *(v3: `[event_categories]` created §5; taxonomy-vs-enum flag kept — v3 pending #9.)*
+- **Events** mega needs an **event category/type taxonomy** — *does one exist?* If not, add `[event_categories]` (or an `event_type` field) to drive the items + an "All Events" index. **Flag for architect.**
 
-## ☑ SCHEMA-3 — NAV-3: Header CTAs — **formalized · v3 §1**
+## ☐ SCHEMA-3 — NAV-3: Header CTAs
 - Global header **CTA config**: two editable CTAs `{ label, url }` (currently Become a Member, Purchase Classes). Likely site-level settings; targets tie into Traction Rec / Club Automation via **embed/redirect only (no DB)**.
 
-## ☑ SCHEMA-4 — NAV-4: Footer / global settings — **formalized · v3 §1 · §3**
+## ☐ SCHEMA-4 — NAV-4: Footer / global settings
 - **Mission text**: "The Salvation Army Mission" statement — a global field (consider locked/default since it's standardized copy).
 - **Newsletter**: replace the inline email/phone form with a **`newsletter_signup_url`** field (vendor form: Mailchimp / Constant Contact / Emma). No inline capture.
 - **Social media links**: repeater `{ platform, url }`.
 - **Footer links**: editable list (kroccenter.org, Thrift and Donate Goods, etc.).
 - **`[kroc_location]`**: ensure **email** (e.g. info@krocphoenix.org) exists alongside address/phone; copyright line "The Salvation Army".
 
-## ☑ SCHEMA-5 — BLK-1 / HOME-6: Intro Band block (NEW) — **formalized · v3 §19** *(as-built 7/7 deltas noted there)*
+## ☐ SCHEMA-5 — BLK-1 / HOME-6: Intro Band block (NEW)
 - New block content model **`[intro_band]`**: `Layout Variant` (no-photo / photo-right), `Eyebrow` (optional), `Title`, `Body` (rich text), `CTAs` (up to 2 · label+url), `Photo` (optional · photo variant), `Background Color` (palette selection).
 - Consumers: homepage **membership callout** (HOME-6) and the **Membership page** (NEW-1). HOME-6 is an instance of this block — no separate schema.
 
-## ☑ SCHEMA-6 — BLK-2: Classes content type — **formalized · v3 §26**
+## ☐ SCHEMA-6 — BLK-2: Classes content type
 - **`[classes]`** add **`marketing_description`** (rich text) — surfaced in the card pop-up.
 - **Photo optional** — confirm `[classes].photo` is not required; define the **no-image** behavior (color-cover fallback) so cards render cleanly without a hero image.
 
-## ☑ SCHEMA-7 — BLK-3: People block — **formalized · v3 §15**
+## ☐ SCHEMA-7 — BLK-3: People block
 - **Formalize `[people_block]`** (currently informal — flagged for architect). Person fields: `Name`, `Role`, `Headshot`, `Bio` (optional), `Email` (optional), `Phone` (optional).
-- **Layout** enum: `4-up cards` · `3-up with bio` · `1-up feature`. *(Design audit: `2-up` variant also needed → SCHEMA-25.)*
+- **Layout** enum: `4-up cards` · `3-up with bio` · `1-up feature`.
 - **1-up feature** adds optional block-level fields: `Feature Heading` (e.g. "Hello from the {Role}") + `Lead-in` line.
 
-## ☑ SCHEMA-8 — HOME-5 / BLK-4: Label & taxonomy naming — **formalized · v3 X6 · §8 · §17**
-- **"Stories" → "Kroc Highlights"**: client said "for now," so **keep the `[stories]` / `[featured_stories]` slugs, change the display label** in UI/headings. Decide whether to also rename the 6.6 All Stories / 6.7 Story Detail page labels + nav/tag references for consistency. **Naming decision for architect.** *(v3 pending #13.)*
+## ☐ SCHEMA-8 — HOME-5 / BLK-4: Label & taxonomy naming
+- **"Stories" → "Kroc Highlights"**: client said "for now," so **keep the `[stories]` / `[featured_stories]` slugs, change the display label** in UI/headings. Decide whether to also rename the 6.6 All Stories / 6.7 Story Detail page labels + nav/tag references for consistency. **Naming decision for architect.**
 - **"Programs and Classes"**: update the Featured Programs **Block Title** default/example (architecture-proposal-v2 currently exemplifies "How We Serve").
 - **"Meet the Team"**: People block default heading (was "Camden Leadership"); Contact Us uses "Meet The Kroc Center Team" (PAGE-8) — keep distinct.
 
@@ -62,19 +62,19 @@ These feed the architecture docs — **schema-decisions.md**, **architecture-pro
 - Checked: **`[events]`** (Event Detail §27) already has a dedicated **`Thumbnail`** field (optional · *"card/feed crop, falls back to Desktop hero"*) plus **`Event Image — Desktop`** = *"16:7 hero (campaign artwork)"* — the **three-field hero standard** (Desktop / Mobile / Thumbnail, decision 5/28). The client's ask (upload a separate thumbnail; photo *or* designed artwork) is already satisfied for both the card and the hero. **No schema change.**
 - The same Thumbnail standard exists on the other card-bearing types (stories, facility, volunteer, etc.), so story/feed thumbnails are covered too.
 
-## ☑ SCHEMA-9 — BLK-5: Featured Pages card media + card style — **formalized · v3 §12**
+## ☐ SCHEMA-9 — BLK-5: Featured Pages card media + card style
 - **`[featured_pages]`** repeater item: add a **media type** field (`icon` | `image`), per item. `icon` → from the kroc-icon library; `image` → upload. UI renders the icon on a tinted panel of the same footprint as the image so grids stay aligned. *(Media applies to the **Full** card style.)*
 - **Card Style (block-level, NEW):** add a **`Card Style`** option — **`Full`** (icon/image panel + body + CTA — homepage "Get Started", About Us explore links) | **`Compact`** (icon chip + label only, whole card is the link — homepage **Quick Links** bar + the Membership section jump-nav). Same content type, two render styles. Compact items use **icon + title only** (body/CTA hidden). Pairs with a wider **Display Mode** (3-up / 4-up / **6-up** for compact). → prototype SYNC-27.
 
-## ☑ SCHEMA-10 — BLK-7: Facility Section content type — **formalized · v3 §11**
+## ☐ SCHEMA-10 — BLK-7: Facility Section content type
 - **`[facility_section]`** updates:
   - **Photos**: single Photo → **repeater of images** (drives the carousel).
-  - **Hours of Operation**: model as a repeater of `{ day, ranges[] }` where `ranges` is one-or-more time strings **or** a Closed flag — supports **multiple periods per day** and Closed days. Make the whole hours group **optional** (no-hours variant for rentals). *(Design audit: `day` should be a free `label` → SCHEMA-25.)*
+  - **Hours of Operation**: model as a repeater of `{ day, ranges[] }` where `ranges` is one-or-more time strings **or** a Closed flag — supports **multiple periods per day** and Closed days. Make the whole hours group **optional** (no-hours variant for rentals).
   - **CTA**: confirm the existing "Optional CTA (Label + URL)" is truly optional (can be empty).
   - Per-facility **closure override** (status + message) already modeled — keep.
   - **Rentals (NEW-4)** reuses this card; the rentable-space model can extend/reuse `[facility_section]` (no fixed hours, rental-inquiry CTA).
 
-## ☑ SCHEMA-11 — PAGE-1: All Programs "Search for Classes" block — **formalized · v3 §24 · X7**
+## ☐ SCHEMA-11 — PAGE-1: All Programs "Search for Classes" block
 - **`[programs_index]`** (All Programs page) gains a **"Search for Classes" block** — a class finder that queries across **all** `[program_categories]`, vs. the Program Category (6.3) listing which is scoped to one category. Same component, different scope.
 - **Driven by existing data — no new content type.** Confirm `[classes]` exposes the fields the finder filters on:
   - **Category** relation → `[program_categories]` (drives the Category dropdown + the per-row Category column on All Programs).
@@ -82,17 +82,17 @@ These feed the architecture docs — **schema-decisions.md**, **architecture-pro
   - **Schedule / dates** → Date filter (Any time / This week / Next week / This month). Ties to PAGE-2's "roster classes need date ranges" — the date filter needs a queryable start/end on the schedule.
   - **Title + (marketing) description** → text search.
 - Filters/search/view-toggle/pagination are **contextual UI only** (no CMS fields), consistent with how 6.3's listing is already documented.
-- **Architect flag (→ OQ-2):** this is a **catalog-scoped class search**, distinct from any **global site search** (NAV-1 search link, PAGE-6 search-results). Decide whether they're one system or two. *(v3 pending #12.)*
+- **Architect flag (→ OQ-2):** this is a **catalog-scoped class search**, distinct from any **global site search** (NAV-1 search link, PAGE-6 search-results). Decide whether they're one system or two.
 
-## ☑ SCHEMA-12 — PAGE-1 item 2 / HOME-4: Apex-only multi-center elements + Map block — **formalized · v3 X5 · §20**
+## ☐ SCHEMA-12 — PAGE-1 item 2 / HOME-4: Apex-only multi-center elements (conditional by site type) + Map block
 - The **"City or ZIP" center locator** (All Programs filter row `83:154` @1145,494) is **not needed on an individual Kroc instance** — on a single center there's nothing to locate. Same family as the **homepage "27 Kroc Centers" locator + map block** (map comment `30:2` @324,733).
 - **Architecture note (no design push):** introduce a **site-type flag** — *apex* (kroccenter.org) vs. *instance* (individual Kroc). Cross-center elements (center locator inputs, the centers map) render on **apex only** and are hidden/omitted on instances. On instances, the apex map "could go on About Us" (NEW-3).
 - On instances, the All Programs filter-row field should be a **within-center program/class search**, not a locator (the prototype already does this).
 - **`[homepage]` schema comment (HOME-4):** the homepage map is a **drag-in block, apex-only** — on instances it is not placed on the homepage.
 - **Map is now a reusable block `[map_block]` (HOME-4):** a **`Variant`** field — **`Locator`** (apex · multi-center finder + City/ZIP search) | **`Single`** (instance · one location + Get Directions, address from `[kroc_location]`). Apex homepage uses Locator; instance **About Us (NEW-3)** uses Single. Same block, two modes — no separate types.
-- **Flag for architect:** confirm whether one CMS serves both apex and instances with a site-type setting, or instances are a separate template set. *(v3 pending #11.)*
+- **Flag for architect:** confirm whether one CMS serves both apex and instances with a site-type setting, or instances are a separate template set.
 
-## ☑ SCHEMA-13 — PAGE-2: `[classes]` date range + split pricing — **formalized · v3 §26 · X3**
+## ☐ SCHEMA-13 — PAGE-2: `[classes]` date range + split pricing
 - **`[classes]` add `Session Dates`** — a date **range** for roster classes (e.g. "6 weeks · Sep 8 – Oct 15, 2026"). Model as start/end (+ optional duration label) so it's **queryable** by the Date filter (SCHEMA-11) and renders on the card, listing table, and **Class Detail (6.4)** sidebar. Drop-In classes omit it.
 - **`[classes]` price → two price points:** **`Member Price`** and **`Public Price`** (replacing/augmenting the single price). Still **dynamic from Traction Rec / Club Automation** (embed/redirect, **no DB**) — the two values resolve at runtime; CMS may hold display fallbacks. Surfaces on card, table, and Class Detail sidebar.
 - **Reuse note — full surface area:** these are class-level fields, so the **same `ClassCard`** renders them on **every** class surface, each just **reading `[classes]`** — **no per-surface schema**:
@@ -102,94 +102,56 @@ These feed the architecture docs — **schema-decisions.md**, **architecture-pro
   - **Class Detail 6.4** — sidebar (the class's own record) **and** the "Other Aquatics Classes" related feed (relational `[classes]` by category). No Class-Detail-specific schema.
 - Net: **one `[classes]` change** (Session Dates + Member/Public price) flows to all consumers. (There are no Figma comments on the Class Detail frame; these asks were pinned on Program Category.)
 
-## ☑ SCHEMA-14 — PAGE-3: Informational page — hero background + accordion — **formalized · v3 §27 · X4**
+## ☐ SCHEMA-14 — PAGE-3: Informational page — selectable hero background + accordion block
 - **`[informational_pages]` hero background (item 1):** add **`Hero Background Type`** (Color | Image), **`Hero Background Color`** (palette select, for Color), **`Hero Background Image`** (media, for Image). Renders via the reusable `PageHero` (color band or photo hero).
-  - **Recurring pattern — flag for architect:** "palette color OR image background" also appears on the Intro Band (SCHEMA-5, homepage reply on `25:6`) and is implied on other heroes. Consider a **shared `Background` field group / config** reused across hero-bearing blocks/pages rather than per-template fields. *(v3 X4 · pending #10.)*
+  - **Recurring pattern — flag for architect:** "palette color OR image background" also appears on the Intro Band (SCHEMA-5, homepage reply on `25:6`) and is implied on other heroes. Consider a **shared `Background` field group / config** reused across hero-bearing blocks/pages rather than per-template fields.
 - **`[informational_pages]` accordion content (item 2):** Page Content should support an **Accordion block** — collapsible sections (repeater of `{ Heading, Body (rich text) }`). Reuses the existing **FAQ/accordion block model** (prototype `FaqList`); if a `[faq]`/`[accordion]` block already exists in the schema, expose it as a content option here. Example use: facility policies. **Reusable** across pages (e.g. Membership/Day Pass FAQs, NEW-1/2).
 
-## ☑ SCHEMA-15 — PAGE-5: Class Detail — additional blocks (Image Gallery) — **formalized · v3 §26 · §13**
+## ☐ SCHEMA-15 — PAGE-5: Class Detail — additional blocks (Image Gallery)
 - The client's **"additional photos"** ask = the **Image Gallery block**, *not* inline images in the "About this class" body. No WYSIWYG image-embed requirement.
 - **Class Detail (6.4) is extensible** — it should accept **additional drag-in blocks**, same as other Hybrid pages. Demonstrated with the **Image Gallery block `[image_gallery]`**. Confirm `[classes]` (Pageset · Hybrid) supports a body/blocks zone for drag-in blocks (not just fixed fields).
 - **`[image_gallery]` layout variant:** add a **`Layout`** option — **`Mosaic`** (varied tile spans / masonry) | **`Grid`** (uniform tiles). Reusable block; mosaic used on Class Detail. (The "include dates" part of these comments = already covered by SCHEMA-13 Session Dates.)
 
-## ☑ SCHEMA-16 — PAGE-7: Event Detail — header image sizes + price — **formalized · v3 §33 · X1**
+## ◑ SCHEMA-16 — PAGE-7: Event Detail — header image sizes + Hybrid (mostly verified)
 - **Item 1 — multi-size header + artwork (mostly already in schema):** `[events]` (§27) already has **Event Image — Desktop** (16:7, *"campaign artwork"*), **Event Image — Mobile**, and **Thumbnail** (the cross-cutting three-field hero standard, 5/28). So **predesigned artwork ✅** and multiple sizes ✅ — *except* the client explicitly listed **"Desktop, tablet, mobile"** and the standard has **no dedicated tablet** field.
-  - **Decision for architect/client:** either (a) **tablet falls back** to Desktop/Mobile via responsive CSS (no new field — current standard), or (b) add **`Event Image — Tablet`**. If (b), consider adding tablet to the **whole three-field hero standard**, not just events. *(Recommend (a) unless the client wants a separately-cropped tablet asset.)* *(v3 X1 records (a) as the standard; pending #16.)*
+  - **Decision for architect/client:** either (a) **tablet falls back** to Desktop/Mobile via responsive CSS (no new field — current standard), or (b) add **`Event Image — Tablet`**. If (b), consider adding tablet to the **whole three-field hero standard**, not just events. *(Recommend (a) unless the client wants a separately-cropped tablet asset.)*
 - **Item 3 — additional blocks (verified):** Event Detail `[events]` is already **"Pageset · Hybrid"** (§27) → accepts drag-in blocks. The Image Gallery block (mosaic) confirms it. **No schema change.** (`[image_gallery]` Layout = Mosaic\|Grid per SCHEMA-15.)
 - **Item 2 — Price (schema change):** add **`Member Price`** + **`Public Price`** to **`[events]`** (§27 currently has *no* price field). Same model as `[classes]` (SCHEMA-13) — **dynamic from Traction Rec / Club Automation** (embed/redirect, no DB); CMS may hold display fallbacks. Renders as the shared `PricePoints` style in **both** the Event Detail **sidebar** (detail size) and the **Event card** (card size) — so every event-card surface (Events Root 6.10, Tag Detail 6.9, "Other Events") inherits the price by reading `[events]`. *(Open-house demo shows Members Free / Public $5; events vary.)*
 
-## ☑ SCHEMA-17 — PAGE-8: Contact Us uses the global footer — **formalized · v3 §3 · §34**
+## ☐ SCHEMA-17 — PAGE-8: Contact Us uses the global footer (social links)
 - **Architecture change to `[contact_us]` (§28):** the doc currently says *"Connect footer replaced by a cross-link card to avoid recursion."* The client's "add Social Media links" comment shows that's wrong — the page should use the **standard global `Connect` footer** like every other page, since the **social links live there** (sourced from **`[kroc_location].social_handles`**). Update §28: Contact uses the global footer (no cross-link card).
 - No new fields — social handles + footer content are already global (`[kroc_location]`, NAV-4 / SCHEMA-4). This is a layout/architecture correction, not a content-model addition.
 - Item 1 ("View all hours") and item 3 ("Meet The Kroc Center Team" via `[people_block]`) need **no schema change** — hours come from `[kroc_location]`; the People block already exists.
 
-## ☑ SCHEMA-18 — HOME-1: Homepage hero — photo OR video background — **formalized · v3 §23 · X4** *(video field ⏳ hosting)*
+## ☐ SCHEMA-18 — HOME-1: Homepage hero — photo OR video background
 - **`[homepage]` hero (§17)** currently has only **Hero Image — Desktop / Mobile / Thumbnail**. Add background-**video** support so the hero can be a **photo OR a video**:
   - **`Hero Background Type`** — `Photo` | `Video`.
   - **`Hero Background Video`** — video source (field type depends on hosting — see below).
   - Keep **Hero Image — Desktop** as the **poster/fallback** (shown while video loads, on reduced-motion, and as the mobile fallback). Video should autoplay **muted + loop**, no audio.
-- **Blocked on a hosting decision (⏳, already flagged at the doc's cross-cutting hero note):** self-hosted file (Manager Media) vs. embed (YouTube/Vimeo/Cloudflare Stream). That decision sets the field type (Media vs. URL) — **flag for architect/client**. *(v3 pending #3.)*
+- **Blocked on a hosting decision (⏳, already flagged at the doc's cross-cutting hero note):** self-hosted file (Manager Media) vs. embed (YouTube/Vimeo/Cloudflare Stream). That decision sets the field type (Media vs. URL) — **flag for architect/client**.
 - **Scope:** homepage hero for now (that's where the comment is). The same Background Type/Video pattern could extend to other hero-bearing templates later — relates to the recurring "background" pattern (SCHEMA-14).
 - **Prototype:** schema-only for now — no hero-video build yet (annotated in `Page_Home`).
 
-## ☑ SCHEMA-19 — HOME-2: Featured Events block + Event short description — **formalized · v3 §10 · §33**
+## ☐ SCHEMA-19 — HOME-2: Featured Events block + Event short description
 - **New block `[featured_events]`** — mirror of `[featured_classes]`: `Block Title` (optional) + `View All` link, `Display Mode` (Grid 3-up / 4-up), and a **repeater → Event Ref into `[events]`** (curated, suggest capping like Featured Classes' max 6). Plus a **Custom Card** option (manually-authored card as an alternative to a referenced event — from the comment reply).
 - **`[events]` add `Event Excerpt`** — a short **Text Area** for the card/feed description (mirrors `[stories].Story Excerpt`). This is the "short event description" the Event card was missing; distinct from the full `Event Body` WYSIWYG. Surfaces on every `EventCard`.
 - **Homepage pairing:** the homepage "Featured Classes and Events" ask = the two paired blocks (`[featured_classes]` 7.7 + `[featured_events]` 7.17) dragged onto `[homepage]`. Both read their respective content types; no combined type needed.
 
 ---
 
-## ☑ SCHEMA-20 — NEW-1…6: 6 new pages formalized on `[informational_pages]` — **v3 Part 4 (§37–42)**
+## ◷ SCHEMA-NEW (deferred batch) — extract content models from the 6 new pages
 
-> Extraction pass completed 2026-07-13 from the finished designs (`KROC prototype/pages-new.jsx` + `mobile/m-pages-new.jsx`), closing the former SCHEMA-NEW deferred batch. Donate (NEW-7) = external link, **no schema**.
+> **Status: pending — single consolidated pass, after the UI work is done** (per direction 2026-06-29). The new pages (NEW-1…NEW-6) were **designed first** (`KROC prototype/pages-new.jsx`); their schema is **extracted from the finished designs** in one go, not per-page up front. Donate (NEW-7) = external link, **no schema**.
 
-- All 6 ride **`[informational_pages]`** (Pageset · Freestyle) + drag-in blocks — **no new page model**. Section-composition tables live in v3 Part 4:
-  - **Membership §37** — hero+CTAs, 6-up Compact jump-nav (`[featured_pages]`, SCHEMA-9), benefits band, `[faqs]` Discounts & Holds, 9 tiers + Family Play comparison (`[rate_cards]`, SCHEMA-21), PlayCare band, member story (`[featured_stories]`), hold/cancel `[custom_forms]`, policies band.
-  - **Day Pass §38** — centered hero, green intro band, Youth/Adult `[rate_cards]` cards, shared `[intro_band]` callout.
-  - **About Us §39** — vision/impact (Page Content), explore links (`[featured_pages]` Full·icon), leadership (`[people_block]`), `[map_block]` Single, `[donation_block]` mission band. **No new type.**
-  - **Rentals §40** — Save-the-Arts hero+CTA, tabs (UI), Theatre & Corner Zone `[facility_section]` (no hours, pills, inquiry CTA — SCHEMA-10), Rates & Specs `[faqs]`, interest `[custom_forms]` (OQ-4), Theatre-Director + policies bands.
-  - **Church §41** — hero, welcome, Sunday Worship `[facility_section]` (with hours), team (`[people_block]` 2-up), connect links, Weekly Ministries schedule list + prayer `[custom_forms]` (OQ-5), Kroc Kids / Music (Page Content).
-  - **Careers §42** — headshot row, why-work-with-us, benefits checklist, Open Positions (`[job_postings]`, SCHEMA-22), how-to-apply + text-to-apply, HR contacts (`[people_block]` 2-up).
-- Composition gaps found while extracting (fields the designs need that v3 doesn't model yet) → **SCHEMA-23…26** below.
+Each page already carries **embedded field hints** — every `PageFrame` declares `schema="[informational_pages]"` (Pageset · Freestyle) plus a `fields` list and `notes` naming the drag-in blocks it uses. Those are the **starting point** for extraction; the pass formalizes them in **content-template-schemas.md** and folds anything net-new into the architecture docs.
 
-## ☑ SCHEMA-21 — BLK-9: Rate Cards block `[rate_cards]` — **formalized · v3 §21 · X3**
-- Pricing/rate-card block for **Membership tiers (9)**, **Day Pass** (Youth/Adult), and **PlayCare rates**, with `Display Mode` = `Cards` | `Comparison Table` (Family Play). Repeater `{ Tier Name, Member/Public PricePoints, Age Range, Billing Period, Included Features, CTA }`.
-- Pricing **dynamic from Traction Rec / Club Automation** (embed/redirect, **no DB**); CMS holds display fallbacks. Integration shape (embed widget vs. deep link) = **OQ-7** (v3 pending #15).
-- *(Design audit: comparison-table rows + fine print not yet expressible → SCHEMA-24.)*
+**What the extraction pass must decide (cross-page):**
+- **Reuse vs. net-new content types.** All 6 ride `[informational_pages]` + existing drag-in blocks. Confirm which sections are genuinely just freestyle/WYSIWYG + existing blocks (`[faqs]`, `[facility_section]`, `[people_block]`, `[featured_pages]`, `[map_block]`, `[donation_block]`, `[custom_forms]`) vs. which need a **new structured type**.
+- **Membership/Day Pass rate cards (NEW-1/2 → BLK-9):** formalize a **Membership card / Day Pass card** model (tier name, rate, age range, period) + the **Family Play comparison** table + **PlayCare rates**. Pricing is **dynamic from Traction Rec / Club Automation** (embed/redirect, **no DB**); CMS may hold display fallbacks. May share the **Member/Public `PricePoints`** model (SCHEMA-13/16).
+- **Integration (NEW-1/2 → OQ-7):** membership sign-up / day-pass purchase via Traction Rec / Club Automation — embed widget vs. deep link; dynamic vs. authored. **Vendor-hosted/embed only, no DB connection.**
+- **Rentals (NEW-4):** rentable-space model — likely **extends/reuses `[facility_section]`** (no fixed hours, amenities/pills, rate, inquiry CTA) per SCHEMA-10; the interest form is a `[custom_forms]` instance (OQ-4: inquiry vs. booking system).
+- **Careers (NEW-6):** ⚠️ built with a **bespoke department/role-listing layout**, not the Volunteer Opportunities blocks BLK-10 anticipated. Decide: **reuse the `[volunteer_opportunities]` model** (6.13/6.14) for job listings, or a careers-specific type (role, dept, location, type, apply link). HR contacts = `[people_block]`.
+- **Church (NEW-5):** service times = `[facility_section]` (with hours), ministries/weekly schedule + prayer-request form, troops — confirm reuse vs. bespoke (OQ-5 scope).
+- **About Us (NEW-3):** mission/impact/leadership/location/explore-links — all map to existing blocks (`[people_block]`, `[featured_pages]`, `[map_block]`, `[donation_block]`); likely **no new type**.
 
-## ☑ SCHEMA-22 — NEW-6: Job Postings block `[job_postings]` — **formalized · v3 §22**
-- Careers open-position listings: repeater `{ Role, Department, Location, Employment Type, Apply Link, Summary }` — design renders grouped-by-department cards with role links. HR contacts = `[people_block]`.
-- ⚐ **Architect decision kept open:** `[job_postings]` vs. reuse `[volunteer_opportunities]` (v3 pending #14).
-
----
-
-## ☑ SCHEMA-23 — `[informational_pages]` hero CTAs — **folded into v3 §27 (7/13)**
-- The **Membership** hero has **two CTAs** ("Sign Up Today" / "View Member Benefits") and the **Rentals** hero has one ("Take a Seat Today") — and v3 **Part 4 §37 explicitly references "Hero Primary / Secondary CTA"** — but the canonical **§27 `[informational_pages]` field table has no hero CTA fields**.
-- **Add:** `Hero Primary CTA (Label + URL)` + `Hero Secondary CTA (Label + URL)`, both optional — same grouped pattern as `[homepage]` §23.
-
-## ☑ SCHEMA-24 — `[rate_cards]` comparison rows + fine print — **folded into v3 §21 (7/13)**
-- **Comparison Table mode can't express the Family Play design.** The design's rows are `{ Benefit, Standard-plan value, Family-Play value }` with **text values per column** (e.g. "$5/child (drop-in)" vs "Included"; "$15 off/week" vs "10% off/week (up to $35/week)") — the current `Included Features (rep · Text)` is a single-column bullet list. **Add a `Comparison Rows` repeater** `{ Benefit, Value per tier/column }` (or per-tier value pairs).
-- **Add block-level `Fine Print / Disclaimer` (Text Area)** — "A $55 one-time Joiner's Fee is required with each membership type. All rates include sales tax…" has no home.
-- **Add optional block-level `Tagline`** — the styled line "Parent & Me Fitness and STEAM classes coming late Winter."
-
-## ☑ SCHEMA-25 — Block deltas surfaced by the new-page designs — **folded into v3 §8/§11/§14/§15/§16/§19/§20/§42 (7/13)** *(schedule-list model = v3 pending #17)*
-- **`[people_block]` Layout:** add **`2-up with bio + contact`** — Church team (3:2 portrait + phone + email) and Careers HR cards use it; the enum only has 4-up / 3-up-bio / 1-up-feature.
-- **Band CTAs (up to 3):** the Membership Policies band and Rentals Policies band carry **3 CTAs**; `[donation_block]` caps at Primary + Secondary. Allow a CTA repeater (max 3) on the band, or accept the third link folding into body copy.
-- **`[featured_stories]` Display Mode:** add a **`1-up quote/feature`** mode — the Membership member story is a full-width quote card (photo + blockquote + attribution), not a 3-up grid or carousel.
-- **`[intro_band]` checklist:** the Membership **Benefits band** = navy band + 2 CTAs + **8-item two-column checklist**; neither `[intro_band]` nor `[donation_block]` has list items. Add optional `Checklist Items (rep · Text)` to `[intro_band]`.
-- **`[facility_section]` Hours label:** Church Sunday Worship hours are `{ "Breakfast Church" → Sundays · 9:00 AM }` — the repeater's `day` key should be a free **`Label`** (day *or* service name).
-- **Church "Weekly Ministries"** is a **static schedule list** `{ Title, When, Description }`, not an accordion — `[faqs]` has no time field and collapses. Either a small `[schedule_list]` repeater block or Page Content; **flag for architect** (OQ-5 scope).
-- **`[custom_forms]` field types:** designs use **Birthdate** (date), **Estimated Attendance** (number), and phone fields — the enum is `text · email · select · textarea`. Extend with `date` / `number` / `tel`, or accept plain text.
-- **`[map_block]` CTA:** the Single-variant design shows a **"Get Directions"** button — §20 has no CTA field. Add optional `CTA (Label + URL)` or document it as fixed automatic behavior.
-- **Careers "Text to Apply":** the red card (Text "SALVATION ARMY" to **22633**) isn't in §42 — capture as two fields (`Keyword`, `Shortcode`) on the page or fold into Page Content.
-
-## ☑ SCHEMA-26 — v3 Part 4 composition-table corrections — **applied to v3 §37–42 (7/13)**
-- **§37 Membership:** add the **6-up Compact quick-nav row** (`[featured_pages]` Compact — Member Benefits / PlayCare / Center Features / Member Stories / Financial Assistance / Policies). It's in the design + SCHEMA-9's stated consumers, but missing from the table.
-- **§37 PlayCare mapping is ambiguous:** the table says `[facility_section]` variant while §21 claims PlayCare rates for `[rate_cards]`. The design is a **band + rates sub-card** (Members $5 / Nonmembers $9) — recommend: band copy = `[intro_band]`/Page Content, the rates sub-card = `[rate_cards]` (PricePoints). Pick one mapping.
-- **§38 Day Pass:** the "Intro Band" row maps to Page Content but shares a name with the `[intro_band]` block — rename the row (e.g. "Green intro band") to avoid confusion. Its **green** background also isn't in the intro-band palette (red/navy) — covered by pending #1 (palette values).
-- **§40 Rentals:** add the **"Host an event" intro card** (Page Content) and the **Theatre Director contact band** (eyebrow/title/body + phone/email + CTA) — both in the design, neither in the table. Conversely **"Client List" is in the table but not in the built design** — remove or confirm it's still wanted.
-- **§42 Careers:** add the **Text-to-Apply card** row (see SCHEMA-25) and the red **"Join us" CTA band** (View All Openings).
-
----
-
-> **Close-out note (2026-07-13):** the queue is **complete**. SCHEMA-1…22 are consolidated in [architecture-proposal-v3.md](KROC%20prototype/uploads/architecture-proposal-v3.md) / [architecture-proposal-v3-changes.md](KROC%20prototype/uploads/architecture-proposal-v3-changes.md); SCHEMA-23…26 (finished-design extraction) are folded into v3 §27, §21, the block library, and Part 4 — rows tagged **(7/13)**, summarized in the v3-changes **Addendum**. Architect-pending decisions are tracked as v3 "Pending items" #1–17.
+**No SCHEMA-N numbers assigned yet** — they'll be cut during the extraction pass so the architect gets one coherent set rather than fragments.

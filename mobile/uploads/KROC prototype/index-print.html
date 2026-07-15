@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>KROC Centers — Prototype (Print)</title>
+<meta name="viewport" content="width=1320"/>
+<link rel="stylesheet" href="kroc.css"/>
+<style>
+  /* Screen tweaks while previewing the print version */
+  body { background: #1a1a1d; }
+
+  @page {
+    size: 1700px 2400px;
+    margin: 24px;
+  }
+
+  @media print {
+    html, body {
+      background: #ffffff !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Hide all interactive chrome */
+    .jumpnav { display: none !important; }
+
+    /* Each top-level surface = one page */
+    .frame-row,
+    .canvas > .frame {
+      break-inside: avoid;
+      break-after: page;
+      page-break-inside: avoid;
+      page-break-after: always;
+      margin: 0 auto 0 !important;
+    }
+
+    /* The big page frames are tall – allow them to overflow across pages cleanly */
+    .canvas > .frame.frame-page {
+      break-after: page;
+      page-break-after: always;
+      break-inside: auto;
+      page-break-inside: auto;
+    }
+
+    /* Frame labels float above their frame; keep them with the frame */
+    .frame-label {
+      break-after: avoid;
+      page-break-after: avoid;
+      margin-top: 0 !important;
+      color: #555 !important;
+    }
+    .frame-label .name { color: #111 !important; }
+    .frame-label .tag { background: #eee !important; color: #333 !important; }
+
+    /* Annotation rail panels: keep with content */
+    .annot, .block-side {
+      color: #333 !important;
+    }
+    .block-n { color: #c0432a !important; }
+
+    /* Cover / essence / open-questions backgrounds */
+    .cover, .essence, .open-questions {
+      break-after: page;
+      page-break-after: always;
+    }
+
+    /* Kill any sticky/fixed positioning */
+    * {
+      position: static !important;
+    }
+
+    /* Ensure shadows still print as subtle */
+    .kroc-page, .card, .kcard, .kchip {
+      box-shadow: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="blocks.jsx"></script>
+<script type="text/babel" src="meta.jsx"></script>
+<script type="text/babel" src="pages-a.jsx"></script>
+<script type="text/babel" src="pages-b.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+function App(){
+  return (
+    <div className="canvas">
+      <Cover/>
+      <Essence/>
+      <BlocksLibrary/>
+      <Page_Home/>
+      <Page_AllPrograms/>
+      <Page_ProgramCategory/>
+      <Page_ClassDetail/>
+      <Page_Info/>
+      <Page_AllStories/>
+      <Page_StoryDetail/>
+      <Page_AllTags/>
+      <Page_TagDetail/>
+      <Page_Events/>
+      <Page_EventDetail/>
+      <Page_Contact/>
+      <Page_Volunteers/>
+      <OpenQuestions/>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+// Auto-print: wait for fonts + Babel transforms + a safety delay
+(async () => {
+  try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch(e){}
+  // Allow Babel-compiled scripts to finish mounting
+  await new Promise(r => setTimeout(r, 1200));
+  window.print();
+})();
+</script>
+</body>
+</html>

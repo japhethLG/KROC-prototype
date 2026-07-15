@@ -1,10 +1,8 @@
 /* ============================================================
-   KROC Mobile v2 — Pages 6.8 – 6.14
-   Updated to the desktop prototype: PAGE-7 (event price + gallery),
-   PAGE-8 (hours link · global footer · team heading), SYNC-11 (Email Us).
+   KROC Mobile — Pages 6.8 – 6.14
    ============================================================ */
 
-const grid2b = { display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 12 };
+const grid2b = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 };
 
 /* ===== 6.8 All Tags ===== */
 function Page_AllTags() {
@@ -61,9 +59,9 @@ function Page_TagDetail() {
         <div className="t-sm text-muted" style={{ marginBottom: 14 }}>Showing 1–6 of 27</div>
         <div style={{ display: "grid", gap: 14 }}>
           <StoryCard category="Youth" title="Robotics club takes nationals" body="A scrappy after-school team built a robot in a converted art room — and beat schools triple their size." />
-          <EventCard title="Teen Open Mic" date="August 9, 2026 · 6–8 PM" address="Camden Kroc · Main Hall" memberPrice="Free" publicPrice="Free" />
+          <EventCard title="Teen Open Mic" date="August 9, 2026 · 6–8 PM" address="Camden Kroc · Main Hall" />
           <StoryCard category="Youth" title="The summer-camp class of 2025" body="Two hundred kids, eight weeks, one unforgettable talent show finale." />
-          <EventCard title="Youth Career Day" date="September 14, 2026 · 10 AM" address="Camden Kroc · Gym" memberPrice="Free" publicPrice="$5" />
+          <EventCard title="Youth Career Day" date="September 14, 2026 · 10 AM" address="Camden Kroc · Gym" />
         </div>
         <Pagination />
       </div>
@@ -77,13 +75,10 @@ function Page_TagDetail() {
 function Page_Events() {
   const { navigate, openMenu } = useNav();
   const [tab, setTab] = React.useState("Upcoming");
-  // PAGE-7 item 2: [title, date, memberPrice, publicPrice] — Member/Public price on the card
   const upcoming = [
-    ["Summer Camp Open House", "June 14, 2026 · 10 AM – 1 PM", "Free", "$5"],
-    ["Family Pool Night", "June 21, 2026 · 5 – 8 PM", "Free", "$8"],
-    ["Teen Open Mic", "June 27, 2026 · 7 PM", "Free", "Free"],
-    ["Senior Health Fair", "July 9, 2026 · 9 AM – 12 PM", "Free", "Free"],
-    ["Independence Day BBQ", "July 4, 2026 · 12 – 4 PM", "$5", "$10"],
+    ["Summer Camp Open House", "June 14, 2026 · 10 AM – 1 PM"], ["Family Pool Night", "June 21, 2026 · 5 – 8 PM"],
+    ["Teen Open Mic", "June 27, 2026 · 7 PM"], ["Senior Health Fair", "July 9, 2026 · 9 AM – 12 PM"],
+    ["Independence Day BBQ", "July 4, 2026 · 12 – 4 PM"],
   ];
   const past = [
     ["Spring Family 5K", "April 12, 2026 · 8 AM"], ["Community Easter Egg Hunt", "March 30, 2026 · 11 AM"],
@@ -105,11 +100,11 @@ function Page_Events() {
         <FilterRow items={["Upcoming", "Past"]} value={tab} onChange={setTab} />
         <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
           <span className="m-select">June 2026 <Icon name="chev" size={14} /></span>
-          <span className="m-select">Category: All <Icon name="chev" size={14} /></span>
+          <span className="m-select">Sort: Soonest <Icon name="chev" size={14} /></span>
         </div>
         <div className="t-sm text-muted" style={{ marginBottom: 14 }}>{tab === "Upcoming" ? "1 – 5 of 20 upcoming" : "1 – 3 of 42 past events"}</div>
         <div style={{ display: "grid", gap: 14 }}>
-          {events.map(([t, d, mp, pp]) => <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way" past={tab === "Past"} memberPrice={mp} publicPrice={pp} />)}
+          {events.map(([t, d]) => <EventCard key={t} title={t} date={d} address="Camden Kroc Center · 1234 Community Way" past={tab === "Past"} />)}
         </div>
         <Pagination />
       </div>
@@ -139,10 +134,6 @@ function Page_EventDetail() {
           <div className="m-meta-k">Date &amp; Time</div>
           <div className="m-meta-v" style={{ marginBottom: 6 }}>Saturday, June 14, 2026 · 10:00 AM – 1:00 PM</div>
           <a className="text-red t-sm" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}><Icon name="cal" size={14} /> Add to Calendar</a>
-
-          {/* PAGE-7 item 2: Member / Public price points (same style as Class Detail) */}
-          <PricePoints member="Free" publicPrice="$5" dynamic />
-
           {!stickyOn && <a className="btn btn-primary btn-block" style={{ marginBottom: 16 }}>Register Here</a>}
           <div className="m-divider" />
           <div className="m-meta-k">Location</div>
@@ -170,17 +161,12 @@ function Page_EventDetail() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Icon name="phone" size={14} color="#EF3E42" /><a className="link t-sm">(856) 555-0123</a></div>
       </div>
 
-      {/* PAGE-7 item 3: additional drag-in block — Image Gallery (mosaic) */}
-      <div className="m-section">
-        <ImageGallery title="Event Gallery" variant="mosaic" tiles={[["camp tour", 2, 2], ["counselors", 1, 1], ["swim test", 1, 1], ["studios", 1, 1], ["registration", 2, 1], ["lunch", 1, 1]]} />
-      </div>
-
       <div className="m-section">
         <SectionHead title="Other Events" seeAll="All Events" onSeeAll={() => navigate("events")} />
         <Carousel width="80%">
-          <EventCard title="Family Pool Night" date="June 21, 2026 · 5–8 PM" address="Camden Kroc · Pool" memberPrice="Free" publicPrice="$8" />
-          <EventCard title="Teen Open Mic" date="June 27, 2026 · 7 PM" address="Camden Kroc · Main Hall" memberPrice="Free" publicPrice="Free" />
-          <EventCard title="Independence Day BBQ" date="July 4, 2026 · 12–4 PM" address="Camden Kroc · Plaza" memberPrice="$5" publicPrice="$10" />
+          <EventCard title="Family Pool Night" date="June 21, 2026 · 5–8 PM" address="Camden Kroc · Pool" />
+          <EventCard title="Teen Open Mic" date="June 27, 2026 · 7 PM" address="Camden Kroc · Main Hall" />
+          <EventCard title="Independence Day BBQ" date="July 4, 2026 · 12–4 PM" address="Camden Kroc · Plaza" />
         </Carousel>
       </div>
 
@@ -207,7 +193,7 @@ function Page_Contact() {
           <h2 className="t-h3" style={{ margin: "0 0 4px" }}>Send Us a Message</h2>
           <p className="t-sm text-muted" style={{ margin: "0 0 18px" }}>All fields required unless marked optional.</p>
           <div style={{ display: "grid", gap: 10 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <div className="m-input"><input placeholder="First name" /></div>
               <div className="m-input"><input placeholder="Last name" /></div>
             </div>
@@ -229,9 +215,7 @@ function Page_Contact() {
           <a className="link t-sm">Get Directions →</a>
           <div className="m-divider" />
           <div className="m-meta-k">Center Hours</div>
-          <div className="t-body" style={{ marginBottom: 8 }}>Mon–Fri · 5:30 AM – 10 PM<br />Saturday · 7 AM – 8 PM<br />Sunday · 9 AM – 6 PM</div>
-          {/* PAGE-8 item 1 */}
-          <a className="link t-sm" style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>View all hours <Icon name="arrow" size={13} /></a>
+          <div className="t-body">Mon–Fri · 5:30 AM – 10 PM<br />Saturday · 7 AM – 8 PM<br />Sunday · 9 AM – 6 PM</div>
         </div>
         <div className="m-panel">
           <h3 className="t-h3" style={{ margin: "0 0 10px" }}>Reach a Team</h3>
@@ -245,31 +229,43 @@ function Page_Contact() {
         </div>
       </div>
 
-      {/* PAGE-8 item 3: people block — heading + SYNC-7 parity (bio · Email Us · phone) */}
+      {/* people block */}
       <div className="m-section">
-        <SectionHead title="Meet The Kroc Center Team" />
-        <Carousel width="60%">
-          <PersonCard name="Marcus Johnson" role="Executive Director" email="mjohnson@kroccenters.org" phone="(856) 555-0101" />
-          <PersonCard name="Jennifer Smith" role="Director of Programs" email="jsmith@kroccenters.org" phone="(856) 555-0102" />
-          <PersonCard name="Reggie Lewis" role="Director of Recreation" email="rlewis@kroccenters.org" phone="(856) 555-0103" />
-          <PersonCard name="Priya Patel" role="Director of Volunteers" email="ppatel@kroccenters.org" phone="(856) 555-0104" />
-        </Carousel>
+        <SectionHead title="Camden Leadership" />
+        <div style={grid2b}>
+          {[["Marcus Johnson", "Executive Director"], ["Jennifer Smith", "Director of Programs"], ["Reggie Lewis", "Director of Recreation"], ["Priya Patel", "Director of Volunteers"]].map(([n, r]) => (
+            <div key={n} className="card">
+              <PH ratio="4/5" label="portrait · 4:5" style={{ borderRadius: 0 }} />
+              <div className="cbody" style={{ padding: "12px 14px" }}>
+                <div className="t-title">{n}</div>
+                <div className="t-xs text-muted">{r}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* FAQs */}
       <div className="m-section">
         <Faq title="Before You Reach Out" items={[
           ["What are your hours?", "Mon–Fri 5:30 AM – 10 PM, Saturday 7 AM – 8 PM, Sunday 9 AM – 6 PM. Holiday hours are posted on the homepage banner two weeks in advance."],
-          ["Do I need a membership to come in?", "No — day passes are available at the front desk, and many community events are free and open. Members get priority registration and discounted pricing."],
+          ["Do I need a membership to come in?", "No — drop-in passes are available at the front desk, and many community events are free and open. Members get priority registration and discounted pricing."],
           ["Where do I park?", "Free parking is available in the main lot off Community Way. Overflow opens on weekends in the adjacent church lot. Two ADA spaces are at the main entrance."],
           ["How do I sign up for a class?", "Most classes register through TractionRec — there's a 'Register' link on every class page that takes you straight in."],
           ["I'd like to volunteer — how do I start?", "Head to the Volunteers page to browse openings, or email volunteer@kroccenters.org. Most roles start with a 30-minute orientation."],
         ]} />
       </div>
 
-      {/* PAGE-8 item 2: the cross-link card is gone — Contact uses the standard Connect footer
-          (it carries the social links, from [kroc_location]) */}
-      <Connect />
+      {/* cross-link (replaces Connect on Contact) */}
+      <div className="m-section">
+        <div className="m-band navy">
+          <div className="eyebrow" style={{ opacity: .7, marginBottom: 8 }}>Stay In Touch</div>
+          <h3 className="t-h3" style={{ margin: "0 0 6px" }}>Sign up for Kroc updates without leaving Contact.</h3>
+          <p className="t-sm" style={{ margin: "0 0 16px", opacity: .85 }}>The full Connect block lives on every other page — head back to the homepage to subscribe.</p>
+          <a className="btn btn-light" onClick={() => navigate("home")}>Visit Home →</a>
+        </div>
+      </div>
+      <div style={{ height: 8 }} />
     </div>
   );
 }

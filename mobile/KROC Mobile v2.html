@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>KROC Centers — Mobile v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="kroc-mobile.css"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  html,body{margin:0;background:#1a1a1a}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="m-shared.jsx"></script>
+<script type="text/babel" src="m-pages-a.jsx"></script>
+<script type="text/babel" src="m-pages-b.jsx"></script>
+<script type="text/babel" src="m-pages-new.jsx"></script>
+<script type="text/babel" src="m-library.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const PAGES = {
+  home: Page_Home, programs: Page_AllPrograms, "program-cat": Page_ProgramCategory,
+  class: Page_ClassDetail, info: Page_Info, stories: Page_AllStories, story: Page_StoryDetail,
+  tags: Page_AllTags, tag: Page_TagDetail, events: Page_Events, event: Page_EventDetail,
+  contact: Page_Contact, volunteers: Page_Volunteers, "volunteer-detail": Page_VolunteerDetail,
+  membership: Page_Membership, daypass: Page_DayPass, about: Page_AboutUs,
+  rentals: Page_Rentals, church: Page_Church, careers: Page_Careers,
+  library: Page_Library, directory: Page_Directory,
+};
+
+const DETAIL_CTA = {
+  class:              { sub: "Members $76 · Public $95", label: "Adult Learn-to-Swim", action: "Register Now" },
+  event:              { sub: "Members Free · Public $5", label: "Summer Camp Open House", action: "Register Here" },
+  "volunteer-detail": { sub: "Jun 1 – Aug 7",            label: "Summer Food Program", action: "Sign Up" },
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "navPattern": "Hamburger overlay",
+  "stickyCTA": true,
+  "accent": "#EF3E42"
+}/*EDITMODE-END*/;
+
+function JumpNav({ route, navigate }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="jump">
+      <button className="jump-toggle" onClick={() => setOpen(o => !o)}><span>≡</span> Screens</button>
+      {open && (
+        <div className="jump-panel">
+          <div className="jump-h">KROC Mobile v2 · 20 pages</div>
+          {SCREENS.map(([n, l, r]) => (
+            <button key={r} className={route === r ? "active" : ""} onClick={() => { navigate(r); setOpen(false); }}>
+              <span className="n">{n}</span><span>{l}</span>
+            </button>
+          ))}
+          <div className="jump-h" style={{ marginTop: 8 }}>Meta</div>
+          <button className={route === "directory" ? "active" : ""} onClick={() => { navigate("directory"); setOpen(false); }}>
+            <span className="n">⊞</span><span>All-Screens Directory</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = useState(() => localStorage.getItem("kroc-route-v2") || "home");
+  const [menu, setMenu] = useState(false);
+  const [scale, setScale] = useState(1);
+  const scrollRef = useRef(null);
+
+  const navigate = useCallback((r) => {
+    if (!PAGES[r]) r = "home";
+    setRoute(r); setMenu(false);
+    localStorage.setItem("kroc-route-v2", r);
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
+
+  // fit the 402×874 phone to the viewport
+  useEffect(() => {
+    const fit = () => {
+      const s = Math.min(1, (window.innerHeight - 150) / 874, (window.innerWidth - 40) / 402);
+      setScale(s > 0.35 ? s : 0.35);
+    };
+    fit(); window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
+
+  const navPattern = t.navPattern;
+  const overlay = navPattern === "Hamburger overlay";
+  const tabsVisible = navPattern === "Bottom tabs" || navPattern === "Tabs + drawer";
+  const menuVariant = overlay ? "overlay" : "sheet";
+
+  const ctaCfg = DETAIL_CTA[route];
+  const stickyShown = !!ctaCfg && t.stickyCTA;
+  const padClass = (tabsVisible && stickyShown) ? "with-both" : tabsVisible ? "with-tabs" : stickyShown ? "with-cta" : "";
+
+  const PageComp = PAGES[route] || Page_Home;
+
+  const navValue = { navigate, route, openMenu: () => setMenu(true), navPattern, stickyOn: stickyShown };
+
+  return (
+    <div className="stage">
+      <header className="stage-head">
+        <div className="brand"><span className="mk">K</span><span style={{ fontSize: 15, color: "#bbb" }}>KROC Centers · Mobile Prototype v2</span></div>
+        <h1>The updated site, reimagined for the phone</h1>
+        <p>All 20 pages of the updated KROC prototype — the new nav + mega menu, Quick Links, Featured Classes &amp; Events, Member/Public pricing, the redesigned footer, and the six new pages (Membership, Day Pass, About Us, Rentals, Church, Careers). Use <b style={{color:'#ddd'}}>Screens</b> (top-right) to jump anywhere, and <b style={{color:'#ddd'}}>Tweaks</b> to A/B the navigation pattern and sticky CTAs.</p>
+      </header>
+
+      <div className="stage-phone" style={{ height: 874 * scale + 24 }}>
+        <div style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}>
+          <IOSDevice>
+            <div className="m-app" style={{ "--kroc-red": t.accent }}>
+              <Nav.Provider value={navValue}>
+                <div className="m-scroll" ref={scrollRef}>
+                  <PageComp />
+                  {padClass && <div className={"m-bottompad " + padClass} />}
+                </div>
+                {tabsVisible && <BottomTabBar active={route} onMore={() => setMenu(true)} />}
+                {stickyShown && (
+                  <StickyCTA label={ctaCfg.label} sub={ctaCfg.sub} action={ctaCfg.action} liftTabs={tabsVisible} />
+                )}
+                <NavDrawer open={menu} onClose={() => setMenu(false)} active={route} variant={menuVariant} />
+              </Nav.Provider>
+            </div>
+          </IOSDevice>
+        </div>
+      </div>
+
+      <JumpNav route={route} navigate={navigate} />
+
+      <TweaksPanel>
+        <TweakSection label="Navigation" />
+        <TweakSelect label="Pattern" value={t.navPattern}
+          options={["Slide-up drawer", "Hamburger overlay", "Bottom tabs", "Tabs + drawer"]}
+          onChange={(v) => setTweak("navPattern", v)} />
+        <TweakSection label="Detail pages" />
+        <TweakToggle label="Sticky bottom CTA" value={t.stickyCTA} onChange={(v) => setTweak("stickyCTA", v)} />
+        <TweakSection label="Brand" />
+        <TweakColor label="Accent" value={t.accent}
+          options={["#EF3E42", "#C5000E", "#002056"]} onChange={(v) => setTweak("accent", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#EF3E42"/><rect x="34" y="24" width="32" height="52" rx="7" fill="#fff"/><rect x="38" y="30" width="24" height="34" rx="2" fill="#D9D9D9"/><circle cx="50" cy="70" r="2.4" fill="#EF3E42"/></svg>
+</template>
+</body>
+</html>
